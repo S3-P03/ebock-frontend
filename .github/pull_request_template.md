@@ -12,3 +12,5 @@
 - [ ] Tests passing
 - [ ] Build completed
 - [ ] Approved by two people
+
+## After merge : Delete the branch (DO NOT DELETE DEV!!!!)
