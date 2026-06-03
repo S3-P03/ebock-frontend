@@ -8,7 +8,6 @@ import {
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import { AppProvider } from "./context/AppContext";
-import { UserProvider } from "./context/UserContext";
 import useAuthSession from "./hooks/useAuthSession";
 import AuthRouteGuard from "./components/AuthRouteGuard";
 
@@ -19,17 +18,15 @@ export default function HomePage() {
 
   return (
     <AppProvider>
-      <UserProvider>
-          <Router>
-            <Routes>
-              <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
-              <Route element={<AuthRouteGuard />}>
-                <Route path="/" element={<Home />} />
-              </Route>
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Router>
-      </UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
+          <Route element={<AuthRouteGuard />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
     </AppProvider>
   );
 }
