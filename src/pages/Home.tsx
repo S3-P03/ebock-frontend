@@ -14,7 +14,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   async function getUser() {
-    const requestData = await fetch(apiAddress + "/api/user/me",
+    const requestData = await fetch(apiAddress + "/user/me",
       {
         method: "GET",
         headers: {
