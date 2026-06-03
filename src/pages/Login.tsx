@@ -7,7 +7,7 @@ export default function Login() {
     return (
         <div>
             <h1>Se connecter</h1>
-            <button className="text-blue-600 hover:underline cursor-pointer mt-4" onClick={login}>Login here</button>
+            <button className="text-blue-600 hover:underline cursor-pointer mt-4" onClick={login}>Login</button>
         </div>
     );
 }

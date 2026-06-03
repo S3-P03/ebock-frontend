@@ -1,10 +1,14 @@
-import { Outlet } from "react-router-dom";
-import {withAuthenticationRequired} from "react-oidc-context";
+import { Outlet, Navigate } from "react-router-dom";
+import useAuthSession from "../hooks/useAuthSession";
 
-const PrivateRouteComponent = () => {
-    return <Outlet />;
+const AuthRouteGuard = () => {
+    const { isAuthenticated, isLoading } = useAuthSession();
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
-const AuthRouteGuard = withAuthenticationRequired(PrivateRouteComponent, {
-    OnRedirecting: () => (<div>Redirecting to the login page...</div>)
-});
+
 export default AuthRouteGuard;

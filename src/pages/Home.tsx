@@ -10,8 +10,7 @@ export default function Home() {
   
   const { apiAddress } = useAppContext();
   const [user, setUser] = useState<User | null>(null);
-  const { token } = useAuthSession();
-  const navigate = useNavigate();
+  const { token, logout } = useAuthSession();
 
   async function getUser() {
     const requestData = await fetch(apiAddress + "/user/me",
@@ -24,7 +23,7 @@ export default function Home() {
       }
     );
     if (requestData.status === 401) {
-      navigate("/login");
+      logout();
       return;
     }
     try {
