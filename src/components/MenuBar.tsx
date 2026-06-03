@@ -13,27 +13,29 @@ import {
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { User } from "../interfaces/User";
+import { useNavigate } from "react-router-dom";
+import useAuthSession from "../hooks/useAuthSession";
 
-const settings = ["Profil", "Déconnexion"];
+export default function MenuBar({ user }: { user: User | null }) {
+  const navigate = useNavigate();
+  const [anchorUserMenu, setAnchorUserMenu] = useState<null | HTMLElement>(null);
+  const {logout} = useAuthSession();
 
-export default function MenuBar({ user }: { user: User }) {
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-
-  const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+    setAnchorUserMenu(event.currentTarget);
   };
 
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+    setAnchorUserMenu(null);
   };
+
+  const handleProfile = () => {
+    setAnchorUserMenu(null);
+  }
+
+  const handleLogout = () => {
+    logout();
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -62,7 +64,7 @@ export default function MenuBar({ user }: { user: User }) {
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
-                    alt={user.prenom + " " + user.nom}
+                    alt={user?.firstName + " " + user?.lastName}
                     src="/static/images/avatar/2.jpg"
                   />
                 </IconButton>
@@ -70,7 +72,7 @@ export default function MenuBar({ user }: { user: User }) {
               <Menu
                 sx={{ mt: "45px" }}
                 id="menu-appbar"
-                anchorEl={anchorElUser}
+                anchorEl={anchorUserMenu}    
                 anchorOrigin={{
                   vertical: "top",
                   horizontal: "right",
@@ -80,16 +82,11 @@ export default function MenuBar({ user }: { user: User }) {
                   vertical: "top",
                   horizontal: "right",
                 }}
-                open={Boolean(anchorElUser)}
+                open={Boolean(anchorUserMenu)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: "center" }}>
-                      {setting}
-                    </Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleProfile}>Profil</MenuItem>
+                <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
               </Menu>
             </Box>
           </Toolbar>
