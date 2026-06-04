@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import { AppProvider } from "./context/AppContext";
+import useAuthSession from "./hooks/useAuthSession";
+import AuthRouteGuard from "./components/AuthRouteGuard";
 
-function App() {
+export default function HomePage() {
+  const { isAuthenticated, isLoading } = useAuthSession();
+
+  if (isLoading) { return <div className="spinner" />; }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
+          <Route element={<AuthRouteGuard />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </AppProvider>
   );
 }
-
-export default App;
