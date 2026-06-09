@@ -2,36 +2,16 @@ import { useEffect, useState } from "react";
 import { User } from "../interfaces/User";
 import { Box, Card } from "@mui/material";
 import MenuBar from "../components/MenuBar";
-import { useAppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import useAuthSession from "../hooks/useAuthSession";
+import { fetchUser } from "../services/userService";
 
 export default function Home() {
-  
-  const { apiAddress } = useAppContext();
   const [user, setUser] = useState<User | null>(null);
   const { token, logout } = useAuthSession();
 
   async function getUser() {
-    const requestData = await fetch(apiAddress + "/user/me",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        }
-      }
-    );
-    if (requestData.status === 401) {
-      logout();
-      return;
-    }
-    try {
-      const data = (await requestData.json()) as User;
-      setUser(data);
-    } catch (error) {
-      console.error(error);
-    }
+    setUser(await fetchUser({ token, logout }));
   };
 
   useEffect(() => {
