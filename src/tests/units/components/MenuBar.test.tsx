@@ -19,8 +19,8 @@ const setupMockAuth = (logout = jest.fn()) => {
 
 const mockUser = {
   cip: "larj4236",
-  firstName: "John",
-  lastName: "Doe",
+  firstName: "Jeef",
+  lastName: "Larouche",
   email: "larj4236@usherbrooke.ca",
   profilePictureUrl: "",
 };
@@ -47,20 +47,12 @@ describe('MenuBar Component', () => {
       expect(screen.getByText('EBOCK')).toBeInTheDocument();
     });
 
-    test('renders user avatar with correct alt text', () => {
-      setupMockAuth();
-      renderMenuBar();
-      
-      const avatar = screen.getByRole('img', { hidden: true });
-      expect(avatar).toHaveAttribute('alt', 'John Doe');
-    });
-
     test('avatar alt -> user full name', () => {
       setupMockAuth();
       renderMenuBar(mockUser);
       
       const avatar = screen.getByRole('img', { hidden: true });
-      expect(avatar).toHaveAttribute('alt', 'John Doe');
+      expect(avatar).toHaveAttribute('alt', 'Jeef Larouche');
     });
 
     test('undefined user -> handled', () => {
@@ -74,7 +66,7 @@ describe('MenuBar Component', () => {
 
   // Test Group 2: Interactions
   describe('Menu Interactions', () => {
-    test('click on avater -> menu opened', () => {
+    test('click on avatar -> menu opened', () => {
       setupMockAuth();
       renderMenuBar();
 
