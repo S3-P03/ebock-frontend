@@ -13,11 +13,9 @@ import {
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { User } from "../interfaces/User";
-import { useNavigate } from "react-router-dom";
 import useAuthSession from "../hooks/useAuthSession";
 
 export default function MenuBar({ user }: { user: User | null }) {
-  const navigate = useNavigate();
   const [anchorUserMenu, setAnchorUserMenu] = useState<null | HTMLElement>(null);
   const {logout} = useAuthSession();
 
