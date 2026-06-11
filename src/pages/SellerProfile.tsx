@@ -6,15 +6,10 @@ import {
 import { useEffect, useState } from "react";
 import { SellerUser, SellerItem, SellerReview } from "../interfaces/Seller";
 import ProfileBox from "../components/ProfileBox";
-import ItemCard from "../components/ItemCard";
+import ItemDisplayBox from "../components/ItemDisplayBox";
 import { useParams } from "react-router-dom";
 import { fetchUserStoreFront } from "../services/userService";
-
-const sellerItems: SellerItem[] = [
-    { id: 1, name: "MacBook Pro 2021", description: "Très bon état.", price: 850, addedAt: "2024-01-01", updatedAt: null, sold: false, quantity: 1, archived: false, categoryId: 1, wearId: 1, sellerCip: "boum1234", location: "Centre-Ville" },
-    { id: 2, name: "Sony WH-1000XM4", description: "Comme neuf.", price: 180, addedAt: "2024-02-01", updatedAt: null, sold: false, quantity: 1, archived: false, categoryId: 2, wearId: 1, sellerCip: "boum1234", location: "UdeS" },
-    { id: 3, name: 'Écran 27" LG', description: "Bon état.", price: 150, addedAt: "2024-03-01", updatedAt: null, sold: false, quantity: 1, archived: false, categoryId: 3, wearId: 2, sellerCip: "boum1234", location: "Carrefour de l'estrie" },
-];
+import { fetchUserItems } from "../services/userService";
 
 const sellerReviews: SellerReview[] = [
     { id: 1, author: "Eliane P.", rating: 5, comment: "Super vendeuse, très rapide à répondre.", timeAgo: "il y a 2 semaines" },
@@ -45,6 +40,7 @@ function ReviewRow({ review }: { review: SellerReview }) {
 export default function SellerProfile() {
     const { cip } = useParams();
     const [seller, setSeller] = useState<SellerUser | null>(null);
+    const [items, setItems] = useState<SellerItem[] | null>(null);
     useEffect(() => {
         try {
             const response = fetchUserStoreFront(cip).then((data) => {
@@ -53,6 +49,14 @@ export default function SellerProfile() {
             });
         } catch (error) {
             console.error("Erreur lors de la récupération du vendeur :", error);
+        }
+
+        try {
+            const response = fetchUserItems(cip).then((data) => {
+                setItems(data);
+            });
+        } catch (error) {
+            console.error("Erreur lors de la récupération des items :", error);
         }
     }, [cip]);
 
@@ -65,19 +69,7 @@ export default function SellerProfile() {
                     <ProfileBox seller={seller} showContact={true} />
                 </Box>
 
-                <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-                    <Card sx={{ p: 2, borderRadius: 2 }}>
-                        <Box sx={{ fontWeight: 700, mb: 1.5 }}>Articles en vente</Box>
-                        <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
-                        </Box>
-                    </Card>
-
-                    <Card sx={{ p: 2, borderRadius: 2 }}>
-                        <Box sx={{ fontWeight: 700, mb: 1.5 }}>Avis reçus</Box>
-                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                        </Box>
-                    </Card>
-                </Box>
+                <ItemDisplayBox items={items ?? []} />
 
             </Box>
         </Box>

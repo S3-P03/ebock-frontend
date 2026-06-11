@@ -1,5 +1,5 @@
 // services/userService.ts
-import { SellerUser, SellerUserRaw } from "../interfaces/Seller";
+import { SellerItem, SellerUser, SellerUserRaw } from "../interfaces/Seller";
 import { User } from "../interfaces/User";
 import apiClient from "./apiClient";
 
@@ -38,6 +38,17 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
       createdAt: new Date(rawSeller.createdAt),
     };
     return seller;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function fetchUserItems(cip: string | undefined): Promise<SellerItem[] | null> {
+  const response = await apiClient.get(`/item/${cip}/storefront`);
+  try {
+    const items = (await response.data) as SellerItem[];
+    return items;
   } catch (error) {
     console.error(error);
     return null;

@@ -1,19 +1,16 @@
 import { User } from "./User";
 
 export interface SellerItem {
-  id: number;
+  itemId: number;
   name: string;
-  description: string;
   price: number;
   addedAt: string;
-  updatedAt: string | null;
-  sold: boolean;
   quantity: number;
-  archived: boolean;
   categoryId: number;
   wearId: number;
-  sellerCip: string;
-  location: string;
+  firstName: string;
+  lastName: string;
+  tags: number[];
 }
 
 export interface SellerUser {
