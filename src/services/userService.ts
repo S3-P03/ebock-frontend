@@ -45,3 +45,14 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
     return null;
   }
 }
+
+export async function fetchUserItems(cip: string | undefined): Promise<SellerItem[] | null> {
+  const response = await apiClient.get(`/item/${cip}/storefront`);
+  try {
+    const items = (await response.data) as SellerItem[];
+    return items;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
