@@ -1,0 +1,100 @@
+import {
+    Box, Button, Card, CircularProgress,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { SellerUser } from "../interfaces/Seller";
+import { useParams } from "react-router-dom";
+import { fetchUser, fetchUserStoreFront } from "../services/userService";
+import MenuBar from "../components/MenuBar";
+import { DetailedItem, ItemComment, ItemImage } from "../interfaces/Item";
+import { fetchItem } from "../services/itemservice";
+import useAuthSession from "../hooks/useAuthSession";
+import { User } from "../interfaces/User";
+import CommentThread from "../components/CommentThread";
+import ImageList from "../components/ImageList";
+import SellerBox from "../components/SellerBox";
+import ItemAditionnalInfoBox from "../components/ItemAdditionalInfoBox";
+import ItemMainInfoBox from "../components/ItemMainInfoBox";
+
+const itemComments: ItemComment[] = [
+    { id: 1, authorCip: "pele3157", authorFirstName: "Eliane", authorLastName: "Pelletier", content: "Cet article est-il toujours disponible ?", respondToCommentId: null, timeAgo: "il y a 2 jours" },
+    { id: 2, authorCip: "herl2700", authorFirstName: "Leanne", authorLastName: "Héroux", content: "Et si je vous offre 2$ pour ce produit ?", respondToCommentId: null, timeAgo: "il y a 5 jours" },
+    { id: 3, authorCip: "bela3439", authorFirstName: "Alex", authorLastName: "Lefkakis", content: "Je peux passer le chercher dans 6 ou 7 jours.", respondToCommentId: null, timeAgo: "il y a 1 semaine" },
+    { id: 4, authorCip: "larj4236", authorFirstName: "Jean-Félix", authorLastName: "Larouche", content: "Oui", respondToCommentId: 1, timeAgo: "il y a 2 jours" },
+    { id: 5, authorCip: "larj4236", authorFirstName: "Jean-Félix", authorLastName: "Larouche", content: "Je vous attendais et vous n'étiez pas là...", respondToCommentId: 3, timeAgo: "il y a 1 jours" },
+];
+
+const itemImages: ItemImage[] = [
+    { itemId: 4, guid: "https://placehold.co/1000x300?text=Image+1", displayOrder: 1 },
+    { itemId: 4, guid: "https://placehold.co/800x300?text=Image+2", displayOrder: 2 },
+    { itemId: 4, guid: "https://placehold.co/800x300?text=Image+3", displayOrder: 3 },
+];
+
+
+
+export default function ItemDetails() {
+    const { id } = useParams();
+    const [seller, setSeller] = useState<SellerUser | null>(null);
+    const [item, setItem] = useState<DetailedItem | null>(null);
+    const [user, setUser] = useState<User | null>(null);
+    const { isAuthenticated, token, logout } = useAuthSession();
+    useEffect(() => {
+        try {
+            const response = fetchItem(id).then((data) => {
+                setItem(data);
+            });
+        } catch (error) {
+            console.error("Erreur lors de la récupération de l'item :", error);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        if (!item?.sellerCip) return;
+        
+        try {
+            fetchUserStoreFront(item.sellerCip).then((data) => {
+                setSeller(data);
+            });
+        } catch (error) {
+            console.error("Erreur lors de la récupération du vendeur :", error);
+        }
+    }, [item?.sellerCip]);
+
+    useEffect(() => {
+        if (!isAuthenticated || !token) return;
+        
+        try {
+            fetchUser({ token, logout }).then((data) => {
+                setUser(data);
+            });
+        } catch (error) {
+            console.error("Erreur lors de la récupération de l'utilisateur :", error);
+        }
+    }, [isAuthenticated]);
+
+    return ( seller == null ?
+        (<CircularProgress />) :
+        (<Box sx={{ mx: "auto" }}>
+            {isAuthenticated ? <MenuBar user={user} /> : <></>}
+            <Box sx={{ display: "flex", gap: 2, p: 2, alignItems: "flex-start" }}>
+                <Box sx={{ flex: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+                    <ImageList images={itemImages}/>
+                    <Card sx={{ p: 2.5, borderRadius: 2 }}>
+                        <CommentThread comments={itemComments} />
+                    </Card>
+                </Box>
+                <Box  sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2, margin: 2, alignItems: "center" }}>
+                    <Box sx={{ width: "100%", flexShrink: 0, gap: 2, display: "flex", flexDirection: "column" }}>
+                        <ItemMainInfoBox item={item} />
+                        <Card sx={{ p: 2.5, borderRadius: 2 }}>
+                            <Button variant="contained" sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} fullWidth>Contacter le vendeur</Button>
+                        </Card>                        
+                        <SellerBox seller={seller} />
+                        <ItemAditionnalInfoBox item={item} />
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
+        )
+    );
+}

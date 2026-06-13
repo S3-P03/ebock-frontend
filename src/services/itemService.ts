@@ -1,19 +1,11 @@
-// services/itemService.ts
-import { SellerItem} from "../interfaces/Seller";
+import { DetailedItem } from "../interfaces/Item";
 import apiClient from "./apiClient";
 
-const SERVICE_BASE_URL = "/item";
+export async function fetchItem(id: string | undefined): Promise<DetailedItem | null> {
+    const response = await apiClient.get(`/item/${id}`);
 
-interface FetchOptions {
-  token: string;
-  logout: () => void;
-}
-
-export async function fetchUserItems(cip: string | undefined): Promise<SellerItem[] | null> {
-  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
   try {
-    const items = (await response.data) as SellerItem[];
-    return items;
+    return (await response.data) as DetailedItem;
   } catch (error) {
     console.error(error);
     return null;
