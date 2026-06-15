@@ -8,6 +8,8 @@ export interface DetailedItem {
     category: string;
     wear: string;
     sellerCip: string;
+    paymentOptions: string[];
+    deliveryOptions: string[];
     tags: number[];
 }
 
