@@ -8,13 +8,13 @@ export default function ImageList({images}: {images: ItemImage[]}) {
 
     return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2, alignItems: "center" }}>
-        <img src={images[currentPosition].guid} alt="Item" style={{ width: "100%", borderRadius: 8 }} />
-        <Box sx={{ display: "flex", gap: 1, width: "100%" }}>
+        <img src={images[currentPosition].url} alt="Item" style={{ maxWidth: "100%", height: 700, borderRadius: 8, objectFit: "contain" }} />
+        <Box sx={{ display: "flex", gap: 1, width: "100%" }}>   
             {images
             .sort((a, b) => a.displayOrder - b.displayOrder)
             .map((img) => (
-                <Box key={img.guid} sx={{ width: 100, height: 100, bgcolor: "background.paper", border: "1px solid", borderColor: "divider" }}>
-                    <img onClick={() => setCurrentPosition(img.displayOrder-1)} src={img.guid} alt="Item" style={{ width: "100%", height: "100%", objectFit: "fill" }} />
+                <Box key={img.url} sx={{ width: 100, height: 100, bgcolor: "background.paper", border: "1px solid", borderColor: "divider" }}>
+                    <img onClick={() => setCurrentPosition(img.displayOrder-1)} src={img.url} alt="Item" style={{ width: "100%", height: "100%", objectFit: "fill" }} />
                 </Box>
             ))}
         </Box>

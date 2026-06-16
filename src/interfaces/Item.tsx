@@ -15,6 +15,7 @@ export interface DetailedItem {
 
 export interface ItemImage {
     itemId: number;
+    url: string;
     guid: string;
     displayOrder: number;
 }
