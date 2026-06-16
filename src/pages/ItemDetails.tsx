@@ -29,7 +29,6 @@ export default function ItemDetails() {
     const { id } = useParams();
     const [seller, setSeller] = useState<SellerUser | null>(null);
     const [images, setImages] = useState<ItemImage[] | null>(null);
-    const [imageUrls, setImageUrls] = useState<string[] | null>(null);
     const [item, setItem] = useState<DetailedItem | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const { isAuthenticated, token, logout } = useAuthSession();
