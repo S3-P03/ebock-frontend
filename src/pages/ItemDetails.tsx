@@ -30,6 +30,7 @@ export default function ItemDetails() {
     const [seller, setSeller] = useState<SellerUser | null>(null);
     const [images, setImages] = useState<ItemImage[] | null>(null);
     const [item, setItem] = useState<DetailedItem | null>(null);
+    const [imagesReady, setImagesReady] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
     const { isAuthenticated, token, logout } = useAuthSession();
     useEffect(() => {
@@ -51,17 +52,27 @@ export default function ItemDetails() {
     }, [id]);
 
     useEffect(() => {
-        try {
-            images?.map((image) => {
-                const response = fetchImage(image.guid).then((data) => {
-                    const itemFound = images.find((img) => image.guid === img.guid);
-                    if (itemFound) itemFound.url = data!;
-                });
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des images :", error);
-        }
-    }, [images]);
+        if (!images || images.length === 0) return;
+ 
+        setImagesReady(false);
+ 
+        const resolveImageUrls = async () => {
+            try {
+                const resolved = await Promise.all(
+                    images.map(async (image) => {
+                        const url = await fetchImage(image.guid);
+                        return { ...image, url: url! };
+                    })
+                );
+                setImages(resolved);
+                setImagesReady(true);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des images :", error);
+            }
+        };
+ 
+        resolveImageUrls();
+    }, [images?.length]);
 
     useEffect(() => {
         if (!item?.sellerCip) return;
@@ -87,7 +98,7 @@ export default function ItemDetails() {
         }
     }, [isAuthenticated]);
 
-    return ( seller == null ?
+    return ( seller == null || !imagesReady ?
         (<CircularProgress />) :
         (<Box sx={{ mx: "auto" }}>
             {isAuthenticated ? <MenuBar user={user} /> : <></>}
