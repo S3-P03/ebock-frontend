@@ -29,7 +29,8 @@
     "build": "env-cmd -f .env.build react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build-keycloak-theme": "keycloakify build"
+    "build-keycloak-theme": "keycloakify build",
+    "deploy-theme": "docker stop auth && npm run build && npm run build-keycloak-theme && docker start auth"
   },
   "eslintConfig": {
     "extends": [
