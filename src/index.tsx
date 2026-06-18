@@ -5,19 +5,27 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from 'react-oidc-context';
 import { authProviderConfig } from './authConfig';
+import { createRoot } from "react-dom/client";
+import { KcPage, type KcContext } from "./keycloak-theme/kc.gen";
+
+const kcContext = (window as any).kcContext as KcContext | undefined;
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
-  <React.StrictMode>
-    <AuthProvider {...authProviderConfig}>
-      <App/>
-    </AuthProvider>
-  </React.StrictMode>
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+if (kcContext !== undefined) {
+    createRoot(document.getElementById("root")!).render(
+        <KcPage kcContext={kcContext} />
+    );
+} else {
+    root.render(
+        <React.StrictMode>
+            <AuthProvider {...authProviderConfig}>
+                <App/>
+            </AuthProvider>
+        </React.StrictMode>
+    );
+}
+
 reportWebVitals();
