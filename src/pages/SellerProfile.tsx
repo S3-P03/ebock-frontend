@@ -1,7 +1,5 @@
 import {
-    Avatar, Box, Button, Card, CardActionArea, CardContent,
-    CircularProgress,
-    Divider, IconButton, Rating,
+    Box, CircularProgress,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser, SellerItem, SellerReview } from "../interfaces/Seller";
@@ -9,7 +7,7 @@ import ProfileBox from "../components/ProfileBox";
 import ItemDisplayBox from "../components/ItemDisplayBox";
 import { useParams } from "react-router-dom";
 import { fetchUserStoreFront } from "../services/userService";
-import { fetchUserItems } from "../services/userService";
+import { fetchUserItems } from "../services/itemService";
 
 export default function SellerProfile() {
     const { cip } = useParams();
