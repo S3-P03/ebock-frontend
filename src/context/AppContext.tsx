@@ -1,5 +1,3 @@
-//Inspiré de code d'un projet de Programmation Web Avancée
-
 import React, { createContext, ReactNode, useContext, useState } from "react";
 
 interface AppContextType {
