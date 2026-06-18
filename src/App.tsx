@@ -12,6 +12,7 @@ import { AppProvider } from "./context/AppContext";
 import useAuthSession from "./hooks/useAuthSession";
 import AuthRouteGuard from "./components/AuthRouteGuard";
 import ItemDetails from "./pages/ItemDetails";
+import MessageRoom from "./pages/MessageRoom";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
@@ -27,6 +28,7 @@ export default function HomePage() {
             <Route path="/" element={<Home />} />
             <Route path="/seller/:cip" element={<SellerProfile />} />
             <Route path="/item/:id" element={<ItemDetails />} />
+            <Route path="message/:id" element={<MessageRoom />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
