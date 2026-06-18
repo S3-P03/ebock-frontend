@@ -1,0 +1,77 @@
+import { DetailedItem, ItemImage } from "../interfaces/Item";
+import { Message, MessagePayload, MessageRaw, Room, RoomPayload } from "../interfaces/Message";
+import apiClient from "./apiClient";
+
+export async function createRoom({itemId, buyerCip, token} : {itemId: number, buyerCip: string, token: string}) : Promise<Room | null> {
+
+    const response = await apiClient.post(`/message/room`,
+        {
+            itemId, buyerCip
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },   
+        }
+    );
+
+    try {
+        return (await response.data) as Room;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function postMessage({content, senderCip, roomId, token} : {content: string, senderCip: string, roomId: string, token: string}) : Promise<Message | null> {
+    
+    const response = await apiClient.post(`/message/room/${roomId}`,
+        {
+            content, senderCip
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },   
+        }
+    );
+
+    try {
+        return (await response.data) as Message;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function fetchMessages(roomId: string | undefined, token: string): Promise<MessageRaw[] | null> {
+    const response = await apiClient.get(`/message/room/${roomId}/messages`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    try {
+        return (await response.data) as MessageRaw[];
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function fetchRoom(roomId: string | undefined, token: string): Promise<Room | null> {
+  const response = await apiClient.get(`/message/room/${roomId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+  try {
+    return (await response.data) as Room;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
