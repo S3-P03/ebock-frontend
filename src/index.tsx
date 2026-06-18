@@ -15,12 +15,10 @@ const root = ReactDOM.createRoot(
 );
 
 if (kcContext !== undefined) {
-    // On est dans Keycloak — affiche le thème custom
     createRoot(document.getElementById("root")!).render(
         <KcPage kcContext={kcContext} />
     );
 } else {
-    // On est dans l'app normale
     root.render(
         <React.StrictMode>
             <AuthProvider {...authProviderConfig}>
