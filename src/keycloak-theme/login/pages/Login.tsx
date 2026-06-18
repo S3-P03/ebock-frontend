@@ -51,7 +51,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     <input
                                         name="username"
                                         type="text"
-                                        placeholder="ex. boum7113"
+                                        placeholder="ex. abcd1234"
                                         autoComplete="username"
                                         style={{ width: "100%", padding: "8px 10px", fontSize: "14px", border: "0.5px solid #ccc", borderRadius: "8px", boxSizing: "border-box" }}
                                     />
