@@ -53,7 +53,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                         <input
                                             name="firstName"
                                             type="text"
-                                            placeholder="Jean-Félix"
+                                            placeholder="Martin"
                                             style={{ width: "100%", padding: "8px 10px", fontSize: "13px", border: "0.5px solid #ccc", borderRadius: "8px", boxSizing: "border-box" }}
                                         />
                                     </div>
@@ -62,7 +62,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                         <input
                                             name="lastName"
                                             type="text"
-                                            placeholder="Larouche"
+                                            placeholder="Thibault"
                                             style={{ width: "100%", padding: "8px 10px", fontSize: "13px", border: "0.5px solid #ccc", borderRadius: "8px", boxSizing: "border-box" }}
                                         />
                                     </div>
@@ -74,7 +74,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                     <input
                                         name="username"
                                         type="text"
-                                        placeholder="ex. larj4236"
+                                        placeholder="ex. abcd1234"
                                         style={{ width: "100%", padding: "8px 10px", fontSize: "13px", border: "0.5px solid #ccc", borderRadius: "8px", boxSizing: "border-box" }}
                                     />
                                 </div>
@@ -85,7 +85,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                     <input
                                         name="email"
                                         type="email"
-                                        placeholder="larj4236@usherbrooke.ca"
+                                        placeholder="abcd1234@usherbrooke.ca"
                                         style={{ width: "100%", padding: "8px 10px", fontSize: "13px", border: "0.5px solid #ccc", borderRadius: "8px", boxSizing: "border-box" }}
                                     />
                                 </div>
