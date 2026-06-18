@@ -1,3 +1,4 @@
+import { SellerItem} from "../interfaces/Seller";
 import { DetailedItem, ItemImage } from "../interfaces/Item";
 import apiClient from "./apiClient";
 

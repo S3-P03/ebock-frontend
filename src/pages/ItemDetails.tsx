@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { fetchUser, fetchUserStoreFront } from "../services/userService";
 import MenuBar from "../components/MenuBar";
 import { DetailedItem, ItemComment, ItemImage } from "../interfaces/Item";
-import { fetchItem, fetchItemImages } from "../services/itemservice";
+import { fetchItem, fetchItemImages } from "../services/itemService";
 import useAuthSession from "../hooks/useAuthSession";
 import { User } from "../interfaces/User";
 import CommentThread from "../components/CommentThread";
