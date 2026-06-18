@@ -1,5 +1,7 @@
 import {
-    Box, CircularProgress,
+    Avatar, Box, Button, Card, CardActionArea, CardContent,
+    CircularProgress,
+    Divider, IconButton, Rating,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser, SellerItem, SellerReview } from "../interfaces/Seller";
