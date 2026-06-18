@@ -1,0 +1,13 @@
+#kc-header {
+    display: none !important;
+}
+
+.kcFormHeaderClass {
+    display: none !important;
+}
+
+.kcLoginClass {
+    background: #f5f5f0 !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+}
