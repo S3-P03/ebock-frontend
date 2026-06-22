@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import CommentThread from "../../../components/CommentThread";
-import { ItemComment } from "../../../interfaces/Item";
+import CommentThread from "components/CommentThread";
+import { ItemComment } from "interfaces/Item";
  
 const mockComments: ItemComment[] = [
   {

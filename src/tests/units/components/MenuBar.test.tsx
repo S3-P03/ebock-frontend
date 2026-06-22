@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import MenuBar from "../../../components/MenuBar";
+import MenuBar from "components/MenuBar";
 import { BrowserRouter } from "react-router-dom";
-import * as authModule from "../../../hooks/useAuthSession";
+import * as authModule from "hooks/useAuthSession";
 
-jest.mock('../../../hooks/useAuthSession');
+jest.mock('hooks/useAuthSession');
 
 const setupMockAuth = (logout = jest.fn()) => {
   const mockUseAuthSession = authModule.default as jest.Mock;

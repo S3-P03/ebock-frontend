@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import SellerBox from "../../../components/SellerBox";
-import { SellerUser } from "../../../interfaces/Seller";
+import SellerBox from "components/SellerBox";
+import { SellerUser } from "interfaces/Seller";
 
 const mockSeller: SellerUser = {
   firstName: "Éliane",

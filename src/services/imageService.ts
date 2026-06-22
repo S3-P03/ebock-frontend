@@ -1,7 +1,9 @@
 import apiClient from "./apiClient";
 
+const SERVICE_BASE_URL = "/image";
+
 export async function fetchImage(guid: string | undefined): Promise<string | null> {
-    const response = await apiClient.get(`/image/${guid}`, {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/${guid}`, {
         responseType: 'blob'
     });
 
