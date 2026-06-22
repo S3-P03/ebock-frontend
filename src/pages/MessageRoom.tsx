@@ -5,7 +5,6 @@ import {
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchUser } from "../services/userService";
-import MenuBar from "../components/MenuBar";
 import useAuthSession from "../hooks/useAuthSession";
 import { User } from "../interfaces/User";
 import MessageBlock from "../components/MessageBlock";
@@ -95,7 +94,6 @@ export default function MessageRoom() {
     return ( room == null || user == null ? 
         (<CenteredCircularProgress />) :
         (<Box sx={{ mx: "auto" }}>
-            {isAuthenticated ? <MenuBar user={user} /> : <></>}
             <Box sx={{ display: "flex", gap: 2, p: 2, flexDirection: "column", alignItems: "flex-start" }}>
                 <RoomHeader room={room!} connectedCip={user!.cip}/>
                     <Card sx={{ p: 2.5, borderRadius: 2, width: "100%" }}>
