@@ -11,6 +11,8 @@ import SellerProfile from "./pages/SellerProfile";
 import { AppProvider } from "./context/AppContext";
 import useAuthSession from "./hooks/useAuthSession";
 import AuthRouteGuard from "./components/AuthRouteGuard";
+import ItemDetails from "./pages/ItemDetails";
+import MenuBarLayout from "./components/MenuBarLayout";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
@@ -23,8 +25,11 @@ export default function HomePage() {
         <Routes>
           <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
           <Route element={<AuthRouteGuard />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/seller/:cip" element={<SellerProfile />} />
+            <Route path="/" element={<MenuBarLayout />} >
+              <Route index element={<Home />} />
+              <Route path="/seller/:cip" element={<SellerProfile />} />
+              <Route path="/item/:id" element={<ItemDetails />} />
+            </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
