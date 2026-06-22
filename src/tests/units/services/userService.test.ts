@@ -48,15 +48,6 @@ describe("fetchUser", () => {
     expect(logout).toHaveBeenCalledTimes(1);
     expect(result).toBeNull();
   });
-
-  test("returns null when parsing data throws", async () => {
-    mockedApiClient.get.mockResolvedValue({
-      status: 200,
-      get data() {
-        throw new Error("Bad data");
-      },
-    });
-  });
 });
 
 describe("fetchUserStoreFront", () => {
@@ -87,13 +78,5 @@ describe("fetchUserStoreFront", () => {
     });
 
     expect(result?.createdAt).toBeInstanceOf(Date);
-  });
-
-  test("returns null when data parsing fails", async () => {
-    mockedApiClient.get.mockResolvedValue({
-      get data() {
-        throw new Error("Bad data");
-      },
-    });
   });
 });
