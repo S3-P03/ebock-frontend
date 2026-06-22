@@ -8,10 +8,10 @@ interface FetchOptions {
   logout: () => void;
 }
 
-const API_BASE_URL = "/user";
+const SERVICE_BASE_URL = "/user";
 
 export async function fetchUser({ token, logout }: FetchOptions): Promise<User | null> {
-  const response = await apiClient.get(`${API_BASE_URL}/me`, {
+  const response = await apiClient.get(`${SERVICE_BASE_URL}/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -31,7 +31,7 @@ export async function fetchUser({ token, logout }: FetchOptions): Promise<User |
 }
 
 export async function fetchUserStoreFront(cip: string | undefined): Promise<SellerUser | null> {
-  const response = await apiClient.get(`${API_BASE_URL}/${cip}/storefront`);
+  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
 
   try {
     const rawSeller = (await response.data) as SellerUserRaw;
@@ -40,6 +40,17 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
       createdAt: new Date(rawSeller.createdAt),
     };
     return seller;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function fetchUserItems(cip: string | undefined): Promise<SellerItem[] | null> {
+  const response = await apiClient.get(`/item/${cip}/storefront`);
+  try {
+    const items = (await response.data) as SellerItem[];
+    return items;
   } catch (error) {
     console.error(error);
     return null;
