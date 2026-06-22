@@ -1,7 +1,7 @@
-import { createRoom, postMessage, fetchRoom, fetchMessages } from "../../../services/messageService";
-import apiClient from "../../../services/apiClient";
+import { createRoom, postMessage, fetchRoom, fetchMessages } from "services/messageService";
+import apiClient from "services/apiClient";
 
-jest.mock("../../../services/apiClient");
+jest.mock("services/apiClient");
 
 const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
 const token = "fake-token";

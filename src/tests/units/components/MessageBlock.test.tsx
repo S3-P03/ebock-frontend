@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import MessageBlock from "../../../components/MessageBlock";
-import { Message } from "../../../interfaces/Message";
+import { render, screen } from "@testing-library/react";
+import MessageBlock from "components/MessageBlock";
+import { Message } from "interfaces/Message";
  
 const mockMessages: Message[] = [
   {

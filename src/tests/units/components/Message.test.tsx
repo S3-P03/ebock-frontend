@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { Message } from "../../../interfaces/Message";
-import SingleMessage from "../../../components/Message";
+import { Message } from "interfaces/Message";
+import SingleMessage from "components/Message";
 
 const sentMessage: Message = {
   roomId: 1,

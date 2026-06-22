@@ -1,10 +1,11 @@
-import { DetailedItem, ItemImage } from "../interfaces/Item";
-import { Message, MessagePayload, MessageRaw, Room, RoomPayload } from "../interfaces/Message";
+import { Message, MessageRaw, Room } from "../interfaces/Message";
 import apiClient from "./apiClient";
+
+const SERVICE_BASE_URL = "/message";
 
 export async function createRoom({itemId, buyerCip, token} : {itemId: number, buyerCip: string, token: string}) : Promise<Room | null> {
 
-    const response = await apiClient.post(`/message/room`,
+    const response = await apiClient.post(`${SERVICE_BASE_URL}/room`,
         {
             itemId, buyerCip
         },
@@ -26,7 +27,7 @@ export async function createRoom({itemId, buyerCip, token} : {itemId: number, bu
 
 export async function postMessage({content, senderCip, roomId, token} : {content: string, senderCip: string, roomId: string, token: string}) : Promise<Message | null> {
     
-    const response = await apiClient.post(`/message/room/${roomId}`,
+    const response = await apiClient.post(`${SERVICE_BASE_URL}/room/${roomId}`,
         {
             content, senderCip
         },
@@ -47,7 +48,7 @@ export async function postMessage({content, senderCip, roomId, token} : {content
 }
 
 export async function fetchMessages(roomId: string | undefined, token: string): Promise<MessageRaw[] | null> {
-    const response = await apiClient.get(`/message/room/${roomId}/messages`, {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/room/${roomId}/messages`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -62,7 +63,7 @@ export async function fetchMessages(roomId: string | undefined, token: string): 
 }
 
 export async function fetchRoom(roomId: string | undefined, token: string): Promise<Room | null> {
-  const response = await apiClient.get(`/message/room/${roomId}`, {
+  const response = await apiClient.get(`${SERVICE_BASE_URL}/room/${roomId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
