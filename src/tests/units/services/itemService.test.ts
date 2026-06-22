@@ -61,15 +61,6 @@ describe("fetchUserItems", () => {
 
     expect(result).toEqual(mockItems);
   });
-
-  test("returns null when parsing data throws", async () => {
-    mockedApiClient.get.mockResolvedValue({
-      status: 200,
-      get data() {
-        throw new Error("Bad data");
-      },
-    });
-  });
 });
 
 describe("fetchItemImages", () => {
@@ -95,14 +86,5 @@ describe("fetchItemImages", () => {
     const result = await fetchItemImages("1");
 
     expect(result).toEqual(mockImages);
-  });
-
-  test("returns null when parsing data throws", async () => {
-    mockedApiClient.get.mockResolvedValue({
-      status: 200,
-      get data() {
-        throw new Error("Bad data");
-      },
-    });
   });
 });
