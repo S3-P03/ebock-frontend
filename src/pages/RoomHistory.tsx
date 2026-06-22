@@ -1,16 +1,16 @@
 import {
-    Box, Card, CircularProgress,
+    Box, Card,
     Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { fetchUser } from "../services/userService";
-import MenuBar from "../components/MenuBar";
 import useAuthSession from "../hooks/useAuthSession";
 import { User } from "../interfaces/User";
 import { Room } from "../interfaces/Message";
 import { fetchUserRooms} from "../services/messageService";
 import { useNavigate } from "react-router-dom";
 import RoomList from "components/RoomList";
+import CenteredCircularProgress from "components/CenteredCircularProgress";
 
 export default function RoomHistory() {
     const [rooms, setRooms] = useState<Room[] | null>(null);
@@ -48,9 +48,8 @@ export default function RoomHistory() {
     }, [isAuthenticated]);
 
     return ( rooms == null || user == null ? 
-        (<CircularProgress />) :
+        (<CenteredCircularProgress />) :
         (<Box sx={{ mx: "auto" }}>
-            {isAuthenticated ? <MenuBar user={user} /> : <></>}¸
             <Card sx={{ m: 2, p: 2.5, borderRadius: 2 }}>
                 <Typography
                 gutterBottom

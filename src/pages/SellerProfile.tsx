@@ -1,13 +1,12 @@
-import {
-    Box, CircularProgress,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { SellerUser, SellerItem, SellerReview } from "../interfaces/Seller";
+import { SellerUser, SellerItem } from "../interfaces/Seller";
 import ProfileBox from "../components/ProfileBox";
 import ItemDisplayBox from "../components/ItemDisplayBox";
 import { useParams } from "react-router-dom";
 import { fetchUserStoreFront } from "../services/userService";
 import { fetchUserItems } from "../services/itemService";
+import CenteredCircularProgress from "../components/CenteredCircularProgress";
 
 export default function SellerProfile() {
     const { cip } = useParams();
@@ -15,7 +14,7 @@ export default function SellerProfile() {
     const [items, setItems] = useState<SellerItem[] | null>(null);
     useEffect(() => {
         try {
-            const response = fetchUserStoreFront(cip).then((data) => {
+            fetchUserStoreFront(cip).then((data) => {
                 setSeller(data);
                 console.log(seller?.createdAt.getFullYear());
             });
@@ -24,7 +23,7 @@ export default function SellerProfile() {
         }
 
         try {
-            const response = fetchUserItems(cip).then((data) => {
+            fetchUserItems(cip).then((data) => {
                 setItems(data);
             });
         } catch (error) {
@@ -33,7 +32,7 @@ export default function SellerProfile() {
     }, [cip]);
 
     return ( seller == null ?
-        (<CircularProgress />) :
+        (<CenteredCircularProgress />) :
         (<Box sx={{ maxWidth: 900, mx: "auto", px: 2, py: 3 }}>
             <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
 
