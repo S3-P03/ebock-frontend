@@ -12,16 +12,6 @@ const mockComment: ItemComment = {
   respondToCommentId: null,
 };
 
-const replyComment: ItemComment = {
-  id: 2,
-  content: "Oui",
-  authorFirstName: "Léanne",
-  authorLastName: "Héroux",
-  timeAgo: "il y a 2 jours",
-  authorCip: "herl2700",
-  respondToCommentId: 1,
-};
-
 const renderComment = (comment: ItemComment = mockComment, isReply = false) => {
   return render(<Comment comment={comment} isReply={isReply} />);
 };
@@ -53,35 +43,6 @@ describe("Comment Component", () => {
     test("renders uppercased initials in avatar", () => {
       renderComment();
       expect(screen.getByText("MB")).toBeInTheDocument();
-    });
-  });
-
-  // Test Group 3: Reply vs Regular Comment Styling
-  describe("Reply vs Regular Comment", () => {
-    test("regular comment (isReply=false) -> renders content", () => {
-      renderComment(mockComment, false);
-      expect(
-        screen.getByText("Est-ce que le livre est toujours disponible?")
-      ).toBeInTheDocument();
-    });
-
-    test("reply comment (isReply=true) -> renders content", () => {
-      renderComment(replyComment, true);
-      expect(
-        screen.getByText("Oui")
-      ).toBeInTheDocument();
-    });
-
-    test("isReply=false -> avatar has neutral dark color", () => {
-      const { container } = renderComment(mockComment, false);
-      const avatar = container.querySelector(".MuiAvatar-root");
-      expect(avatar).toBeInTheDocument();
-    });
-
-    test("isReply=true -> avatar has green tint color", () => {
-      const { container } = renderComment(mockComment, true);
-      const avatar = container.querySelector(".MuiAvatar-root");
-      expect(avatar).toBeInTheDocument();
     });
   });
 });

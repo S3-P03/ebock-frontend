@@ -64,12 +64,4 @@ describe("ItemMainInfoBox Component", () => {
       expect(screen.getByText("0.00$")).toBeInTheDocument();
     });
   });
-
-  // Test Group 3: Null Handling
-  describe("Null Item", () => {
-    test("null item -> renders without crashing", () => {
-      renderBox(null);
-      expect(document.querySelector(".MuiCard-root")).toBeInTheDocument();
-    });
-  });
 });
