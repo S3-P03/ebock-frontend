@@ -14,7 +14,7 @@ export default function ImageList({images}: {images: ItemImage[]}) {
             .sort((a, b) => a.displayOrder - b.displayOrder)
             .map((img) => (
                 <Box key={img.url} sx={{ width: 100, height: 100, bgcolor: "background.paper", border: "1px solid", borderColor: "divider" }}>
-                    <img onClick={() => setCurrentPosition(img.displayOrder-1)} src={img.url} alt="Item" style={{ width: "100%", height: "100%", objectFit: "fill" }} />
+                    <img onClick={() => setCurrentPosition(img.displayOrder-1)} src={img.url} alt="Item" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                 </Box>
             ))}
         </Box>

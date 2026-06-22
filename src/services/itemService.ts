@@ -21,7 +21,7 @@ export async function fetchUserItems(cip: string | undefined): Promise<SellerIte
 }
 
 export async function fetchItem(id: string | undefined): Promise<DetailedItem | null> {
-    const response = await apiClient.get(`/item/${id}`);
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/${id}`);
 
   try {
     return (await response.data) as DetailedItem;

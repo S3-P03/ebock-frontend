@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import useAuthSession from '../../../hooks/useAuthSession';
+import useAuthSession from 'hooks/useAuthSession';
 import * as oidcModule from 'react-oidc-context';
 
 jest.mock('react-oidc-context');

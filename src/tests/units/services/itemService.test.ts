@@ -1,7 +1,7 @@
-import { fetchUserItems, fetchItem, fetchItemImages } from "../../../services/itemService";
-import apiClient from "../../../services/apiClient";
+import { fetchUserItems, fetchItem, fetchItemImages } from "services/itemService";
+import apiClient from "services/apiClient";
 
-jest.mock("../../../services/apiClient");
+jest.mock("services/apiClient");
 
 const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
 

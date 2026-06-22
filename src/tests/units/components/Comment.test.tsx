@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import Comment from "../../../components/Comment";
-import { ItemComment } from "../../../interfaces/Item";
+import Comment from "components/Comment";
+import { ItemComment } from "interfaces/Item";
 
 const mockComment: ItemComment = {
   id: 1,
