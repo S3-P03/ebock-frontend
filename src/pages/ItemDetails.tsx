@@ -1,11 +1,10 @@
 import {
-    Box, Button, Card, CircularProgress,
+    Box, Button, Card,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser } from "../interfaces/Seller";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchUser, fetchUserStoreFront } from "../services/userService";
-import MenuBar from "../components/MenuBar";
 import { DetailedItem, ItemComment, ItemImage } from "../interfaces/Item";
 import { fetchItem, fetchItemImages } from "../services/itemService";
 import useAuthSession from "../hooks/useAuthSession";
@@ -17,6 +16,7 @@ import ItemAditionnalInfoBox from "../components/ItemAdditionalInfoBox";
 import ItemMainInfoBox from "../components/ItemMainInfoBox";
 import { fetchImage } from "../services/imageService";
 import { createRoom } from "../services/messageService";
+import CenteredCircularProgress from "components/CenteredCircularProgress";
 
 const itemComments: ItemComment[] = [
     { id: 1, authorCip: "pele3157", authorFirstName: "Eliane", authorLastName: "Pelletier", content: "Cet article est-il toujours disponible ?", respondToCommentId: null, timeAgo: "il y a 2 jours" },
@@ -114,9 +114,8 @@ export default function ItemDetails() {
     }, [isAuthenticated]);
 
     return ( seller == null || !imagesReady ?
-        (<CircularProgress />) :
+        (<CenteredCircularProgress />) :
         (<Box sx={{ mx: "auto" }}>
-            {isAuthenticated ? <MenuBar user={user} /> : <></>}
             <Box sx={{ display: "flex", gap: 2, p: 2, alignItems: "flex-start" }}>
                 <Box sx={{ flex: 2, display: "flex", flexDirection: "column", gap: 2 }}>
                     <ImageList images={images!}/>

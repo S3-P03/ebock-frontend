@@ -4,11 +4,6 @@ import apiClient from "./apiClient";
 
 const SERVICE_BASE_URL = "/item";
 
-interface FetchOptions {
-  token: string;
-  logout: () => void;
-}
-
 export async function fetchUserItems(cip: string | undefined): Promise<SellerItem[] | null> {
   const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
   try {

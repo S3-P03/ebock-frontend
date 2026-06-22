@@ -1,5 +1,5 @@
 import {
-    Box, Button, Card, CircularProgress,
+    Box, Button, Card,
     TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import RoomHeader from "../components/RoomHeader";
 import useWebSocket from "../hooks/useWebSocket";
 import DOMPurify from "dompurify";
 import { containsMalicious } from "../utils/maliciousText";
+import CenteredCircularProgress from "components/CenteredCircularProgress";
 
 export default function MessageRoom() {
     const { id } = useParams();
@@ -92,7 +93,7 @@ export default function MessageRoom() {
     }, [isAuthenticated]);
 
     return ( room == null || user == null ? 
-        (<CircularProgress />) :
+        (<CenteredCircularProgress />) :
         (<Box sx={{ mx: "auto" }}>
             {isAuthenticated ? <MenuBar user={user} /> : <></>}
             <Box sx={{ display: "flex", gap: 2, p: 2, flexDirection: "column", alignItems: "flex-start" }}>
