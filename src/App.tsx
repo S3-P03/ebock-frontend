@@ -13,6 +13,7 @@ import useAuthSession from "./hooks/useAuthSession";
 import AuthRouteGuard from "./components/AuthRouteGuard";
 import ItemDetails from "./pages/ItemDetails";
 import MessageRoom from "./pages/MessageRoom";
+import RoomHistory from "pages/RoomHistory";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
@@ -29,6 +30,7 @@ export default function HomePage() {
             <Route path="/seller/:cip" element={<SellerProfile />} />
             <Route path="/item/:id" element={<ItemDetails />} />
             <Route path="message/:id" element={<MessageRoom />} />
+            <Route path="message" element={<RoomHistory />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

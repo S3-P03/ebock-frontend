@@ -1,4 +1,4 @@
-import { createRoom, postMessage, fetchRoom, fetchMessages } from "services/messageService";
+import { createRoom, postMessage, fetchRoom, fetchMessages, fetchUserRooms } from "services/messageService";
 import apiClient from "services/apiClient";
 
 jest.mock("services/apiClient");
@@ -62,6 +62,37 @@ describe("fetchMessages", () => {
         const result = await fetchMessages("1", token);
 
         expect(result).toEqual(mockMessages);
+    });
+});
+
+describe("fetchUserRooms", () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test("returns the user's rooms when the request succeeds", async () => {
+        const mockRooms = [
+        {
+            id: 1,
+            name: "Room test 1",
+            sellerCip: "larj4236",
+            buyerCip : "boum7113"
+        }, {
+            id: 2,
+            name: "Room test 2",
+            sellerCip: "larj4236",
+            buyerCip : "boum7113"
+        }];
+
+        mockedApiClient.get.mockResolvedValue({
+            status: 200,
+            data: mockRooms,
+        });
+
+        const result = await fetchUserRooms(token);
+
+        expect(result).toEqual(mockRooms);
     });
 });
 

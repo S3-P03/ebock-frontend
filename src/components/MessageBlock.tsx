@@ -19,12 +19,12 @@ export default function MessageBlock({ messages, cip }: { messages: Message[], c
                         <SingleMessage message={message} isSent={message.senderCip==cip} />
                         { !sameSender && message.senderCip==cip && 
                             <Box sx={{ display: "flex", mb: 4, justifyContent: "flex-end"}}>
-                                <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${message.senderFirstName} ${message.senderLastName[0]} - ${now.getDate() !== message.sentAt?.getDate() ? (message.sentAt?.getDate() + "/" + String(message.sentAt?.getMonth()).padStart(2, "0")) : ""} ${message.sentAt?.getHours()}:${String(message.sentAt?.getMinutes()).padStart(2, "0")}`}</Box>
+                                <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${message.senderFirstName} ${message.senderLastName[0]} - ${now.getDate() !== message.sentAt?.getDate() ? (message.sentAt?.getDate() + "/" + String(message.sentAt?.getMonth()+1).padStart(2, "0")) : ""} ${message.sentAt?.getHours()}:${String(message.sentAt?.getMinutes()).padStart(2, "0")}`}</Box>
                             </Box>
                         }
                         { !sameSender && message.senderCip!=cip && 
                             <Box sx={{ display: "flex", mb: 4, justifyContent: "flex-start"}}>
-                                <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${message.senderFirstName} ${message.senderLastName[0]} - ${now.getDate() !== message.sentAt?.getDate() ? (message.sentAt?.getDate() + "/" + String(message.sentAt?.getMonth()).padStart(2, "0")) : ""} ${message.sentAt?.getHours()}:${String(message.sentAt?.getMinutes()).padStart(2, "0")}`}</Box>
+                                <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${message.senderFirstName} ${message.senderLastName[0]} - ${now.getDate() !== message.sentAt?.getDate() ? (message.sentAt?.getDate() + "/" + String(message.sentAt?.getMonth()+1).padStart(2, "0")) : ""} ${message.sentAt?.getHours()}:${String(message.sentAt?.getMinutes()).padStart(2, "0")}`}</Box>
                             </Box>
                         }
                     </Box>

@@ -2,7 +2,6 @@ import {
   AppBar,
   Avatar,
   Box,
-  Button,
   Container,
   IconButton,
   Menu,
@@ -14,10 +13,12 @@ import {
 import { MouseEvent, useState } from "react";
 import { User } from "../interfaces/User";
 import useAuthSession from "../hooks/useAuthSession";
+import { useNavigate } from "react-router-dom";
 
 export default function MenuBar({ user }: { user: User | null }) {
   const [anchorUserMenu, setAnchorUserMenu] = useState<null | HTMLElement>(null);
   const {logout} = useAuthSession();
+  let navigate = useNavigate();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorUserMenu(event.currentTarget);
@@ -29,6 +30,11 @@ export default function MenuBar({ user }: { user: User | null }) {
 
   const handleProfile = () => {
     setAnchorUserMenu(null);
+  }
+
+  const handleMessages = () => {
+    setAnchorUserMenu(null);
+    navigate("/message");
   }
 
   const handleLogout = () => {
@@ -84,6 +90,7 @@ export default function MenuBar({ user }: { user: User | null }) {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem onClick={handleProfile}>Profil</MenuItem>
+                <MenuItem onClick={handleMessages}>Messages</MenuItem>
                 <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
               </Menu>
             </Box>

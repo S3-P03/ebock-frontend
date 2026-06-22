@@ -1,6 +1,6 @@
 import {
-  Avatar, Box, Button, Card, CardActionArea, CardContent,
-  Divider, IconButton, Rating,
+  Avatar, Box, Button, Card,
+  Divider, Rating,
 } from "@mui/material";
 import { SellerUser } from "../interfaces/Seller";
 
