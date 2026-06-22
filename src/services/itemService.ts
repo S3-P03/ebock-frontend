@@ -2,6 +2,19 @@ import { SellerItem} from "../interfaces/Seller";
 import { DetailedItem, ItemImage } from "../interfaces/Item";
 import apiClient from "./apiClient";
 
+const SERVICE_BASE_URL = "/item";
+
+export async function fetchUserItems(cip: string | undefined): Promise<SellerItem[] | null> {
+  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
+  try {
+    const items = (await response.data) as SellerItem[];
+    return items;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 export async function fetchItem(id: string | undefined): Promise<DetailedItem | null> {
     const response = await apiClient.get(`${SERVICE_BASE_URL}/${id}`);
 
