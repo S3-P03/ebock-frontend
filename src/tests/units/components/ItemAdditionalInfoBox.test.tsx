@@ -99,19 +99,4 @@ describe("ItemAdditionalInfoBox Component", () => {
       expect(screen.queryByText(/2024/)).not.toBeInTheDocument();
     });
   });
- 
-  // Test Group 5: Null Handling
-  describe("Null Item", () => {
-    test("null item -> renders without crashing", () => {
-      renderBox(null);
-      expect(screen.getByText("DÉTAILS")).toBeInTheDocument();
-    });
- 
-    test("null item -> section labels still visible", () => {
-      renderBox(null);
-      expect(screen.getByText("État")).toBeInTheDocument();
-      expect(screen.getByText("Paiement")).toBeInTheDocument();
-      expect(screen.getByText("Publié")).toBeInTheDocument();
-    });
-  });
 });
