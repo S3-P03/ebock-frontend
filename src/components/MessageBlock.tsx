@@ -15,7 +15,7 @@ export default function MessageBlock({ messages, cip }: { messages: Message[], c
                 const isLast = idx === arr.length - 1;
                 sameSender = !isLast && next?.senderCip === message.senderCip;
                 return (
-                    <Box sx={{display: "flex", flexDirection: "column"}}>
+                    <Box key={idx} sx={{display: "flex", flexDirection: "column"}}>
                         <SingleMessage message={message} isSent={message.senderCip==cip} />
                         { !sameSender && message.senderCip==cip && 
                             <Box sx={{ display: "flex", mb: 4, justifyContent: "flex-end"}}>
@@ -29,7 +29,6 @@ export default function MessageBlock({ messages, cip }: { messages: Message[], c
                         }
                     </Box>
                 );
-                
             })}
         </Box>
     );
