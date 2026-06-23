@@ -52,7 +52,7 @@ export default function MessageRoom() {
 
     useEffect(() => {
         try {
-            const response = fetchRoom(id, token).then((data) => {
+            fetchRoom(id, token).then((data) => {
                 setRoom(data);
             });
         } catch (error) {
@@ -60,7 +60,7 @@ export default function MessageRoom() {
         }
         
         try {
-            const response = fetchMessages(id, token).then((data) => {
+            fetchMessages(id, token).then((data) => {
                 let formattedMessages = data?.map((obj) => {
                     return {
                         roomId: obj.roomId,

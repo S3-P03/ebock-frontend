@@ -17,13 +17,8 @@ export default function MessageBlock({ messages, cip }: { messages: Message[], c
                 return (
                     <Box key={idx} sx={{display: "flex", flexDirection: "column"}}>
                         <SingleMessage message={message} isSent={message.senderCip==cip} />
-                        { !sameSender && message.senderCip==cip && 
-                            <Box sx={{ display: "flex", mb: 4, justifyContent: "flex-end"}}>
-                                <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${message.senderFirstName} ${message.senderLastName[0]} - ${now.getDate() !== message.sentAt?.getDate() ? (message.sentAt?.getDate() + "/" + String(message.sentAt?.getMonth()).padStart(2, "0")) : ""} ${message.sentAt?.getHours()}:${String(message.sentAt?.getMinutes()).padStart(2, "0")}`}</Box>
-                            </Box>
-                        }
-                        { !sameSender && message.senderCip!=cip && 
-                            <Box sx={{ display: "flex", mb: 4, justifyContent: "flex-start"}}>
+                        { !sameSender && 
+                            <Box sx={{ display: "flex", mb: 4, justifyContent: (message.senderCip==cip ? "flex-end" : "flex-start") }}>
                                 <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${message.senderFirstName} ${message.senderLastName[0]} - ${now.getDate() !== message.sentAt?.getDate() ? (message.sentAt?.getDate() + "/" + String(message.sentAt?.getMonth()).padStart(2, "0")) : ""} ${message.sentAt?.getHours()}:${String(message.sentAt?.getMinutes()).padStart(2, "0")}`}</Box>
                             </Box>
                         }

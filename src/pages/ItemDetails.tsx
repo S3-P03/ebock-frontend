@@ -38,7 +38,7 @@ export default function ItemDetails() {
 
     const handleClick = () => {        
         try {
-            const response = createRoom({itemId: Number(id!), buyerCip: user!.cip, token}).then((data) => {
+            createRoom({itemId: Number(id!), buyerCip: user!.cip, token}).then((data) => {
                 navigate(`/message/${data!.roomId}`)
             });
         } catch(error) {
