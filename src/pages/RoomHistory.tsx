@@ -3,11 +3,11 @@ import {
     Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { fetchUser } from "../services/userService";
-import useAuthSession from "../hooks/useAuthSession";
-import { User } from "../interfaces/User";
-import { Room } from "../interfaces/Message";
-import { fetchUserRooms} from "../services/messageService";
+import { fetchUser } from "services/userService";
+import useAuthSession from "hooks/useAuthSession";
+import { User } from "interfaces/User";
+import { Room } from "interfaces/Message";
+import { fetchUserRooms} from "services/messageService";
 import { useNavigate } from "react-router-dom";
 import RoomList from "components/RoomList";
 import CenteredCircularProgress from "components/CenteredCircularProgress";

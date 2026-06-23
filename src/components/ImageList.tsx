@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { ItemImage } from "../interfaces/Item";
+import { ItemImage } from "interfaces/Item";
 import { useState } from "react";
 
 export default function ImageList({images}: {images: ItemImage[]}) {

@@ -1,9 +1,8 @@
-// Layout.jsx
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import useAuthSession from '../hooks/useAuthSession';
-import { User } from '../interfaces/User';
-import { fetchUser } from '../services/userService';
+import useAuthSession from 'hooks/useAuthSession';
+import { User } from 'interfaces/User';
+import { fetchUser } from 'services/userService';
 import MenuBar from './MenuBar';
 
 export default function MenuBarLayout() {

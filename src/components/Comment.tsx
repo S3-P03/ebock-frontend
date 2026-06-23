@@ -1,5 +1,5 @@
 import { Box, styled } from "@mui/material";
-import { ItemComment } from "../interfaces/Item";
+import { ItemComment } from "interfaces/Item";
 import DefaultAvatar from "./DefaultAvatar";
 
 const ReplyCommentStyle = styled('div')(({ theme }) => ({

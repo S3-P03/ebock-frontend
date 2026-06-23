@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useAuthSession from "../hooks/useAuthSession";
+import useAuthSession from "hooks/useAuthSession";
 
 export default function Login() {
 

@@ -1,5 +1,5 @@
 import { Box, Card, styled, Typography } from "@mui/material";
-import { DetailedItem } from "../interfaces/Item";
+import { DetailedItem } from "interfaces/Item";
 
 const CategoryStyle = styled('div')(({ theme }) => ({
   ...theme.typography.button,

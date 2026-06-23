@@ -1,5 +1,5 @@
-import { SellerItem} from "../interfaces/Seller";
-import { DetailedItem, ItemImage } from "../interfaces/Item";
+import { SellerItem} from "interfaces/Seller";
+import { DetailedItem, ItemImage } from "interfaces/Item";
 import apiClient from "./apiClient";
 
 const SERVICE_BASE_URL = "/item";
@@ -35,4 +35,14 @@ export async function fetchItemImages(id: string | undefined): Promise<ItemImage
     console.error(error);
     return null;
   }
+}
+export async function getAllItems() {
+    const response = await apiClient.get(`/item/list/1`);
+    
+    try {
+        return (await response.data) as DetailedItem[];
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
 }
