@@ -12,6 +12,7 @@ import { AppProvider } from "./context/AppContext";
 import useAuthSession from "./hooks/useAuthSession";
 import AuthRouteGuard from "./components/AuthRouteGuard";
 import ItemDetails from "./pages/ItemDetails";
+import MessageRoom from "./pages/MessageRoom";
 import MenuBarLayout from "./components/MenuBarLayout";
 
 export default function HomePage() {
@@ -28,6 +29,7 @@ export default function HomePage() {
             <Route path="/" element={<MenuBarLayout />} >
               <Route index element={<Home />} />
               <Route path="/seller/:cip" element={<SellerProfile />} />
+              <Route path="message/:id" element={<MessageRoom />} />
               <Route path="/item/:id" element={<ItemDetails />} />
             </Route>
           </Route>

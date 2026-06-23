@@ -3,7 +3,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser } from "../interfaces/Seller";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchUser, fetchUserStoreFront } from "../services/userService";
 import { DetailedItem, ItemComment, ItemImage } from "../interfaces/Item";
 import { fetchItem, fetchItemImages } from "../services/itemService";
@@ -15,6 +15,7 @@ import SellerBox from "../components/SellerBox";
 import ItemAditionnalInfoBox from "../components/ItemAdditionalInfoBox";
 import ItemMainInfoBox from "../components/ItemMainInfoBox";
 import { fetchImage } from "../services/imageService";
+import { createRoom } from "../services/messageService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 
 const itemComments: ItemComment[] = [
@@ -33,6 +34,20 @@ export default function ItemDetails() {
     const [imagesReady, setImagesReady] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
     const { isAuthenticated, token, logout } = useAuthSession();
+    let navigate = useNavigate();
+
+    const handleClick = () => {        
+        try {
+            createRoom({itemId: Number(id!), buyerCip: user!.cip, token}).then((data) => {
+                navigate(`/message/${data!.roomId}`)
+            });
+        } catch(error) {
+            console.error("Erreur lors de l'envoi du message : ", error);
+            return;
+        }
+
+    };
+
     useEffect(() => {
         try {
             const response = fetchItem(id).then((data) => {
@@ -112,7 +127,7 @@ export default function ItemDetails() {
                     <Box sx={{ width: "100%", flexShrink: 0, gap: 2, display: "flex", flexDirection: "column" }}>
                         <ItemMainInfoBox item={item} />
                         <Card sx={{ p: 2.5, borderRadius: 2 }}>
-                            <Button variant="contained" sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} fullWidth>Contacter le vendeur</Button>
+                            <Button variant="contained" sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} fullWidth onClick={handleClick}>Contacter le vendeur</Button>
                         </Card>                        
                         <SellerBox seller={seller} />
                         <ItemAditionnalInfoBox item={item} />
