@@ -1,5 +1,6 @@
-import { Avatar, Box, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { ItemComment } from "../interfaces/Item";
+import DefaultAvatar from "./DefaultAvatar";
 
 const ReplyCommentStyle = styled('div')(({ theme }) => ({
   ...theme.typography.button,
@@ -24,7 +25,7 @@ export default function Comment({ comment, isReply }: { comment: ItemComment; is
     return (
         <Box>
             <Box sx={{ display: "flex", gap: 1.5, alignItems: "flex-start" }}>
-                <Avatar sx={{ width: 36, height: 36, color: (isReply ? "#00796b" : "#333"), backgroundColor: (isReply ? "#e1f5ee" : "#f5f5f0"), fontSize: 13 }}>{initials}</Avatar>
+                <DefaultAvatar width={36} height={36} initials={initials} primaryColor={isReply} />
                 <Box sx={{ flexGrow: 1 }}>
                     {isReply ? (
                         <ReplyCommentStyle>

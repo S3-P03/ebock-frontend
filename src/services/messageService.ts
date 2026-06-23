@@ -76,3 +76,18 @@ export async function fetchRoom(roomId: string | undefined, token: string): Prom
     return null;
   }
 }
+
+export async function fetchUserRooms(token: string): Promise<Room[] | null> {
+  const response = await apiClient.get(`${SERVICE_BASE_URL}/room`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+  try {
+    return (await response.data) as Room[];
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}

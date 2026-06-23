@@ -1,5 +1,6 @@
-import { Avatar, Box, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { Message } from "../interfaces/Message";
+import DefaultAvatar from "./DefaultAvatar";
 
 const SentStyle = styled('div')(({ theme }) => ({
   ...theme.typography,
@@ -24,25 +25,20 @@ export default function SingleMessage({ message, isSent }: { message: Message; i
 
     return (
         <Box>
-            {isSent ? (
-            <Box sx={{ display: "flex", flexDirection: "row-reverse", justifyContent: "flex-start", gap: 1.5, alignItems: "flex-start" }}>
-                <Avatar sx={{ width: 36, height: 36, color: (isSent ? "#00796b" : "#333"), backgroundColor: (isSent ? "#e1f5ee" : "#f5f5f0"), fontSize: 13 }}>{initials}</Avatar>
-                <Box sx={{ flexGrow: 1, display:"flex", flexDirection: "row-reverse" }}>
+            <Box sx={{ display: "flex", flexDirection: (isSent ? "row-reverse" : "row"), justifyContent: "flex-start", gap: 1.5, alignItems: "flex-start" }}>
+                <DefaultAvatar width={36} height={36} primaryColor={isSent} initials={initials}/>
+                <Box sx={{ flexGrow: 1, display:"flex", flexDirection: (isSent ? "row-reverse" : "row") }}>
+                {isSent ? (
                     <SentStyle>
                         {message.content}
                     </SentStyle>
-                </Box>
-            </Box>
-            ) : (
-            <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", gap: 1.5, alignItems: "flex-start" }}>
-                <Avatar sx={{ width: 36, height: 36, color: (isSent ? "#00796b" : "#333"), backgroundColor: (isSent ? "#e1f5ee" : "#f5f5f0"), fontSize: 13 }}>{initials}</Avatar>
-                <Box sx={{ flexGrow: 1, display:"flex", flexDirection: "row" }}>
+                ) : (
                     <ReceivedStyle>
                         {message.content}
                     </ReceivedStyle>
+                )}
                 </Box>
             </Box>
-                )}
         </Box>
     );
 }
