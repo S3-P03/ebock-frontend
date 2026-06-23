@@ -27,7 +27,7 @@ export default function RoomHistory() {
     
     useEffect(() => {
         try {
-            const response = fetchUserRooms(token).then((data) => {
+            fetchUserRooms(token).then((data) => {
                 setRooms(data);
             });
         } catch (error) {
