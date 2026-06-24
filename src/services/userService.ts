@@ -1,6 +1,7 @@
 // services/userService.ts
-import { SellerItem, SellerUser, SellerUserRaw } from "../interfaces/Seller";
-import { User } from "../interfaces/User";
+import { SellerUser, SellerUserRaw } from "interfaces/Seller";
+import { SellerItem } from "interfaces/Item";
+import { User } from "interfaces/User";
 import apiClient from "./apiClient";
 
 interface FetchOptions {

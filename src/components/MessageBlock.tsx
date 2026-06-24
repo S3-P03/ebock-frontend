@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Message } from "../interfaces/Message";
+import { Message } from "interfaces/Message";
 import SingleMessage from "./Message";
 
 export default function MessageBlock({ messages, cip }: { messages: Message[], cip: string }) {

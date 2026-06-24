@@ -1,5 +1,5 @@
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
-import { ItemComment } from "../interfaces/Item";
+import { ItemComment } from "interfaces/Item";
 import Comment from "./Comment";
 
 export default function CommentThread({ comments }: { comments: ItemComment[] }) {

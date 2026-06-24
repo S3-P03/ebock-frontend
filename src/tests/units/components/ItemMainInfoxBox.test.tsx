@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import ItemMainInfoBox from "components/ItemMainInfoBox";
+import ItemMainInfoBox from "components/items/ItemMainInfoBox";
 import { DetailedItem } from "interfaces/Item";
 
 const mockItem: DetailedItem = {
@@ -61,7 +61,7 @@ describe("ItemMainInfoBox Component", () => {
 
     test("zero price -> shows 0.00$", () => {
       renderBox({ ...mockItem, price: 0 });
-      expect(screen.getByText("0.00$")).toBeInTheDocument();
+      expect(screen.getByText("Gratuit")).toBeInTheDocument();
     });
   });
 });

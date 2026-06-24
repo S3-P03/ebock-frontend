@@ -11,8 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import { User } from "../interfaces/User";
-import useAuthSession from "../hooks/useAuthSession";
+import { User } from "interfaces/User";
+import useAuthSession from "hooks/useAuthSession";
 import { useNavigate } from "react-router-dom";
 
 export default function MenuBar({ user }: { user: User | null }) {
@@ -50,7 +50,7 @@ export default function MenuBar({ user }: { user: User | null }) {
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              href="/search"
               sx={{
                 mr: 2,
                 display: "flex",

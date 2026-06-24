@@ -2,20 +2,20 @@ import {
     Box, Button, Card,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { SellerUser } from "../interfaces/Seller";
+import { SellerUser } from "interfaces/Seller";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchUser, fetchUserStoreFront } from "../services/userService";
-import { DetailedItem, ItemComment, ItemImage } from "../interfaces/Item";
-import { fetchItem, fetchItemImages } from "../services/itemService";
-import useAuthSession from "../hooks/useAuthSession";
-import { User } from "../interfaces/User";
-import CommentThread from "../components/CommentThread";
-import ImageList from "../components/ImageList";
-import SellerBox from "../components/SellerBox";
-import ItemAditionnalInfoBox from "../components/ItemAdditionalInfoBox";
-import ItemMainInfoBox from "../components/ItemMainInfoBox";
-import { fetchImage } from "../services/imageService";
-import { createRoom } from "../services/messageService";
+import { fetchUser, fetchUserStoreFront } from "services/userService";
+import { DetailedItem, ItemComment, ItemImage } from "interfaces/Item";
+import { fetchItem, fetchItemImages } from "services/itemService";
+import useAuthSession from "hooks/useAuthSession";
+import { User } from "interfaces/User";
+import CommentThread from "components/CommentThread";
+import ImageList from "components/ImageList";
+import SellerBox from "components/SellerBox";
+import ItemAditionnalInfoBox from "components/items/ItemAdditionalInfoBox";
+import ItemMainInfoBox from "components/items/ItemMainInfoBox";
+import { fetchImage } from "services/imageService";
+import { createRoom } from "services/messageService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 
 const itemComments: ItemComment[] = [

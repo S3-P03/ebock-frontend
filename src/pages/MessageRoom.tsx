@@ -4,16 +4,16 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchUser } from "../services/userService";
-import useAuthSession from "../hooks/useAuthSession";
-import { User } from "../interfaces/User";
-import MessageBlock from "../components/MessageBlock";
-import { Message, MessageRaw, Room } from "../interfaces/Message";
-import { fetchMessages, fetchRoom, postMessage } from "../services/messageService";
-import RoomHeader from "../components/RoomHeader";
-import useWebSocket from "../hooks/useWebSocket";
+import { fetchUser } from "services/userService";
+import useAuthSession from "hooks/useAuthSession";
+import { User } from "interfaces/User";
+import MessageBlock from "components/MessageBlock";
+import { Message, MessageRaw, Room } from "interfaces/Message";
+import { fetchMessages, fetchRoom, postMessage } from "services/messageService";
+import RoomHeader from "components/RoomHeader";
+import useWebSocket from "hooks/useWebSocket";
 import DOMPurify from "dompurify";
-import { containsMalicious } from "../utils/maliciousText";
+import { containsMalicious } from "utils/maliciousText";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 
 export default function MessageRoom() {

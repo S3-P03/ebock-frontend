@@ -1,4 +1,4 @@
-import { Message, MessageRaw, Room } from "../interfaces/Message";
+import { Message, MessageRaw, Room } from "interfaces/Message";
 import apiClient from "./apiClient";
 
 const SERVICE_BASE_URL = "/message";
