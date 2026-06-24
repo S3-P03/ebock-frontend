@@ -3,13 +3,11 @@ import apiClient from "./apiClient";
 
 const SERVICE_BASE_URL = "/category";
 
-export async function fetchCategories(): Promise<Category[] | null> {
-    const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
-
+export async function getCategoryList(): Promise<Category[]> {
   try {
-    return response.data as Category[];
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
+    return (Array.isArray(response.data) ? response.data : []) as Category[];
   } catch (error) {
-    console.error(error);
-    return null;
+    return [];
   }
 }

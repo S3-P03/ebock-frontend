@@ -10,7 +10,6 @@ export async function fetchImage(guid: string | undefined): Promise<string | nul
   try {
     return(URL.createObjectURL(response.data));
   } catch (error) {
-    console.error(error);
     return null;
   }
 }

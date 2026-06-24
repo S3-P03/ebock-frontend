@@ -3,13 +3,11 @@ import apiClient from "./apiClient";
 
 const SERVICE_BASE_URL = "/deliveryOption";
 
-export async function fetchDeliveryOptions(): Promise<DeliveryOption[] | null> {
-    const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
-
+export async function getDeliveryList(): Promise<DeliveryOption[]> {
   try {
-    return response.data as DeliveryOption[];
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
+    return (Array.isArray(response.data) ? response.data : []) as DeliveryOption[];
   } catch (error) {
-    console.error(error);
-    return null;
+    return [];
   }
 }

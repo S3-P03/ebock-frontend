@@ -1,7 +1,7 @@
 import {
   Avatar, Box, Divider, Rating,
 } from "@mui/material";
-import { SellerReview } from "../interfaces/Seller";
+import { SellerReview } from "interfaces/Seller";
 
 export default function ReviewRow({ review }: { review: SellerReview }) {
     const initials = review.author.split(" ").map((w) => w[0]).join("").toUpperCase();

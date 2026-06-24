@@ -3,13 +3,11 @@ import apiClient from "./apiClient";
 
 const SERVICE_BASE_URL = "/wear";
 
-export async function fetchWears(): Promise<Wear[] | null> {
-    const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
-
+export async function getWearList(): Promise<Wear[]> {
   try {
-    return response.data as Wear[];
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
+    return (Array.isArray(response.data) ? response.data : []) as Wear[];
   } catch (error) {
-    console.error(error);
-    return null;
+    return [];
   }
 }

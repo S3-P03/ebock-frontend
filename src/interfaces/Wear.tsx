@@ -1,4 +1,4 @@
 export interface Wear {
-    wearId: number;
-    name: string;
+  wearId: number;
+  name: string;
 }

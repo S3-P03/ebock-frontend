@@ -2,7 +2,7 @@ import {
   Avatar, Box, Button, Card,
   Divider, Rating,
 } from "@mui/material";
-import { SellerUser } from "../interfaces/Seller";
+import { SellerUser } from "interfaces/Seller";
 
 export default function ProfileBox ({seller, showContact = true}: { seller: SellerUser, showContact?: boolean }) {
   return (

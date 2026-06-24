@@ -1,4 +1,4 @@
 export interface DeliveryOption {
-    deliveryOptnId: number;
-    name: string;
+  deliveryOptnId: number;
+  name: string;
 }

@@ -45,3 +45,17 @@ export interface ItemPayload {
         displayOrder: number
     }];
 }
+
+export interface SellerItem {
+  itemId: number;
+  name: string;
+  price: number;
+  addedAt: string;
+  quantity: number;
+  categoryId: number;
+  wearId: number;
+  firstName: string;
+  lastName: string;
+  tags: number[];
+  firstImage?: string;
+}

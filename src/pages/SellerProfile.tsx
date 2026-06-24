@@ -1,12 +1,13 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { SellerUser, SellerItem } from "../interfaces/Seller";
-import ProfileBox from "../components/ProfileBox";
-import ItemDisplayBox from "../components/ItemDisplayBox";
+import { SellerUser } from "interfaces/Seller";
+import { SellerItem } from "interfaces/Item";
+import ProfileBox from "components/ProfileBox";
+import ItemDisplayBox from "components/items/ItemDisplayBox";
 import { useParams } from "react-router-dom";
-import { fetchUserStoreFront } from "../services/userService";
-import { fetchUserItems } from "../services/itemService";
-import CenteredCircularProgress from "../components/CenteredCircularProgress";
+import { fetchUserStoreFront } from "services/userService";
+import { fetchUserItems } from "services/itemService";
+import CenteredCircularProgress from "components/CenteredCircularProgress";
 
 export default function SellerProfile() {
     const { cip } = useParams();

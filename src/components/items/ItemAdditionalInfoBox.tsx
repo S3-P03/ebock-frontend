@@ -4,7 +4,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { DetailedItem } from "../interfaces/Item";
+import { DetailedItem } from "interfaces/Item";
 
 export default function ItemAditionnalInfoBox({ item }: { item: DetailedItem | null }) {
   

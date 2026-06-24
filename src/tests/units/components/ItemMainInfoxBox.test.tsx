@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import ItemMainInfoBox from "components/ItemMainInfoBox";
+import ItemMainInfoBox from "components/items/ItemMainInfoBox";
 import { DetailedItem } from "interfaces/Item";
 
 const mockItem: DetailedItem = {

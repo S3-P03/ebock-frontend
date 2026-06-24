@@ -1,17 +1,5 @@
 import { User } from "./User";
-
-export interface SellerItem {
-  itemId: number;
-  name: string;
-  price: number;
-  addedAt: string;
-  quantity: number;
-  categoryId: number;
-  wearId: number;
-  firstName: string;
-  lastName: string;
-  tags: number[];
-}
+import { SellerItem } from "./Item";
 
 export interface SellerUser {
   firstName: string;

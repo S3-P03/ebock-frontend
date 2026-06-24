@@ -1,4 +1,4 @@
 export interface PaymentOption {
-    paymentOptnId: number;
-    name: string;
+  paymentId: number;
+  name: string;
 }

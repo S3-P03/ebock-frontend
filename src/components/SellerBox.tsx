@@ -5,8 +5,8 @@ import {
   Rating,
   Typography,
 } from "@mui/material";
-import { SellerUser } from "../interfaces/Seller";
-import { monthNames } from "../utils/months";
+import { SellerUser } from "interfaces/Seller";
+import { monthNames } from "utils/months";
 
 
 

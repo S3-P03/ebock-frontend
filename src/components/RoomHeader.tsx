@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
-import { Room } from "../interfaces/Message";
+import { Room } from "interfaces/Message";
 
 export default function RoomHeader({room, connectedCip} : {room : Room, connectedCip : string}) {
     return(

@@ -1,5 +1,5 @@
 import { Box, styled } from "@mui/material";
-import { Message } from "../interfaces/Message";
+import { Message } from "interfaces/Message";
 import DefaultAvatar from "./DefaultAvatar";
 
 const SentStyle = styled('div')(({ theme }) => ({
