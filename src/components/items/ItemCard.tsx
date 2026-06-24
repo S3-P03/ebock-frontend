@@ -1,7 +1,7 @@
 import {
   Box, Card, CardActionArea, CardContent, IconButton,
 } from "@mui/material";
-import { SellerItem } from "interfaces/Seller";
+import { SellerItem } from "interfaces/Item";
 
 export default function ItemCard({ itemList }: { itemList: SellerItem }) {
   const { name, price } = itemList;

@@ -29,3 +29,16 @@ export interface ItemComment {
     authorLastName: string;
     timeAgo: string;
 }
+
+export interface SellerItem {
+  itemId: number;
+  name: string;
+  price: number;
+  addedAt: string;
+  quantity: number;
+  categoryId: number;
+  wearId: number;
+  firstName: string;
+  lastName: string;
+  tags: number[];
+}

@@ -2,7 +2,7 @@ import ItemCard from "./ItemCard";
 import {
   Box
 } from "@mui/material";
-import { SellerItem } from "interfaces/Seller";
+import { SellerItem } from "interfaces/Item";
 
 export default function ItemDisplayBox({ items }: { items: SellerItem[] }) {
   const itemsArray = Array.isArray(items) ? items : [items];

@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { SellerUser, SellerItem } from "interfaces/Seller";
+import { SellerUser } from "interfaces/Seller";
+import { SellerItem } from "interfaces/Item";
 import ProfileBox from "components/ProfileBox";
 import ItemDisplayBox from "components/items/ItemDisplayBox";
 import { useParams } from "react-router-dom";
