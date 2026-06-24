@@ -21,7 +21,6 @@ export async function fetchUserItems(cip: string | undefined): Promise<SellerIte
     const items = (await response.data) as SellerItem[];
     return items;
   } catch (error) {
-    console.error(error);
     return null;
   }
 }
@@ -32,7 +31,6 @@ export async function fetchItem(id: string | undefined): Promise<DetailedItem | 
   try {
     return (await response.data) as DetailedItem;
   } catch (error) {
-    console.error(error);
     return null;
   }
 }
@@ -43,7 +41,6 @@ export async function fetchItemImages(id: string | undefined): Promise<ItemImage
   try {
     return (await response.data) as ItemImage[];
   } catch (error) {
-    console.error(error);
     return null;
   }
 }
@@ -68,7 +65,6 @@ export async function getFilteredItems(pageNumber: number, filters: FilterParams
     const response = await apiClient.get(url);
     return (Array.isArray(response.data) ? response.data : []) as SellerItem[];
   } catch (error) {
-    console.error("Error fetching filtered items:", error);
     return [];
   }
 }

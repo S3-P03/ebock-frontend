@@ -8,7 +8,6 @@ export async function getWearList(): Promise<Wear[]> {
     const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
     return (Array.isArray(response.data) ? response.data : []) as Wear[];
   } catch (error) {
-    console.error("Error fetching wear list:", error);
     return [];
   }
 }

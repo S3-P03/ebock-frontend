@@ -15,7 +15,7 @@ export default function ItemCard({ itemList }: { itemList: SellerItem }) {
   useEffect(() => {
     if (firstImage) {
       setImageLoading(true);
-      fetchImage(firstImage).then(url => {
+      fetchImage(firstImage)?.then(url => {
         setImageUrl(url);
         setImageLoading(false);
       });
@@ -28,11 +28,28 @@ export default function ItemCard({ itemList }: { itemList: SellerItem }) {
 
   return (
     <Card sx={{ borderRadius: 2, position: "relative", flex: "1 1 250px", maxWidth: "350px" }}>
-      <IconButton size="small" sx={{ position: "absolute", top: 6, right: 6, zIndex: 1 }}>
+      <IconButton
+        size="small"
+        sx={{
+          position: "absolute",
+          top: 6,
+          right: 6,
+          zIndex: 1,
+          bgcolor: "white",
+          borderRadius: "50%",
+          width: 28,
+          height: 28,
+          "&:hover": {
+            bgcolor: "grey.100",
+          },
+        }}
+        role="fav-button"
+      >
         ♡
       </IconButton>
       <CardActionArea onClick={handleCardClick}>
         <Box
+          role="img"
           sx={{
             height: 110,
             display: "flex",

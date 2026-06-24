@@ -8,7 +8,6 @@ export async function getPaymentList(): Promise<PaymentOption[]> {
     const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
     return (Array.isArray(response.data) ? response.data : []) as PaymentOption[];
   } catch (error) {
-    console.error("Error fetching payment list:", error);
     return [];
   }
 }

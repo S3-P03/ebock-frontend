@@ -64,7 +64,6 @@ export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
         setDeliveriesList(deliveries);
         setPaymentsList(payments);
       } catch (error) {
-        console.error("Error fetching filter options:", error);
       } finally {
         setLoading(false);
       }
@@ -168,12 +167,14 @@ export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
         />
 
         <FormControl fullWidth size="small">
-          <InputLabel>Catégories</InputLabel>
+          <InputLabel id="categories-label">Catégories</InputLabel>
           <Select
+            labelId="categories-label"
+            id="categories-select"
             multiple
             value={selectedCategories}
             onChange={(e) => setSelectedCategories(typeof e.target.value === 'string' ? [] : e.target.value)}
-            label="Categories"
+            label="Catégories"
           >
             {categoriesList.map((cat) => (
               <MenuItem key={cat.categoryId} value={cat.categoryId}>
@@ -184,8 +185,10 @@ export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
         </FormControl>
 
         <FormControl fullWidth size="small">
-          <InputLabel>Tags</InputLabel>
+          <InputLabel id="tags-label">Tags</InputLabel>
           <Select
+            labelId="tags-label"
+            id="tags-select"
             multiple
             value={selectedTags}
             onChange={(e) => setSelectedTags(typeof e.target.value === 'string' ? [] : e.target.value)}
@@ -200,12 +203,14 @@ export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
         </FormControl>
 
         <FormControl fullWidth size="small">
-          <InputLabel>États</InputLabel>
+          <InputLabel id="wears-label">États</InputLabel>
           <Select
+            labelId="wears-label"
+            id="wears-select"
             multiple
             value={selectedWears}
             onChange={(e) => setSelectedWears(typeof e.target.value === 'string' ? [] : e.target.value)}
-            label="Wears"
+            label="États"
           >
             {wearsList.map((wear) => (
               <MenuItem key={wear.wearId} value={wear.wearId}>
@@ -216,12 +221,14 @@ export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
         </FormControl>
 
         <FormControl fullWidth size="small">
-          <InputLabel>Options de livraison</InputLabel>
+          <InputLabel id="deliveries-label">Options de livraison</InputLabel>
           <Select
+            labelId="deliveries-label"
+            id="deliveries-select"
             multiple
             value={selectedDeliveries}
             onChange={(e) => setSelectedDeliveries(typeof e.target.value === 'string' ? [] : e.target.value)}
-            label="Deliveries"
+            label="Options de livraison"
           >
             {deliveriesList.map((delivery) => (
               <MenuItem key={delivery.deliveryOptnId} value={delivery.deliveryOptnId}>
@@ -232,12 +239,14 @@ export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
         </FormControl>
 
         <FormControl fullWidth size="small">
-          <InputLabel>Modes de paiement</InputLabel>
+          <InputLabel id="payments-label">Modes de paiement</InputLabel>
           <Select
+            labelId="payments-label"
+            id="payments-select"
             multiple
             value={selectedPayments}
             onChange={(e) => setSelectedPayments(typeof e.target.value === 'string' ? [] : e.target.value)}
-            label="Payments"
+            label="Modes de paiement"
           >
             {paymentsList.map((payment) => (
               <MenuItem key={payment.paymentId} value={payment.paymentId}>

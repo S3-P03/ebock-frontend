@@ -1,4 +1,4 @@
-import { fetchUserItems, fetchItem, fetchItemImages } from "services/itemService";
+import { fetchUserItems, fetchItem, fetchItemImages, getFilteredItems, FilterParams } from "services/itemService";
 import apiClient from "services/apiClient";
 
 jest.mock("services/apiClient");
@@ -86,5 +86,141 @@ describe("fetchItemImages", () => {
     const result = await fetchItemImages("1");
 
     expect(result).toEqual(mockImages);
+  });
+});
+
+describe("getFilteredItems", () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("returns filtered items when the request succeeds", async () => {
+    const mockItems = [
+      { id: 1, name: "Item 1", price: 50 },
+      { id: 2, name: "Item 2", price: 75 },
+    ];
+
+    mockedApiClient.get.mockResolvedValue({
+      status: 200,
+      data: mockItems,
+    });
+
+    const filters: FilterParams = {
+      minP: 40,
+      maxP: 100,
+      categories: [1, 2],
+    };
+
+    const result = await getFilteredItems(1, filters);
+
+    expect(mockedApiClient.get).toHaveBeenCalledWith(
+      "/item/list/1?minP=40&maxP=100&categories=1%2C2"
+    );
+    expect(result).toEqual(mockItems);
+  });
+
+  test("returns items with all filter parameters", async () => {
+    const mockItems = [{ id: 1, name: "Item 1" }];
+
+    mockedApiClient.get.mockResolvedValue({
+      status: 200,
+      data: mockItems,
+    });
+
+    const filters: FilterParams = {
+      minP: 20,
+      maxP: 150,
+      maxD: 50,
+      fav: true,
+      categories: [1],
+      tags: [2, 3],
+      wears: [1],
+      deliveries: [2],
+      payments: [1, 3],
+    };
+
+    await getFilteredItems(2, filters);
+
+    expect(mockedApiClient.get).toHaveBeenCalled();
+    const callArg = (mockedApiClient.get as jest.Mock).mock.calls[0][0];
+    expect(callArg).toContain("/item/list/2");
+    expect(callArg).toContain("minP=20");
+    expect(callArg).toContain("maxP=150");
+    expect(callArg).toContain("maxD=50");
+    expect(callArg).toContain("fav=true");
+  });
+
+  test("returns items without optional filters", async () => {
+    const mockItems = [{ id: 1, name: "Item 1" }];
+
+    mockedApiClient.get.mockResolvedValue({
+      status: 200,
+      data: mockItems,
+    });
+
+    const filters: FilterParams = {};
+
+    await getFilteredItems(1, filters);
+
+    expect(mockedApiClient.get).toHaveBeenCalledWith("/item/list/1");
+  });
+
+  test("returns empty array when request fails", async () => {
+    mockedApiClient.get.mockRejectedValue(new Error("Network error"));
+
+    const filters: FilterParams = { minP: 50 };
+
+    const result = await getFilteredItems(1, filters);
+
+    expect(result).toEqual([]);
+  });
+
+  test("returns empty array when response data is not an array", async () => {
+    mockedApiClient.get.mockResolvedValue({
+      status: 200,
+      data: { id: 1, name: "Item 1" },
+    });
+
+    const filters: FilterParams = {};
+
+    const result = await getFilteredItems(1, filters);
+
+    expect(result).toEqual([]);
+  });
+
+  test("returns empty array on null response", async () => {
+    mockedApiClient.get.mockResolvedValue({
+      status: 200,
+      data: null,
+    });
+
+    const filters: FilterParams = {};
+
+    const result = await getFilteredItems(1, filters);
+
+    expect(result).toEqual([]);
+  });
+
+  test("correctly handles array filters with multiple values", async () => {
+    const mockItems = [{ id: 1, name: "Item 1" }];
+
+    mockedApiClient.get.mockResolvedValue({
+      status: 200,
+      data: mockItems,
+    });
+
+    const filters: FilterParams = {
+      categories: [1, 2, 3],
+      tags: [5, 6],
+      wears: [1, 2],
+    };
+
+    await getFilteredItems(1, filters);
+
+    const callArg = (mockedApiClient.get as jest.Mock).mock.calls[0][0];
+    expect(callArg).toContain("categories=1%2C2%2C3");
+    expect(callArg).toContain("tags=5%2C6");
+    expect(callArg).toContain("wears=1%2C2");
   });
 });
