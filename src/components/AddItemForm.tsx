@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, CardHeader, Divider, FormControl, FormH
 import useAuthSession from "hooks/useAuthSession";
 import { Category } from "interfaces/Category";
 import { DeliveryOption } from "interfaces/DeliveryOption";
-import { FormErrors, FormState, ImageEntry } from "interfaces/Form";
+import { ItemFormErrors, ItemFormState, ImageEntry } from "interfaces/ItemForm";
 import { ItemPayload } from "interfaces/Item";
 import { PaymentOption } from "interfaces/PaymentOption";
 import { Tag } from "interfaces/Tag";
@@ -41,7 +41,7 @@ export default function AddItemForm({
   wears: Wear[];
 }) {
   
-  const INITIAL_STATE: FormState = {
+  const INITIAL_STATE: ItemFormState = {
   name: "",
   description: "",
   price: "",
@@ -54,13 +54,13 @@ export default function AddItemForm({
   imageList: [],
   };
   
-  const [form, setForm] = useState<FormState>(INITIAL_STATE);
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [form, setForm] = useState<ItemFormState>(INITIAL_STATE);
+  const [errors, setErrors] = useState<ItemFormErrors>({});
   const { token } = useAuthSession();
   const navigate = useNavigate();
   const localIdCounter = useRef(0);
 
-  const set = <K extends keyof FormState>(key: K, value: FormState[K]): void => {
+  const set = <K extends keyof ItemFormState>(key: K, value: ItemFormState[K]): void => {
     setForm((f) => ({ ...f, [key]: value }));
     setErrors((e) => ({ ...e, [key]: undefined }));
   };
@@ -82,7 +82,7 @@ export default function AddItemForm({
       guid: "",
       previewUrl: URL.createObjectURL(file),
       displayOrder: form.imageList.length + i + 1,
-      status: "Uploading",
+      status: "Uploaded",
     }));
 
     setForm((f) => ({
@@ -90,22 +90,6 @@ export default function AddItemForm({
       imageList: [...f.imageList, ...placeholders],
     }));
     setErrors((e) => ({ ...e, imageList: undefined }));
- 
-    await Promise.all(
-      placeholders.map(async (placeholder) => {
-        try {
-          const response = await uploadImageFile(placeholder.file, token);
-          patchImage(placeholder.localId, { guid: response!.guid, status: "Uploaded" });
-        } catch (err) {
-          const message =
-            err instanceof Error ? err.message : "Unknown error";
-          patchImage(placeholder.localId, {
-            status: "Error",
-            uploadError: message,
-          });
-        }
-      })
-    );
   };
 
   const removeImage = (localId: string): void => {
@@ -133,13 +117,13 @@ export default function AddItemForm({
 
   const isUploading = form.imageList.some((img) => img.status === "Uploading");
 
-  const validate = (): FormErrors => {
-    const errs: FormErrors = {};
+  const validate = (): ItemFormErrors => {
+    const errs: ItemFormErrors = {};
     if (!form.name.trim()) errs.name = "Veuillez indiquer le nom du produit.";
     if (!form.description.trim()) errs.description = "Veuillez fournir une description.";
     const price = parseFloat(form.price);
-    if (!form.price || isNaN(price) || price < 0.01)
-      errs.price = "Veuillez entrer un prix valide (minimum : $0.01).";
+    if (!form.price || isNaN(price) || price < 0)
+      errs.price = "Veuillez entrer un prix valide.";
     if (!form.quantity || form.quantity < 1)
       errs.quantity = "Veuillez spécifier la quantité (minimum : 1).";
     if (form.categoryId === "") errs.categoryId = "Veuillez sélectionner une catégorie.";
@@ -160,6 +144,24 @@ export default function AddItemForm({
   };
 
   const handleSubmit = async () => {
+
+    await Promise.all(
+      form.imageList.map(async (placeholder) => {
+        try {
+          const response = await uploadImageFile(placeholder.file, token);
+          patchImage(placeholder.localId, { guid: response!.guid, status: "Uploaded" });
+        } catch (err) {
+          const message =
+            err instanceof Error ? err.message : "Unknown error";
+          patchImage(placeholder.localId, {
+            status: "Error",
+            uploadError: message,
+          });
+          return;
+        }
+      })
+    );
+    
     const errs = validate();
     if (Object.keys(errs).length) {
       setErrors(errs);
@@ -180,7 +182,7 @@ export default function AddItemForm({
         displayorder: displayOrder,
       })),
     };
-    
+
     try {
       await addItem(payload, token).then((data) => {
         if(data) navigate(`/item/${data.itemId}`);
@@ -278,7 +280,7 @@ export default function AddItemForm({
                     required
                     fullWidth
                     type="number"
-                    inputProps={{ step: "0.01", min: "0.01" }}
+                    inputProps={{ step: "0.01", min: "0" }}
                     placeholder="0.00"
                     value={form.price}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -420,7 +422,7 @@ export default function AddItemForm({
                   >
                     {form.imageList.length} image
                     {form.imageList.length > 1 ? "s" : ""}
-                    {isUploading ? " · Uploading…" : " · Utilisez les flèches pour réarranger les images"}
+                    {isUploading ? " · Chargement..." : " · Utilisez les flèches pour réarranger les images"}
                   </Typography>
                 )}
               </Stack>

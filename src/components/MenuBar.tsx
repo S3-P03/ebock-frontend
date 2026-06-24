@@ -73,7 +73,7 @@ export default function MenuBar({ user }: { user: User | null }) {
                 + Ajouter un item
             </Button>
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
+              <Tooltip title="Ouvrir options">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt={user?.firstName + " " + user?.lastName}

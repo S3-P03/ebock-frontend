@@ -56,7 +56,7 @@ export default function ImageDropzone({ onFiles, error, disabled } : {onFiles: (
           Glisser les images ici ou cliquer pour explorer les fichiers
         </Typography>
         <Typography variant="caption" color="text.disabled">
-          Formats supportés · PNG, JPG, WEBP 
+          Formats supportés · PNG, JPG 
         </Typography>
         <input
           ref={inputRef}

@@ -22,7 +22,7 @@ describe("ImageDropzone Component", () => {
     
         test("renders formats", () => {
           renderDropzone();
-          expect(screen.getByText(/PNG, JPG, WEBP/)).toBeInTheDocument();
+          expect(screen.getByText(/PNG, JPG/)).toBeInTheDocument();
         });
     });
 });

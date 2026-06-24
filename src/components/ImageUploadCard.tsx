@@ -1,6 +1,6 @@
 import { ArrowDownward, ArrowUpward, Delete, Image } from "@mui/icons-material";
 import { Box, IconButton, Paper, Stack, Tooltip, Typography } from "@mui/material";
-import { ImageEntry } from "interfaces/Form";
+import { ImageEntry } from "interfaces/ItemForm";
 
 export default function ImageUploadCard({ image, index, total, onRemove, onReorder }: {image: ImageEntry, index: number, total: number, onRemove: (index: string) => void, onReorder: (from: number, to: number) => void}) {
   return (
@@ -63,7 +63,7 @@ export default function ImageUploadCard({ image, index, total, onRemove, onReord
       </Box>
  
       <Stack direction="row" gap={0.5} flexShrink={0}>
-        <Tooltip title="Move up">
+        <Tooltip title="Mettre avant">
           <span>
             <IconButton
               size="small"
@@ -74,7 +74,7 @@ export default function ImageUploadCard({ image, index, total, onRemove, onReord
             </IconButton>
           </span>
         </Tooltip>
-        <Tooltip title="Move down">
+        <Tooltip title="Mettre après">
           <span>
             <IconButton
               size="small"
@@ -85,7 +85,7 @@ export default function ImageUploadCard({ image, index, total, onRemove, onReord
             </IconButton>
           </span>
         </Tooltip>
-        <Tooltip title="Remove">
+        <Tooltip title="Retirer">
           <IconButton size="small" color="error" onClick={() => onRemove(image.localId)}>
             <Delete/>
           </IconButton>

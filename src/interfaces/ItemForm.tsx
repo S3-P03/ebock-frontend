@@ -10,7 +10,7 @@ export interface ImageEntry {
   uploadError?: string;
 }
 
-export interface FormState {
+export interface ItemFormState {
   name: string;
   description: string;
   price: string;
@@ -23,7 +23,7 @@ export interface FormState {
   imageList: ImageEntry[];
 }
  
-export interface FormErrors {
+export interface ItemFormErrors {
   name?: string;
   description?: string;
   price?: string;

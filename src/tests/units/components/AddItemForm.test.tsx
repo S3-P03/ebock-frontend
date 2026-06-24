@@ -138,7 +138,7 @@ describe("AddItemForm Component", () => {
 
       expect(await screen.findByText("Veuillez indiquer le nom du produit.")).toBeInTheDocument();
       expect(screen.getByText("Veuillez fournir une description.")).toBeInTheDocument();
-      expect(screen.getByText("Veuillez entrer un prix valide (minimum : $0.01).")).toBeInTheDocument();
+      expect(screen.getByText("Veuillez entrer un prix valide.")).toBeInTheDocument();
       expect(screen.getByText("Veuillez sélectionner une catégorie.")).toBeInTheDocument();
       expect(screen.getByText("Veuillez sélectionner la condition de l'item.")).toBeInTheDocument();
       expect(screen.getByText("Veuillez sélectionner au moins une option de paiement.")).toBeInTheDocument();
