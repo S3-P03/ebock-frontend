@@ -45,7 +45,7 @@ export async function fetchItemImages(id: string | undefined): Promise<ItemImage
   }
 }
 
-export async function getFilteredItems(pageNumber: number, filters: FilterParams): Promise<SellerItem[]> {
+export async function getFilteredItems(token: string, pageNumber: number, filters: FilterParams): Promise<SellerItem[]> {
   try {
     const params = new URLSearchParams();
     
@@ -62,7 +62,11 @@ export async function getFilteredItems(pageNumber: number, filters: FilterParams
     const queryString = params.toString();
     const url = `${SERVICE_BASE_URL}/list/${pageNumber}${queryString ? `?${queryString}` : ""}`;
     
-    const response = await apiClient.get(url);
+    const response = await apiClient.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return (Array.isArray(response.data) ? response.data : []) as SellerItem[];
   } catch (error) {
     return [];

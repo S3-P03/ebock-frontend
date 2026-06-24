@@ -5,6 +5,8 @@ jest.mock("services/apiClient");
 
 const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
 
+const fakeToken = "token123";
+
 describe("fetchItem", () => {
 
   beforeEach(() => {
@@ -112,10 +114,11 @@ describe("getFilteredItems", () => {
       categories: [1, 2],
     };
 
-    const result = await getFilteredItems(1, filters);
+    const result = await getFilteredItems(fakeToken, 1, filters);
 
     expect(mockedApiClient.get).toHaveBeenCalledWith(
-      "/item/list/1?minP=40&maxP=100&categories=1%2C2"
+      "/item/list/1?minP=40&maxP=100&categories=1%2C2",
+      { headers: { Authorization: `Bearer ${fakeToken}` } }
     );
     expect(result).toEqual(mockItems);
   });
@@ -140,7 +143,7 @@ describe("getFilteredItems", () => {
       payments: [1, 3],
     };
 
-    await getFilteredItems(2, filters);
+    await getFilteredItems(fakeToken, 2, filters);
 
     expect(mockedApiClient.get).toHaveBeenCalled();
     const callArg = (mockedApiClient.get as jest.Mock).mock.calls[0][0];
@@ -161,9 +164,9 @@ describe("getFilteredItems", () => {
 
     const filters: FilterParams = {};
 
-    await getFilteredItems(1, filters);
+    await getFilteredItems(fakeToken, 1, filters);
 
-    expect(mockedApiClient.get).toHaveBeenCalledWith("/item/list/1");
+    expect(mockedApiClient.get).toHaveBeenCalledWith("/item/list/1",  {"headers": {"Authorization": `Bearer ${fakeToken}`}});
   });
 
   test("returns empty array when request fails", async () => {
@@ -171,7 +174,7 @@ describe("getFilteredItems", () => {
 
     const filters: FilterParams = { minP: 50 };
 
-    const result = await getFilteredItems(1, filters);
+    const result = await getFilteredItems(fakeToken, 1, filters);
 
     expect(result).toEqual([]);
   });
@@ -181,10 +184,11 @@ describe("getFilteredItems", () => {
       status: 200,
       data: { id: 1, name: "Item 1" },
     });
-
+    
+    const fakeToken = "token123";
     const filters: FilterParams = {};
 
-    const result = await getFilteredItems(1, filters);
+    const result = await getFilteredItems(fakeToken, 1, filters);
 
     expect(result).toEqual([]);
   });
@@ -197,7 +201,7 @@ describe("getFilteredItems", () => {
 
     const filters: FilterParams = {};
 
-    const result = await getFilteredItems(1, filters);
+    const result = await getFilteredItems(fakeToken, 1, filters);
 
     expect(result).toEqual([]);
   });
@@ -216,7 +220,7 @@ describe("getFilteredItems", () => {
       wears: [1, 2],
     };
 
-    await getFilteredItems(1, filters);
+    await getFilteredItems(fakeToken, 1, filters);
 
     const callArg = (mockedApiClient.get as jest.Mock).mock.calls[0][0];
     expect(callArg).toContain("categories=1%2C2%2C3");

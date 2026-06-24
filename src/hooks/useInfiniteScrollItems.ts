@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import useAuthSession from "./useAuthSession";
 
 interface UseInfiniteScrollResult<T> {
   items: T[];
@@ -21,7 +22,7 @@ interface FilterParams {
 }
 
 export function useInfiniteScrollItems<T extends { itemId: number }>(
-  fetchFunction: (page: number, filters: FilterParams) => Promise<T[]>,
+  fetchFunction: (token: string, page: number, filters: FilterParams) => Promise<T[]>,
   filters: FilterParams
 ): UseInfiniteScrollResult<T> {
   const [items, setItems] = useState<T[]>([]);
@@ -30,13 +31,14 @@ export function useInfiniteScrollItems<T extends { itemId: number }>(
   const [error, setError] = useState<Error | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const pageRef = useRef(1);
+  const { isAuthenticated, token, logout } = useAuthSession();
 
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
     try {
       const currentPage = pageRef.current;
-      const data = await fetchFunction(currentPage, filters);
+      const data = await fetchFunction(token, currentPage, filters);
 
       const newHasMore = Array.isArray(data) && data.length > 0;
       
@@ -61,7 +63,7 @@ export function useInfiniteScrollItems<T extends { itemId: number }>(
     // Load first page directly
     (async () => {
       try {
-        const data = await fetchFunction(1, filters);
+        const data = await fetchFunction(token, 1, filters);
         const newHasMore = Array.isArray(data) && data.length > 0;
         setItems(Array.isArray(data) ? data : []);
         setHasMore(newHasMore);

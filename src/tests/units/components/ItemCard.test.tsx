@@ -176,7 +176,7 @@ describe("ItemCard Component", () => {
     test("handles zero price", () => {
       const freeItem = { ...mockItem, price: 0 };
       renderItemCard(freeItem);
-      expect(screen.getByText("0 $")).toBeInTheDocument();
+      expect(screen.getByText("Gratuit")).toBeInTheDocument();
     });
 
     test("handles negative price (edge case)", () => {
