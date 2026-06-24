@@ -75,7 +75,7 @@ describe('MenuBar Component', () => {
       expect(screen.queryByText('Déconnexion')).not.toBeVisible();
 
       // Click avatar to open
-      const avatarButton = screen.getByRole('button');
+      const avatarButton = screen.getAllByRole('button')[1];
       fireEvent.click(avatarButton);
 
       // Now opened
@@ -92,7 +92,7 @@ describe('MenuBar Component', () => {
       renderMenuBar();
 
       // Open menu
-      const avatarButton = screen.getByRole('button');
+      const avatarButton = screen.getAllByRole('button')[1];
       fireEvent.click(avatarButton);
 
       // Click logout
@@ -107,7 +107,7 @@ describe('MenuBar Component', () => {
       renderMenuBar();
 
       // Open menu
-      const avatarButton = screen.getByRole('button');
+      const avatarButton = screen.getAllByRole('button')[1];
       fireEvent.click(avatarButton);
 
       const logoutButton = screen.getByText('Déconnexion');
@@ -123,7 +123,7 @@ describe('MenuBar Component', () => {
       renderMenuBar();
 
       // Open menu
-      const avatarButton = screen.getByRole('button');
+      const avatarButton = screen.getAllByRole('button')[1];
       fireEvent.click(avatarButton);
 
       const profileButton = screen.getByText('Profil');

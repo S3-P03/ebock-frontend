@@ -40,10 +40,10 @@ export interface ItemPayload {
     tagList: number[];
     paymentOptionList: number[];
     deliveryOptionList: number[];
-    imageList: [{
+    imageList: {
         guid: string, 
-        displayOrder: number
-    }];
+        displayorder: number
+    }[];
 }
 
 export interface SellerItem {

@@ -7,67 +7,51 @@ import { PaymentOption } from "interfaces/PaymentOption";
 import { Tag } from "interfaces/Tag";
 import { Wear } from "interfaces/Wear";
 import { useEffect, useState } from "react";
-import { fetchCategories } from "services/categoryService";
-import { fetchDeliveryOptions } from "services/deliveryOptionService";
-import { fetchPaymentOptions } from "services/paymentOptionService";
-import { fetchTags } from "services/tagService";
-import { fetchWears } from "services/wearService";
+import { getCategoryList } from "services/categoryService";
+import { getDeliveryList } from "services/deliveryOptionService";
+import { getPaymentList } from "services/paymentOptionService";
+import { getTagList } from "services/tagService";
+import { getWearList } from "services/wearService";
 
 
 export default function AddItem() {
 
-    const [paymentOptions, setPaymentOptions] = useState<PaymentOption[] | null>(null);
-    const [deliveryOptions, setDeliveryOptions] = useState<DeliveryOption[] | null>(null);
-    const [categories, setCategories] = useState<Category[] | null>(null);
-    const [tags, setTags] = useState<Tag[] | null>(null);
-    const [wears, setWears] = useState<Wear[] | null>(null);
-
+    const [categoriesList, setCategoriesList] = useState<Category[]>([]);
+    const [tagsList, setTagsList] = useState<Tag[]>([]);
+    const [wearsList, setWearsList] = useState<Wear[]>([]);
+    const [deliveriesList, setDeliveriesList] = useState<DeliveryOption[]>([]);
+    const [paymentsList, setPaymentsList] = useState<PaymentOption[]>([]);
+    const [loading, setLoading] = useState(true);
+    
     useEffect(() => {
+    const fetchFilterOptions = async () => {
+        setLoading(true);
         try {
-            fetchPaymentOptions().then((data) => {
-                setPaymentOptions(data);
-            });
+        const [cats, tags, wears, deliveries, payments] = await Promise.all([
+            getCategoryList(),
+            getTagList(),
+            getWearList(),
+            getDeliveryList(),
+            getPaymentList(),
+        ]);
+        setCategoriesList(cats);
+        setTagsList(tags);
+        setWearsList(wears);
+        setDeliveriesList(deliveries);
+        setPaymentsList(payments);
         } catch (error) {
-            console.error("Erreur lors de la récupération des options de paiement :", error);
+        } finally {
+        setLoading(false);
         }
-        
-        try {
-            fetchDeliveryOptions().then((data) => {
-                setDeliveryOptions(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des options de livraison :", error);
-        }
+    };
 
-        try {
-            fetchCategories().then((data) => {
-                setCategories(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des catégories :", error);
-        }
-
-        try {
-            fetchWears().then((data) => {
-                setWears(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des niveaux d'usure :", error);
-        }
-
-        try {
-            fetchTags().then((data) => {
-                setTags(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des tags :", error);
-        }
+    fetchFilterOptions();
     }, []);
 
-    return((paymentOptions == null || deliveryOptions == null || categories == null || tags == null || wears == null) ?
+    return((loading) ?
             (<CenteredCircularProgress />) :
         (<Box>
-            <AddItemForm paymentOptions={paymentOptions} categories={categories} tags={tags} deliveryOptions={deliveryOptions} wears={wears}/>
+            <AddItemForm paymentOptions={paymentsList} categories={categoriesList} tags={tagsList} deliveryOptions={deliveriesList} wears={wearsList}/>
         </Box>)
     );
 }

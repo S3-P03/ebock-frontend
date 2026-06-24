@@ -12,10 +12,10 @@ describe("getPaymentList", () => {
 
   test("returns payments when the request succeeds", async () => {
     const mockPayments = [
-      { paymentId: 1, name: "Cash" },
-      { paymentId: 2, name: "Debit Card" },
-      { paymentId: 3, name: "Credit Card" },
-      { paymentId: 4, name: "E-Transfer" },
+      { paymentOptnId: 1, name: "Cash" },
+      { paymentOptnId: 2, name: "Debit Card" },
+      { paymentOptnId: 3, name: "Credit Card" },
+      { paymentOptnId: 4, name: "E-Transfer" },
     ];
 
     mockedApiClient.get.mockResolvedValue({
@@ -40,7 +40,7 @@ describe("getPaymentList", () => {
   test("returns empty array when response data is not an array", async () => {
     mockedApiClient.get.mockResolvedValue({
       status: 200,
-      data: { paymentId: 1, name: "Cash" },
+      data: { paymentOptnId: 1, name: "Cash" },
     });
 
     const result = await getPaymentList();

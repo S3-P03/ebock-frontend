@@ -69,7 +69,7 @@ export async function getFilteredItems(pageNumber: number, filters: FilterParams
   }
 }
 
-export async function addItem(item : ItemPayload, token: string): Promise<DetailedItem | null> {
+export async function addItem(item : ItemPayload, token: string): Promise<{itemId: number} | null> {
   const response = await apiClient.post(`${SERVICE_BASE_URL}/insert`,
         {
             name: item.name,
@@ -92,7 +92,7 @@ export async function addItem(item : ItemPayload, token: string): Promise<Detail
     );
 
   try {
-    return (await response.data) as DetailedItem;
+    return (await response.data) as {itemId: number};
   } catch (error) {
     console.error(error);
     return null;
