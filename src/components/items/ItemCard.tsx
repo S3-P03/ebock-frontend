@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box, Card, CardActionArea, CardContent, IconButton,
 } from "@mui/material";
@@ -6,9 +7,10 @@ import { SellerItem } from "interfaces/Item";
 import { fetchImage } from "services/imageService";
 
 export default function ItemCard({ itemList }: { itemList: SellerItem }) {
-  const { name, price, firstImage } = itemList;
+  const { itemId, name, price, firstImage } = itemList;
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (firstImage) {
@@ -20,12 +22,16 @@ export default function ItemCard({ itemList }: { itemList: SellerItem }) {
     }
   }, [firstImage]);
 
+  const handleCardClick = () => {
+    navigate(`/item/${itemId}`);
+  };
+
   return (
     <Card sx={{ borderRadius: 2, position: "relative", flex: "1 1 250px", maxWidth: "350px" }}>
       <IconButton size="small" sx={{ position: "absolute", top: 6, right: 6, zIndex: 1 }}>
         ♡
       </IconButton>
-      <CardActionArea>
+      <CardActionArea onClick={handleCardClick}>
         <Box
           sx={{
             height: 110,
