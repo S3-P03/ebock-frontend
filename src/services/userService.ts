@@ -1,7 +1,6 @@
 // services/userService.ts
 import { SellerUser, SellerUserRaw } from "interfaces/Seller";
-import { SellerItem } from "interfaces/Item";
-import { User } from "interfaces/User";
+import { User, UserInfoPerso, UserSecurity } from "interfaces/User";
 import apiClient from "./apiClient";
 
 interface FetchOptions {
@@ -47,11 +46,22 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
   }
 }
 
-export async function fetchUserItems(cip: string | undefined): Promise<SellerItem[] | null> {
-  const response = await apiClient.get(`/item/${cip}/storefront`);
+export async function fetchUserProfile(cip: string | undefined): Promise<UserInfoPerso | null> {
+  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/profile`);
   try {
-    const items = (await response.data) as SellerItem[];
-    return items;
+    const userInfo = (await response.data) as UserInfoPerso;
+    return userInfo;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function fetchUserSecurity(cip: string | undefined): Promise<UserSecurity | null> {
+  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/security`);
+  try {
+    const userSecurity = (await response.data) as UserSecurity;
+    return userSecurity;
   } catch (error) {
     console.error(error);
     return null;
