@@ -8,11 +8,6 @@ interface UseInfiniteScrollResult<T> {
   sentinelRef: React.RefObject<HTMLDivElement | null>;
 }
 
-interface PageResult<T> {
-  data: T[];
-  hasMore: boolean;
-}
-
 interface FilterParams {
   minP?: number;
   maxP?: number;
@@ -23,43 +18,6 @@ interface FilterParams {
   wears?: number[];
   deliveries?: number[];
   payments?: number[];
-}
-
-export function useInfiniteScroll<T>(
-  fetchFn: (page: number) => Promise<PageResult<T>>
-): UseInfiniteScrollResult<T> {
-  const [items, setItems] = useState<T[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-
-  const loadMore = useCallback(async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    try {
-      const { data, hasMore: more } = await fetchFn(page);
-      setItems(prev => [...prev, ...data]);
-      setHasMore(more);
-      setPage(prev => prev + 1);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
-    } finally {
-      setLoading(false);
-    }
-  }, [page, loading, hasMore, fetchFn]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { if (entries[0].isIntersecting) loadMore(); },
-      { threshold: 0.1 }
-    );
-    if (sentinelRef.current) observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [loadMore]);
-
-  return { items, loading, error, hasMore, sentinelRef };
 }
 
 export function useInfiniteScrollItems<T extends { itemId: number }>(

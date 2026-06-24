@@ -2,11 +2,11 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import ItemListFiltered from "components/items/ItemListFiltered";
 import * as itemService from "services/itemService";
-import * as useInfiniteScroll from "hooks/useInfiniteScroll";
+import * as useInfiniteScrollItems from "hooks/useInfiniteScrollItems";
 import { SellerItem } from "interfaces/Item";
 
 jest.mock("services/itemService");
-jest.mock("hooks/useInfiniteScroll");
+jest.mock("hooks/useInfiniteScrollItems");
 jest.mock("components/items/ItemCard", () => {
   return function MockItemCard({ itemList }: { itemList: SellerItem }) {
     return <div data-testid="item-card">{itemList.name}</div>;
@@ -66,7 +66,7 @@ const setupMocks = (
   loading: boolean = false,
   error: Error | null = null
 ): void => {
-  (useInfiniteScroll.useInfiniteScrollItems as jest.Mock).mockReturnValue({
+  (useInfiniteScrollItems.useInfiniteScrollItems as jest.Mock).mockReturnValue({
     items,
     loading,
     error,
@@ -135,7 +135,7 @@ describe("ItemListFiltered Component", () => {
       setupMocks();
       renderItemListFiltered();
 
-      expect(useInfiniteScroll.useInfiniteScrollItems).toHaveBeenCalledWith(
+      expect(useInfiniteScrollItems.useInfiniteScrollItems).toHaveBeenCalledWith(
         itemService.getFilteredItems,
         expect.any(Object)
       );
@@ -145,7 +145,7 @@ describe("ItemListFiltered Component", () => {
       setupMocks();
       renderItemListFiltered();
 
-      const callArgs = (useInfiniteScroll.useInfiniteScrollItems as jest.Mock).mock.calls[0];
+      const callArgs = (useInfiniteScrollItems.useInfiniteScrollItems as jest.Mock).mock.calls[0];
       expect(callArgs[1]).toEqual({});
     });
 
@@ -175,7 +175,7 @@ describe("ItemListFiltered Component", () => {
     test("calls useInfiniteScrollItems with empty filters initially", () => {
       renderItemListFiltered();
 
-      expect(useInfiniteScroll.useInfiniteScrollItems).toHaveBeenCalledWith(
+      expect(useInfiniteScrollItems.useInfiniteScrollItems).toHaveBeenCalledWith(
         itemService.getFilteredItems,
         {}
       );
@@ -185,7 +185,7 @@ describe("ItemListFiltered Component", () => {
       renderItemListFiltered("/?minP=50&maxP=200&categories=1");
 
       await waitFor(() => {
-        expect(useInfiniteScroll.useInfiniteScrollItems).toHaveBeenCalledWith(
+        expect(useInfiniteScrollItems.useInfiniteScrollItems).toHaveBeenCalledWith(
           itemService.getFilteredItems,
           {
             minP: 50,
@@ -200,7 +200,7 @@ describe("ItemListFiltered Component", () => {
       renderItemListFiltered("/?categories=1,2,3");
 
       await waitFor(() => {
-        const lastCall = (useInfiniteScroll.useInfiniteScrollItems as jest.Mock).mock.calls.slice(-1)[0];
+        const lastCall = (useInfiniteScrollItems.useInfiniteScrollItems as jest.Mock).mock.calls.slice(-1)[0];
         expect(lastCall[1].categories).toEqual([1, 2, 3]);
       });
     });
@@ -209,7 +209,7 @@ describe("ItemListFiltered Component", () => {
       renderItemListFiltered("/?fav=true");
 
       await waitFor(() => {
-        const lastCall = (useInfiniteScroll.useInfiniteScrollItems as jest.Mock).mock.calls.slice(-1)[0];
+        const lastCall = (useInfiniteScrollItems.useInfiniteScrollItems as jest.Mock).mock.calls.slice(-1)[0];
         expect(lastCall[1].fav).toBe(true);
       });
     });
@@ -220,7 +220,7 @@ describe("ItemListFiltered Component", () => {
       );
 
       await waitFor(() => {
-        const lastCall = (useInfiniteScroll.useInfiniteScrollItems as jest.Mock).mock.calls.slice(-1)[0];
+        const lastCall = (useInfiniteScrollItems.useInfiniteScrollItems as jest.Mock).mock.calls.slice(-1)[0];
         const filters = lastCall[1];
 
         expect(filters.minP).toBe(20);
@@ -286,7 +286,7 @@ describe("ItemListFiltered Component", () => {
 
       // The sentinel is rendered via ref, which we can't directly test in jsdom
       // But we can verify that useInfiniteScrollItems was called correctly
-      expect(useInfiniteScroll.useInfiniteScrollItems).toHaveBeenCalled();
+      expect(useInfiniteScrollItems.useInfiniteScrollItems).toHaveBeenCalled();
     });
   });
 
