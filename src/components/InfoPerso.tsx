@@ -1,31 +1,68 @@
 import {
   Box, Button, Card, TextField, Typography,
 } from "@mui/material";
-import { UserInfoPerso } from "../interfaces/User";
+import { UserInfoPerso, UserAddress } from "../interfaces/User";
+import { useState } from "react";
 
-export default function InformationsPersonnelles({ user }: { user: UserInfoPerso }) {
+export default function InformationsPersonnelles({ user, onSave }: { user: UserInfoPerso, onSave: (firstName: string, lastName: string, address: UserAddress) => void }) {
+  const [firstName, setFirstName] = useState(user?.user.firstName ?? "");
+  const [lastName, setLastName] = useState(user?.user.lastName ?? "");
+  const [noCivic, setNoCivic] = useState(String(user?.address.noCivic ?? ""));
+  const [street, setStreet] = useState(user?.address.street ?? "");
+  const [city, setCity] = useState(user?.address.city ?? "");
+  const [province, setProvince] = useState(user?.address.province ?? "");
+  const [country, setCountry] = useState(user?.address.country ?? "");
+  const [postalCode, setPostalCode] = useState(user?.address.postalCode ?? "");
+
+  const handleSave = () => {
+    onSave(firstName, lastName, {
+      noCivic: Number(noCivic),
+      street,
+      city,
+      province,
+      country,
+      postalCode,
+    });
+  };
+
   return (
     <Card sx={{ p: 2.5, borderRadius: 2, width: "100%" }}>
       <Typography sx={{ fontWeight: 700, fontSize: 16, mb: 2 }}>
         Informations personnelles
       </Typography>
-
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5, mb: 1.5 }}>
-        <TextField label="Prénom" size="small" value={user?.user.firstName || ""} />
-        <TextField label="Nom" size="small" value={user?.user.lastName || ""} />
+        <TextField label="Prénom" size="small" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+        <TextField label="Nom" size="small" value={lastName} onChange={(e) => setLastName(e.target.value)} />
         <TextField sx={{ "& .MuiInputBase-input": { color: "text.secondary" } }}
-          label="Identifiant (CIP)" size="small" value={user?.user.cip || ""} disabled/>
+          label="Identifiant (CIP)" size="small" value={user?.user.cip || ""} disabled />
         <TextField sx={{ "& .MuiInputBase-input": { color: "text.secondary" } }}
-          label="Courriel UdeS" size="small" value={user?.user.email || ""} disabled/>
-        <TextField label="Adresse" size="small" value={user?.address || ""}
-          sx={{ gridColumn: "1 / -1" }}
-        />
+          label="Courriel UdeS" size="small" value={user?.user.email || ""} disabled />
+        <Box sx={{ 
+          gridColumn: "1 / -1",
+          border: "1px solid", 
+          borderColor: "divider", 
+          borderRadius: 2, 
+          p: 2,
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 1.5
+        }}>
+          <Typography sx={{ gridColumn: "1 / -1", fontWeight: 600, fontSize: 14, mb: 0.5 }}>
+            Adresse
+          </Typography>
+          <TextField label="Numéro civique" size="small" value={noCivic} onChange={(e) => setNoCivic(e.target.value)} />
+          <TextField label="Rue" size="small" value={street} onChange={(e) => setStreet(e.target.value)} />
+          <TextField label="Ville" size="small" value={city} onChange={(e) => setCity(e.target.value)} />
+          <TextField label="Province" size="small" value={province} onChange={(e) => setProvince(e.target.value)} />
+          <TextField label="Pays" size="small" value={country} onChange={(e) => setCountry(e.target.value)} />
+          <TextField label="Code postal" size="small" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
+        </Box>
       </Box>
-
       <Button
         variant="contained"
         size="small"
         sx={{ borderRadius: 2, textTransform: "none" }}
+        onClick={handleSave}
       >
         Enregistrer
       </Button>

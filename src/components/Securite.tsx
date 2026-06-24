@@ -2,8 +2,17 @@ import {
   Box, Button, Card, TextField, Typography,
 } from "@mui/material";
 import { UserSecurity } from "../interfaces/User";
+import { useState } from "react";
 
-export default function Securite({ user }: { user: UserSecurity | null }) {
+export default function Securite({ user, onSave }: { user: UserSecurity | null, onSave: (currentPassword: string, newPassword: string) => void }) {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const handleSubmit = async () => {
+    await onSave(currentPassword, newPassword);
+    setCurrentPassword("");
+    setNewPassword("");
+  };
 
   return (
     <Card sx={{ p: 2.5, borderRadius: 2 }}>
@@ -16,13 +25,15 @@ export default function Securite({ user }: { user: UserSecurity | null }) {
           label="Mot de passe actuel"
           type="password"
           size="small"
-          value={user?.currentPassword || ""}
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
         />
         <TextField
           label="Nouveau mot de passe"
           type="password"
           size="small"
-          value={user?.newPassword || ""}
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
         />
       </Box>
 
@@ -30,6 +41,7 @@ export default function Securite({ user }: { user: UserSecurity | null }) {
         variant="contained"
         size="small"
         sx={{ borderRadius: 2, textTransform: "none" }}
+        onClick={handleSubmit}
       >
         Changer le mot de passe
       </Button>

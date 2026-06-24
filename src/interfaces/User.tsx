@@ -13,7 +13,16 @@ export interface ConnectedUser {
 
 export interface UserInfoPerso {
     user: User;
-    address: string;
+    address: UserAddress;
+}
+
+export interface UserAddress {
+    noCivic: number;
+    street: string;
+    city: string;
+    province: string;
+    country: string;
+    postalCode: string;
 }
 
 export interface UserSecurity {

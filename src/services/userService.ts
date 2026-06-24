@@ -57,11 +57,20 @@ export async function fetchUserProfile(cip: string | undefined): Promise<UserInf
   }
 }
 
-export async function fetchUserSecurity(cip: string | undefined): Promise<UserSecurity | null> {
-  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/security`);
+export async function updateUserProfile(cip: string | undefined, data: Partial<UserInfoPerso>): Promise<UserInfoPerso | null> {
   try {
-    const userSecurity = (await response.data) as UserSecurity;
-    return userSecurity;
+    const response = await apiClient.put(`${SERVICE_BASE_URL}/${cip}/profile`, data);
+    return response.data as UserInfoPerso;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function updateUserPassword(cip: string | undefined, data: UserSecurity): Promise<UserSecurity | null> {
+  try {
+    const response = await apiClient.put(`${SERVICE_BASE_URL}/${cip}/security`, data);
+    return response.data as UserSecurity;
   } catch (error) {
     console.error(error);
     return null;
