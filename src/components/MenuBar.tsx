@@ -55,7 +55,7 @@ export default function MenuBar({ user }: { user: User | null }) {
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              href="/search"
               sx={{
                 mr: 2,
                 display: "flex",

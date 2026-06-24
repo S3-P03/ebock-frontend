@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Box, Card, Grid, CircularProgress, Alert } from "@mui/material";
 import { SellerItem } from "interfaces/Item";
 import { FilterParams, getFilteredItems } from "services/itemService";
-import { useInfiniteScrollItems } from "hooks/useInfiniteScroll";
+import { useInfiniteScrollItems } from "hooks/useInfiniteScrollItems";
 import ItemCard from "./ItemCard";
 import ItemFilterBar from "./ItemFilterBar";
 

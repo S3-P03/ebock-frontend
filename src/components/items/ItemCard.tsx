@@ -69,7 +69,7 @@ export default function ItemCard({ itemList }: { itemList: SellerItem }) {
             {name}
           </Box>
           <Box sx={{ fontSize: 14, fontWeight: 700, color: "primary.main" }}>
-            {price} $
+            {price === 0 ? "Gratuit" : `${price} $`}
           </Box>
           <Box sx={{ fontSize: 12, color: "text.secondary" }}>Sherbrooke</Box>
         </CardContent>

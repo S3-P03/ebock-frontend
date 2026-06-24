@@ -1,14 +1,16 @@
-import { useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
+
+import ItemListFiltered from "components/items/ItemListFiltered";
 
 export default function SearchPage() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Redirect to home with the same query params
-    navigate(`/?${searchParams.toString()}`, { replace: true });
-  }, [searchParams, navigate]);
-
-  return null;
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <ItemListFiltered />
+    </Box>
+  );
 }
