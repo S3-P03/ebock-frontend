@@ -8,9 +8,13 @@ export default function ImageDropzone({ onFiles, error, disabled } : {onFiles: (
  
   const handleFiles = (fileList: FileList | null): void => {
     if (!fileList) return;
-    const accepted = Array.from(fileList).filter((f) =>
-      f.type.startsWith("image/")
+    
+    const allowedTypes = ["image/jpeg", "image/png"];
+
+    const accepted = Array.from(fileList).filter(file =>
+      allowedTypes.includes(file.type)
     );
+
     if (accepted.length) onFiles(accepted);
   };
 
@@ -61,7 +65,7 @@ export default function ImageDropzone({ onFiles, error, disabled } : {onFiles: (
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept=".jpg, .jpeg, .png"
           multiple
           style={{ display: "none" }}
           onChange={(e) => handleFiles(e.target.files)}
