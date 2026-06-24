@@ -241,7 +241,7 @@ export default function AddItemForm({
               <SectionLabel>Informations </SectionLabel>
               <Stack spacing={2}>
                 <TextField
-                  label="Name"
+                  label="Nom"
                   required
                   fullWidth
                   placeholder="Nom du produit"
@@ -370,7 +370,7 @@ export default function AddItemForm({
             </Box>
  
             <Box>
-              <SectionLabel>Options de livraison/Ramassage *</SectionLabel>
+              <SectionLabel>Options de livraison/ramassage *</SectionLabel>
               <ChipGroup
                 options={deliveryOptions.map((option) => {return({id: option.deliveryOptnId, label: option.name})})}
                 selected={form.deliveryOptionList}

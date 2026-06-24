@@ -1,4 +1,4 @@
-import { fetchUserItems, fetchItem, fetchItemImages, getFilteredItems, FilterParams } from "services/itemService";
+import { fetchUserItems, fetchItem, fetchItemImages, getFilteredItems, FilterParams, addItem } from "services/itemService";
 import apiClient from "services/apiClient";
 
 jest.mock("services/apiClient");
@@ -61,6 +61,51 @@ describe("fetchUserItems", () => {
 
     expect(result).toEqual(mockItems);
   });
+});
+
+describe("addItem", () => {
+
+  const token = "fake-token";
+  const mockPayload = {
+    name: "item.name",
+    description: "item.description",
+    price: 15,
+    quantity: 1,
+    categoryId: 1,
+    wearId: 1,
+    tagList: [2],
+    deliveryOptionList: [2,3],
+    paymentOptionList: [2],
+    imageList: []
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("returns itemId when the request succeeds", async () => {
+    
+
+    mockedApiClient.post.mockResolvedValue({
+      status: 200,
+      data: {itemId: 1},
+    });
+
+    const result = await addItem(mockPayload, token);
+
+    expect(result).toEqual({itemId: 1});
+  });
+
+  test("returns null when status is 401", async () => {
+      mockedApiClient.post.mockResolvedValue({
+        status: 401,
+        data: null,
+      });
+  
+      const result = await addItem(mockPayload, token );
+  
+      expect(result).toBeNull();
+    });
 });
 
 describe("fetchItemImages", () => {
