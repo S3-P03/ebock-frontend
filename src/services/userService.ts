@@ -47,8 +47,8 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
 }
 
 export async function fetchUserProfile(cip: string | undefined): Promise<UserInfoPerso | null> {
-  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/profile`);
   try {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/profile`);
     const userInfo = (await response.data) as UserInfoPerso;
     return userInfo;
   } catch (error) {
