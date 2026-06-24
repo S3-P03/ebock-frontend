@@ -41,4 +41,5 @@ export interface SellerItem {
   firstName: string;
   lastName: string;
   tags: number[];
+  firstImage?: string;
 }
