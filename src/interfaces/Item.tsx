@@ -29,3 +29,19 @@ export interface ItemComment {
     authorLastName: string;
     timeAgo: string;
 }
+
+export interface ItemPayload {
+    name: string;
+    description: string;
+    price: number;
+    quantity: number;
+    categoryId: number;
+    wearId: number;
+    tagList: number[];
+    paymentOptionList: number[];
+    deliveryOptionList: number[];
+    imageList: [{
+        guid: string, 
+        displayOrder: number
+    }];
+}

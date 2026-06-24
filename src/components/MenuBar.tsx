@@ -2,6 +2,7 @@ import {
   AppBar,
   Avatar,
   Box,
+  Button,
   Container,
   IconButton,
   Menu,
@@ -27,6 +28,10 @@ export default function MenuBar({ user }: { user: User | null }) {
   const handleCloseUserMenu = () => {
     setAnchorUserMenu(null);
   };
+
+  const handleAddItem = () => {
+    navigate("/item/add");
+  }
 
   const handleProfile = () => {
     setAnchorUserMenu(null);
@@ -64,6 +69,9 @@ export default function MenuBar({ user }: { user: User | null }) {
             >
               EBOCK
             </Typography>
+            <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }} onClick={handleAddItem}>
+                + Ajouter un item
+            </Button>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
