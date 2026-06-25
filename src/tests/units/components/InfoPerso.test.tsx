@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import InformationsPersonnelles from "components/InfoPerso";
-import { UserInfoPerso } from "interfaces/User";
+import InformationsPersonnelles from "components/UserInfo";
+import { UserInformation } from "interfaces/User";
 
-const mockUser: UserInfoPerso = {
+const mockUser: UserInformation = {
   user: {
     cip: "boum7113",
     firstName: "Jean",
@@ -22,7 +22,7 @@ const mockUser: UserInfoPerso = {
 
 const mockOnSave = jest.fn();
 
-const renderComponent = (user: UserInfoPerso = mockUser) => {
+const renderComponent = (user: UserInformation = mockUser) => {
   return render(<InformationsPersonnelles user={user} onSave={mockOnSave} />);
 };
 

@@ -11,7 +11,7 @@ export interface ConnectedUser {
     email: string;
 }
 
-export interface UserInfoPerso {
+export interface UserInformation {
     user: User;
     address: UserAddress;
 }
@@ -23,9 +23,4 @@ export interface UserAddress {
     province: string;
     country: string;
     postalCode: string;
-}
-
-export interface UserSecurity {
-    currentPassword: string;
-    newPassword: string;
 }

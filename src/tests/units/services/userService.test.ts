@@ -156,25 +156,25 @@ describe("fetchAndModifyUserProfile", () => {
   describe("updateUserPassword", () => {
     const mockPasswordData = { currentPassword: "ancien", newPassword: "nouveau" };
 
-    test("retourne les données si succès", async () => {
-      mockedApiClient.put.mockResolvedValue({ data: mockPasswordData });
+    test("retourne true si succès", async () => {
+      mockedApiClient.put.mockResolvedValue({ data: {} });
       const result = await updateUserPassword("trej1234", mockPasswordData);
-      expect(result).toEqual(mockPasswordData);
+      expect(result).toBe(true);
     });
 
-    test("retourne null si erreur", async () => {
+    test("retourne false si erreur", async () => {
       mockedApiClient.put.mockRejectedValue(new Error("Erreur réseau"));
       const result = await updateUserPassword("trej1234", mockPasswordData);
-      expect(result).toBeNull();
+      expect(result).toBe(false);
     });
 
     test("appelle le bon endpoint avec les bons mots de passe", async () => {
-      mockedApiClient.put.mockResolvedValue({ data: mockPasswordData });
+      mockedApiClient.put.mockResolvedValue({ data: {} });
       await updateUserPassword("trej1234", mockPasswordData);
       expect(mockedApiClient.put).toHaveBeenCalledWith(
         expect.stringContaining("trej1234/security"),
         mockPasswordData
       );
     });
-  });
+});
 });

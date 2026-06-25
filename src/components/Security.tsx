@@ -1,10 +1,9 @@
 import {
   Box, Button, Card, TextField, Typography,
 } from "@mui/material";
-import { UserSecurity } from "../interfaces/User";
 import { useState } from "react";
 
-export default function Securite({ user, onSave }: { user: UserSecurity | null, onSave: (currentPassword: string, newPassword: string) => void }) {
+export default function Security({ onSave, errorMessage }: { onSave: (currentPassword: string, newPassword: string) => void; errorMessage: string | null}) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
@@ -27,6 +26,7 @@ export default function Securite({ user, onSave }: { user: UserSecurity | null, 
           size="small"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
+          error={!!errorMessage}
         />
         <TextField
           label="Nouveau mot de passe"
@@ -36,7 +36,11 @@ export default function Securite({ user, onSave }: { user: UserSecurity | null, 
           onChange={(e) => setNewPassword(e.target.value)}
         />
       </Box>
-
+      {errorMessage && (
+        <Typography color="error" sx={{ fontSize: 13, mb: 1 }}>
+          {errorMessage}
+        </Typography>
+      )}
       <Button
         variant="contained"
         size="small"

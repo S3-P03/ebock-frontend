@@ -36,7 +36,7 @@ export default function HomePage() {
               <Route path="message/:id" element={<MessageRoom />} />
               <Route path="message" element={<RoomHistory />} />
               <Route path="/item/:id" element={<ItemDetails />} />
-              <Route path="/user/:cip" element={<UserProfile />} />
+              <Route path="/profile" element={<UserProfile />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

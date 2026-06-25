@@ -1,13 +1,13 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import Securite from "components/Securite";
+import Security from "components/Security";
 
 const mockOnSave = jest.fn();
 
-const renderComponent = () => {
-  return render(<Securite user={null} onSave={mockOnSave} />);
+const renderComponent = (errorMessage: string | null = null) => {
+  return render(<Security onSave={mockOnSave} errorMessage={errorMessage} />);
 };
 
-describe("Securite Component", () => {
+describe("Security Component", () => {
   beforeEach(() => {
     mockOnSave.mockClear();
   });
@@ -71,5 +71,23 @@ describe("Securite Component", () => {
       expect(screen.queryByDisplayValue("ancien")).not.toBeInTheDocument();
       expect(screen.queryByDisplayValue("nouveau")).not.toBeInTheDocument();
     });
+  });
+});
+
+describe("Gestion des erreurs", () => {
+  test("affiche le message d'erreur si errorMessage est fourni", () => {
+    render(<Security onSave={mockOnSave} errorMessage="Mot de passe actuel incorrect." />);
+    expect(screen.getByText("Mot de passe actuel incorrect.")).toBeInTheDocument();
+  });
+
+  test("n'affiche pas de message d'erreur si errorMessage est null", () => {
+    render(<Security onSave={mockOnSave} errorMessage={null} />);
+    expect(screen.queryByText("Mot de passe actuel incorrect.")).not.toBeInTheDocument();
+  });
+
+  test("le champ mot de passe actuel est en erreur si errorMessage est fourni", () => {
+    render(<Security onSave={mockOnSave} errorMessage="Mot de passe actuel incorrect." />);
+    const input = screen.getByLabelText("Mot de passe actuel");
+    expect(input).toHaveAttribute("aria-invalid", "true");
   });
 });

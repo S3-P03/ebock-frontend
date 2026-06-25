@@ -1,10 +1,10 @@
 import {
   Box, Button, Card, TextField, Typography,
 } from "@mui/material";
-import { UserInfoPerso, UserAddress } from "../interfaces/User";
+import { UserAddress, UserInformation } from "../interfaces/User";
 import { useState } from "react";
 
-export default function InformationsPersonnelles({ user, onSave }: { user: UserInfoPerso, onSave: (firstName: string, lastName: string, address: UserAddress) => void }) {
+export default function UserInfo({ user, onSave }: { user: UserInformation, onSave: (firstName: string, lastName: string, address: UserAddress) => void }) {
   const [firstName, setFirstName] = useState(user?.user.firstName ?? "");
   const [lastName, setLastName] = useState(user?.user.lastName ?? "");
   const [noCivic, setNoCivic] = useState(String(user?.address.noCivic ?? ""));
