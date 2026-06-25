@@ -2,10 +2,24 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import ItemCard from "components/items/ItemCard";
 import { SellerItem } from "interfaces/Item";
 import * as imageService from "services/imageService";
+import * as authModule from "hooks/useAuthSession";
 
 jest.mock("services/imageService");
+jest.mock("hooks/useAuthSession");
 
 const mockNavigate = jest.fn();
+
+const setupMockAuth = (logout = jest.fn()) => {
+  const mockUseAuthSession = authModule.default as jest.Mock;
+  mockUseAuthSession.mockReturnValue({
+    isAuthenticated: true,
+    isLoading: false,
+    connectedUser: { cip: 'larj4236', email: 'larj4236@usherbrooke.ca' },
+    token: 'test-token',
+    login: jest.fn(),
+    logout,
+  });
+};
 
 jest.mock("react-router-dom", () => {
   const actual = jest.requireActual("react-router-dom");
@@ -37,8 +51,9 @@ const renderItemCard = (item: SellerItem = mockItem) => {
 };
 
 describe("ItemCard Component", () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
+    setupMockAuth();
   });
 
   describe("Rendering", () => {
