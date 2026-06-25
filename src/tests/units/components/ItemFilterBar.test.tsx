@@ -1,5 +1,4 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import ItemFilterBar from "components/items/ItemFilterBar";
 import * as categoryService from "services/categoryService";
 import * as tagService from "services/tagService";
@@ -36,8 +35,8 @@ const mockDeliveries = [
 ];
 
 const mockPayments = [
-  { paymentId: 1, name: "Cash" },
-  { paymentId: 2, name: "Card" },
+  { paymentOptnId: 1, name: "Cash" },
+  { paymentOptnId: 2, name: "Card" },
 ];
 
 const setupMocks = () => {

@@ -30,6 +30,22 @@ export interface ItemComment {
     timeAgo: string;
 }
 
+export interface ItemPayload {
+    name: string;
+    description: string;
+    price: number;
+    quantity: number;
+    categoryId: number;
+    wearId: number;
+    tagList: number[];
+    paymentOptionList: number[];
+    deliveryOptionList: number[];
+    imageList: {
+        guid: string, 
+        displayorder: number
+    }[];
+}
+
 export interface SellerItem {
   itemId: number;
   name: string;

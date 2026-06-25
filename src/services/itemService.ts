@@ -1,4 +1,4 @@
-import { DetailedItem, ItemImage, SellerItem } from "interfaces/Item";
+import { DetailedItem, ItemImage, SellerItem, ItemPayload } from "interfaces/Item";
 import apiClient from "./apiClient";
 
 const SERVICE_BASE_URL = "/item";
@@ -41,6 +41,36 @@ export async function fetchItemImages(id: string | undefined): Promise<ItemImage
   try {
     return (await response.data) as ItemImage[];
   } catch (error) {
+    return null;
+  }
+}
+
+export async function addItem(item : ItemPayload, token: string): Promise<{itemId: number} | null> {
+  const response = await apiClient.post(`${SERVICE_BASE_URL}/insert`,
+        {
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            quantity: item.quantity,
+            categoryId: item.categoryId,
+            wearId: item.wearId,
+            tagList: item.tagList,
+            deliveryOptionList: item.deliveryOptionList,
+            paymentOptionList: item.paymentOptionList,
+            imageList: item.imageList
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },   
+        }
+    );
+
+  try {
+    return (await response.data) as {itemId: number};
+  } catch (error) {
+    console.error(error);
     return null;
   }
 }

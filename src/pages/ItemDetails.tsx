@@ -1,6 +1,4 @@
-import {
-    Box, Button, Card,
-} from "@mui/material";
+import { Box, Button, Card } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser } from "interfaces/Seller";
 import { useNavigate, useParams } from "react-router-dom";
@@ -66,10 +64,12 @@ export default function ItemDetails() {
         }
     }, [id]);
 
-    useEffect(() => {
-        if (!images || images.length === 0) return;
- 
-        setImagesReady(false);
+    useEffect(() => { 
+        if (!images || images.length == 0) {
+            setImages([]);
+            setImagesReady(true);
+            return;
+        }
  
         const resolveImageUrls = async () => {
             try {
@@ -118,7 +118,19 @@ export default function ItemDetails() {
         (<Box sx={{ mx: "auto" }}>
             <Box sx={{ display: "flex", gap: 2, p: 2, alignItems: "flex-start" }}>
                 <Box sx={{ flex: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-                    <ImageList images={images!}/>
+                    {images!.length === 0 && <Box role="img"
+                        sx={{
+                            height: 300,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            bgcolor: "grey.100",
+                            fontSize: 48,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                        }}>📷
+                        </Box>}
+                    {images!.length !== 0 && <ImageList images={images!}/>}
                     <Card sx={{ p: 2.5, borderRadius: 2 }}>
                         <CommentThread comments={itemComments} />
                     </Card>

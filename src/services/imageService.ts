@@ -13,3 +13,22 @@ export async function fetchImage(guid: string | undefined): Promise<string | nul
     return null;
   }
 }
+
+export async function uploadImageFile(file: File, token: string): Promise<{guid: string} | undefined> {
+  const response = await apiClient.post(`${SERVICE_BASE_URL}/upload`, {
+      file
+  },
+  {
+      headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+      },   
+  });
+
+  try {
+    return(response.data) as {guid: string};
+  } catch (error) {
+    return undefined;
+  }
+}

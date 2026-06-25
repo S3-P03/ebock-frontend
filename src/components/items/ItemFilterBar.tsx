@@ -249,7 +249,7 @@ export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
             label="Modes de paiement"
           >
             {paymentsList.map((payment) => (
-              <MenuItem key={payment.paymentId} value={payment.paymentId}>
+              <MenuItem key={payment.paymentOptnId} value={payment.paymentOptnId}>
                 {payment.name}
               </MenuItem>
             ))}
