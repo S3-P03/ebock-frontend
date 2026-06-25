@@ -5,12 +5,16 @@ import {
 } from "@mui/material";
 import { SellerItem } from "interfaces/Item";
 import { fetchImage } from "services/imageService";
+import { favoriteItem, unfavoriteItem } from "services/itemService";
+import useAuthSession from "hooks/useAuthSession";
 
-export default function ItemCard({ itemList }: { itemList: SellerItem }) {
-  const { itemId, name, price, firstImage } = itemList;
+export default function ItemCard({ item }: { item: SellerItem }) {
+  const { itemId, name, price, firstImage, favorite } = item;
+  const [isFavorite, setIsFavorite] = useState(favorite);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const navigate = useNavigate();
+  const {token} = useAuthSession();
 
   useEffect(() => {
     if (firstImage) {
@@ -39,13 +43,22 @@ export default function ItemCard({ itemList }: { itemList: SellerItem }) {
           borderRadius: "50%",
           width: 28,
           height: 28,
+          color: isFavorite ? "red" : "inherit",
           "&:hover": {
             bgcolor: "grey.100",
           },
         }}
         role="fav-button"
+        onClick={() => {
+          if (isFavorite) {
+            unfavoriteItem(itemId, token);
+          } else {
+            favoriteItem(itemId, token); 
+          }
+          setIsFavorite(!isFavorite);
+        }}
       >
-        ♡
+        {isFavorite ? "♥" : "♡"}
       </IconButton>
       <CardActionArea onClick={handleCardClick}>
         <Box

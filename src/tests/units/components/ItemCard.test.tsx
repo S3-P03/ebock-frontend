@@ -20,6 +20,7 @@ const mockedFetchImage = imageService.fetchImage as jest.MockedFunction<typeof i
 const mockItem: SellerItem = {
   itemId: 123,
   name: "Test Item",
+  favorite: false,
   price: 49.99,
   addedAt: new Date().toISOString(),
   quantity: 1,
@@ -32,7 +33,7 @@ const mockItem: SellerItem = {
 };
 
 const renderItemCard = (item: SellerItem = mockItem) => {
-  return render(<ItemCard itemList={item} />);
+  return render(<ItemCard item={item} />);
 };
 
 describe("ItemCard Component", () => {

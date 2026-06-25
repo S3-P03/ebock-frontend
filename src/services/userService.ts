@@ -1,6 +1,6 @@
 // services/userService.ts
 import { SellerUser, SellerUserRaw } from "interfaces/Seller";
-import { User, UserInformation } from "interfaces/User";
+import { User, UserInformation, UserUpdatePayload } from "interfaces/User";
 import apiClient from "./apiClient";
 
 interface FetchOptions {
@@ -46,9 +46,19 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
   }
 }
 
-export async function fetchUserProfile(cip: string | undefined): Promise<UserInformation | null> {
+export async function fetchUserProfile({ token, logout }: FetchOptions): Promise<UserInformation | null> {
   try {
-    const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/profile`);
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 401) {
+      logout();
+      return null;
+    }
+
     const userInfo = (await response.data) as UserInformation;
     return userInfo;
   } catch (error) {
@@ -57,9 +67,19 @@ export async function fetchUserProfile(cip: string | undefined): Promise<UserInf
   }
 }
 
-export async function updateUserProfile(cip: string | undefined, data: Partial<UserInformation>): Promise<UserInformation | null> {
+export async function updateUserProfile({ token, logout }: FetchOptions, data: Partial<UserUpdatePayload>): Promise<UserInformation | null> {
   try {
-    const response = await apiClient.put(`${SERVICE_BASE_URL}/${cip}/profile`, data);
+    const response = await apiClient.put(`${SERVICE_BASE_URL}/profile`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });  
+
+    if (response.status === 401) {
+      logout();
+      return null;
+    }
+
     return response.data as UserInformation;
   } catch (error) {
     console.error(error);
@@ -67,9 +87,18 @@ export async function updateUserProfile(cip: string | undefined, data: Partial<U
   }
 }
 
-export async function updateUserPassword(cip: string | undefined, data: { currentPassword: string; newPassword: string }): Promise<boolean> {
+export async function updateUserPassword({ token, logout }: FetchOptions, data: { oldPassword: string; newPassword: string }): Promise<boolean> {
   try {
-    const response = await apiClient.put(`${SERVICE_BASE_URL}/${cip}/security`, data);
+    const response = await apiClient.put(`${SERVICE_BASE_URL}/security`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    
+    if (response.status === 401) {
+      logout();
+    }
+
     return true;
   } catch (error) {
     console.error(error);

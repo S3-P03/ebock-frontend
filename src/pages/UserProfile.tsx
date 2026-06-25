@@ -33,19 +33,19 @@ export default function UserProfile() {
     const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
 
     const handleSaveProfile = async (firstName: string, lastName: string, address: UserAddress) => {
-        const updated = await updateUserProfile(cip, {
-            user: { ...user!.user, firstName, lastName },
+        const updated = await updateUserProfile({token, logout}, {
+            user: { firstName, lastName },
             address,
         });
-        if (updated) setUser(updated);
+        if (updated) setUser({...user, ...updated});
     };
 
     const [passwordError, setPasswordError] = useState<string | null>(null);
 
-    const handleChangePassword = async (currentPassword: string, newPassword: string) => {
+    const handleChangePassword = async (oldPassword: string, newPassword: string) => {
       try {
         setPasswordError(null);
-        await updateUserPassword(cip, { currentPassword, newPassword });
+        await updateUserPassword({token, logout}, { oldPassword, newPassword });
       } catch (error: any) {
         if (error.response?.status === 400 || error.response?.status === 401) {
         setPasswordError("Mot de passe actuel incorrect.");
@@ -66,7 +66,7 @@ export default function UserProfile() {
 
         try {
             if (cip) {
-                fetchUserProfile(cip).then((data) => {
+                fetchUserProfile({token, logout}).then((data) => {
                     setUser(data);
                 });
             }
@@ -74,7 +74,9 @@ export default function UserProfile() {
             console.error("Erreur lors de la récupération du profil utilisateur :", error);
         }
 
-        fetchReviewAverage(cip).then((data) => setReviewAverage(data)).catch(console.error);
+        if (cip) {
+            fetchReviewAverage(cip).then((data) => setReviewAverage(data)).catch(console.error);
+        }
     }, [cip]);
 
 

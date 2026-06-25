@@ -49,6 +49,7 @@ export interface ItemPayload {
 export interface SellerItem {
   itemId: number;
   name: string;
+  favorite: boolean;
   price: number;
   addedAt: string;
   quantity: number;

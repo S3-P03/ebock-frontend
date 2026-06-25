@@ -102,3 +102,27 @@ export async function getFilteredItems(token: string, pageNumber: number, filter
     return [];
   }
 }
+
+export async function favoriteItem(id: number, token: string): Promise<void> {
+  try {
+    await apiClient.post(`${SERVICE_BASE_URL}/${id}/favorite`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error("Erreur lors de la mise en favori de l'article :", error);
+  }
+}
+
+export async function unfavoriteItem(id: number, token: string): Promise<void> {
+  try {
+    await apiClient.post(`${SERVICE_BASE_URL}/${id}/unfavorite`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error("Erreur lors de la mise en favori de l'article :", error);
+  }
+}
