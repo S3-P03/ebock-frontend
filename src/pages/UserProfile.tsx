@@ -10,6 +10,7 @@ import UserInfo from "../components/UserInfo";
 import { User, UserAddress, UserInformation} from "../interfaces/User";
 import useAuthSession from "hooks/useAuthSession";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
+import { fetchReviewAverage, ReviewAverage } from "services/reviewService";
 
 export default function UserProfile() {
     const [me, setMe] = useState<User | null>(null);
@@ -29,6 +30,7 @@ export default function UserProfile() {
     const cip = me?.cip;
     const [seller, setSeller] = useState<SellerUser | null>(null);
     const [user, setUser] = useState<UserInformation | null>(null);
+    const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
 
     const handleSaveProfile = async (firstName: string, lastName: string, address: UserAddress) => {
         const updated = await updateUserProfile(cip, {
@@ -71,6 +73,8 @@ export default function UserProfile() {
         } catch (error) {
             console.error("Erreur lors de la récupération du profil utilisateur :", error);
         }
+
+        fetchReviewAverage(cip).then((data) => setReviewAverage(data)).catch(console.error);
     }, [cip]);
 
 
@@ -80,7 +84,7 @@ export default function UserProfile() {
             <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
 
                 <Box sx={{ width: 220, flexShrink: 0 }}>
-                    <ProfileBox seller={seller} showContact={false} />
+                    <ProfileBox seller={seller} showContact={false} reviewAverage={reviewAverage} />
                 </Box>
 
                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2}}>
