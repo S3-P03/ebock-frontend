@@ -11,10 +11,11 @@ const mockUser: UserInformation = {
     profilePictureUrl: null,
   },
   address: {
-    noCivic: 123,
+    civicNumber: 123,
+    apptNumber: null,
     street: "Rue Principale",
     city: "Sherbrooke",
-    province: "Québec",
+    provinceCode: "Québec",
     country: "Canada",
     postalCode: "J1H 1A1",
   },
@@ -90,10 +91,11 @@ describe("InformationsPersonnelles Component", () => {
       renderComponent();
       fireEvent.click(screen.getByText("Enregistrer"));
       expect(mockOnSave).toHaveBeenCalledWith("Jean", "Tremblay", {
-        noCivic: 123,
+        civicNumber: 123,
+        apptNumber: null,
         street: "Rue Principale",
         city: "Sherbrooke",
-        province: "Québec",
+        provinceCode: "Québec",
         country: "Canada",
         postalCode: "J1H 1A1",
       });

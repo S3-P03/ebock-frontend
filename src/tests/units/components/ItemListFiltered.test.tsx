@@ -8,8 +8,8 @@ import { SellerItem } from "interfaces/Item";
 jest.mock("services/itemService");
 jest.mock("hooks/useInfiniteScrollItems");
 jest.mock("components/items/ItemCard", () => {
-  return function MockItemCard({ itemList }: { itemList: SellerItem }) {
-    return <div data-testid="item-card">{itemList.name}</div>;
+  return function MockItemCard({ item }: { item: SellerItem }) {
+    return <div data-testid="item-card">{item.name}</div>;
   };
 });
 jest.mock("components/items/ItemFilterBar", () => {
@@ -35,6 +35,7 @@ const mockItems: SellerItem[] = [
   {
     itemId: 1,
     name: "Item 1",
+    favorite: true,
     price: 50,
     addedAt: new Date().toISOString(),
     quantity: 1,
@@ -47,6 +48,7 @@ const mockItems: SellerItem[] = [
   {
     itemId: 2,
     name: "Item 2",
+    favorite: false,
     price: 75,
     addedAt: new Date().toISOString(),
     quantity: 2,

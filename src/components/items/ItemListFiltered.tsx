@@ -88,7 +88,7 @@ export default function ItemListFiltered() {
             <Grid container spacing={2}>
               {items.map((item) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={item.itemId}>
-                  <ItemCard itemList={item} />
+                  <ItemCard item={item} />
                 </Grid>
               ))}
             </Grid>

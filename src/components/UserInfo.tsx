@@ -7,19 +7,20 @@ import { useState } from "react";
 export default function UserInfo({ user, onSave }: { user: UserInformation, onSave: (firstName: string, lastName: string, address: UserAddress) => void }) {
   const [firstName, setFirstName] = useState(user?.user.firstName ?? "");
   const [lastName, setLastName] = useState(user?.user.lastName ?? "");
-  const [noCivic, setNoCivic] = useState(String(user?.address.noCivic ?? ""));
+  const [civicNumber, setCivicNumber] = useState(String(user?.address.civicNumber ?? ""));
   const [street, setStreet] = useState(user?.address.street ?? "");
   const [city, setCity] = useState(user?.address.city ?? "");
-  const [province, setProvince] = useState(user?.address.province ?? "");
+  const [provinceCode, setProvinceCode] = useState(user?.address.provinceCode ?? "");
   const [country, setCountry] = useState(user?.address.country ?? "");
   const [postalCode, setPostalCode] = useState(user?.address.postalCode ?? "");
 
   const handleSave = () => {
     onSave(firstName, lastName, {
-      noCivic: Number(noCivic),
+      civicNumber: Number(civicNumber),
+      apptNumber: null,
       street,
       city,
-      province,
+      provinceCode,
       country,
       postalCode,
     });
@@ -50,10 +51,10 @@ export default function UserInfo({ user, onSave }: { user: UserInformation, onSa
           <Typography sx={{ gridColumn: "1 / -1", fontWeight: 600, fontSize: 14, mb: 0.5 }}>
             Adresse
           </Typography>
-          <TextField label="Numéro civique" size="small" value={noCivic} onChange={(e) => setNoCivic(e.target.value)} />
+          <TextField label="Numéro civique" size="small" value={civicNumber} onChange={(e) => setCivicNumber(e.target.value)} />
           <TextField label="Rue" size="small" value={street} onChange={(e) => setStreet(e.target.value)} />
           <TextField label="Ville" size="small" value={city} onChange={(e) => setCity(e.target.value)} />
-          <TextField label="Province" size="small" value={province} onChange={(e) => setProvince(e.target.value)} />
+          <TextField label="Province" size="small" value={provinceCode} onChange={(e) => setProvinceCode(e.target.value)} />
           <TextField label="Pays" size="small" value={country} onChange={(e) => setCountry(e.target.value)} />
           <TextField label="Code postal" size="small" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
         </Box>

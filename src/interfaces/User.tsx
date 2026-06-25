@@ -16,11 +16,22 @@ export interface UserInformation {
     address: UserAddress;
 }
 
+export interface UserUpdatePayload {
+    user: UserinfoForUpdate;
+    address: UserAddress;
+}
+
+export interface UserinfoForUpdate {
+    firstName: string;
+    lastName: string;
+}
+
 export interface UserAddress {
-    noCivic: number;
+    civicNumber: number;
+    apptNumber: number | null;
     street: string;
     city: string;
-    province: string;
-    country: string;
     postalCode: string;
+    provinceCode: string;
+    country: string;
 }

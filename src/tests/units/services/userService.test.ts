@@ -4,10 +4,10 @@ import apiClient from "services/apiClient";
 jest.mock("services/apiClient");
 
 const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
+const token = "fake-token";
+const logout = jest.fn();
 
 describe("fetchUser", () => {
-  const token = "fake-token";
-  const logout = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -90,12 +90,29 @@ const mockUserInfoPerso = {
     profilePictureUrl: null,
   },
   address: {
-    noCivic: 123,
+    civicNumber: 123,
+    apptNumber: null,
     street: "Rue Principale",
     city: "Sherbrooke",
-    province: "Québec",
-    country: "Canada",
     postalCode: "J1H 1A1",
+    provinceCode: "Québec",
+    country: "Canada"
+  },
+};
+
+const mockUserInfoForUpdate = {
+  user: {
+    firstName: "Jean",
+    lastName: "Tremblay"
+  },
+  address: {
+    civicNumber: 123,
+    apptNumber: null,
+    street: "Rue Principale",
+    city: "Sherbrooke",
+    postalCode: "J1H 1A1",
+    provinceCode: "Québec",
+    country: "Canada"
   },
 };
 
@@ -113,67 +130,69 @@ describe("fetchAndModifyUserProfile", () => {
   describe("fetchUserProfile", () => {
     test("retourne le profil utilisateur si succès", async () => {
       mockedApiClient.get.mockResolvedValue({ data: mockUserInfoPerso });
-      const result = await fetchUserProfile("trej1234");
+      const result = await fetchUserProfile({ token, logout });
       expect(result).toEqual(mockUserInfoPerso);
     });
 
     test("retourne null si erreur", async () => {
       mockedApiClient.get.mockRejectedValue(new Error("Erreur réseau"));
-      const result = await fetchUserProfile("trej1234");
+      const result = await fetchUserProfile({ token, logout });
       expect(result).toBeNull();
     });
 
     test("appelle le bon endpoint", async () => {
       mockedApiClient.get.mockResolvedValue({ data: mockUserInfoPerso });
-      await fetchUserProfile("trej1234");
-      expect(mockedApiClient.get).toHaveBeenCalledWith(expect.stringContaining("trej1234/profile"));
+      await fetchUserProfile({ token, logout });
+      expect(mockedApiClient.get).toHaveBeenCalledWith("/user/profile", {"headers": {"Authorization": "Bearer fake-token"}});
     });
   });
 
   describe("updateUserProfile", () => {
     test("retourne le profil mis à jour si succès", async () => {
       mockedApiClient.put.mockResolvedValue({ data: mockUserInfoPerso });
-      const result = await updateUserProfile("trej1234", mockUserInfoPerso);
+      const result = await updateUserProfile({ token, logout }, mockUserInfoForUpdate);
       expect(result).toEqual(mockUserInfoPerso);
     });
 
     test("retourne null si erreur", async () => {
       mockedApiClient.put.mockRejectedValue(new Error("Erreur réseau"));
-      const result = await updateUserProfile("trej1234", mockUserInfoPerso);
+      const result = await updateUserProfile({ token, logout }, mockUserInfoForUpdate);
       expect(result).toBeNull();
     });
 
     test("appelle le bon endpoint avec les bonnes données", async () => {
       mockedApiClient.put.mockResolvedValue({ data: mockUserInfoPerso });
-      await updateUserProfile("trej1234", mockUserInfoPerso);
+      await updateUserProfile({ token, logout }, mockUserInfoForUpdate);
       expect(mockedApiClient.put).toHaveBeenCalledWith(
-        expect.stringContaining("trej1234/profile"),
-        mockUserInfoPerso
+        expect.stringContaining("/profile"),
+        mockUserInfoForUpdate,
+        {"headers": {"Authorization": "Bearer fake-token"}}
       );
     });
   });
 
   describe("updateUserPassword", () => {
-    const mockPasswordData = { currentPassword: "ancien", newPassword: "nouveau" };
+    const mockPasswordData = { oldPassword: "ancien", newPassword: "nouveau" };
 
     test("retourne true si succès", async () => {
       mockedApiClient.put.mockResolvedValue({ data: {} });
-      const result = await updateUserPassword("trej1234", mockPasswordData);
+      const result = await updateUserPassword({ token, logout }, mockPasswordData);
       expect(result).toBe(true);
     });
 
     test("retourne false si erreur", async () => {
       mockedApiClient.put.mockRejectedValue(new Error("Erreur réseau"));
-      const result = await updateUserPassword("trej1234", mockPasswordData);
+      const result = await updateUserPassword({ token, logout }, mockPasswordData);
       expect(result).toBe(false);
     });
 
     test("appelle le bon endpoint avec les bons mots de passe", async () => {
       mockedApiClient.put.mockResolvedValue({ data: {} });
-      await updateUserPassword("trej1234", mockPasswordData);
+      await updateUserPassword({ token, logout }, mockPasswordData);
       expect(mockedApiClient.put).toHaveBeenCalledWith(
-        expect.stringContaining("trej1234/security"),
-        mockPasswordData
+        expect.stringContaining("/security"),
+        mockPasswordData,
+        {"headers": {"Authorization": "Bearer fake-token"}}
       );
     });
 });

@@ -17,7 +17,7 @@ export default function ItemDisplayBox({ items }: { items: SellerItem[] }) {
       }}
     >
       {itemsArray.map((item) => (
-      <ItemCard key={item.itemId} itemList={item} />
+      <ItemCard key={item.itemId} item={item} />
       ))}
     </Box> 
   );
