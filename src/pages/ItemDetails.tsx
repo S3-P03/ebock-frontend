@@ -1,7 +1,4 @@
-import {
-    Box, Button, Card,
-    Typography,
-} from "@mui/material";
+import { Box, Button, Card } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser } from "interfaces/Seller";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,7 +15,6 @@ import ItemMainInfoBox from "components/items/ItemMainInfoBox";
 import { fetchImage } from "services/imageService";
 import { createRoom } from "services/messageService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
-import { Camera } from "@mui/icons-material";
 
 const itemComments: ItemComment[] = [
     { id: 1, authorCip: "pele3157", authorFirstName: "Eliane", authorLastName: "Pelletier", content: "Cet article est-il toujours disponible ?", respondToCommentId: null, timeAgo: "il y a 2 jours" },
