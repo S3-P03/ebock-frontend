@@ -35,6 +35,7 @@ export default function MenuBar({ user }: { user: User | null }) {
 
   const handleProfile = () => {
     setAnchorUserMenu(null);
+    navigate("/profile");
   }
 
   const handleMessages = () => {

@@ -17,6 +17,7 @@ import RoomHistory from "pages/RoomHistory";
 import MenuBarLayout from "./components/MenuBarLayout";
 import AddItem from "pages/AddItem";
 import SearchPage from "pages/SearchPage";
+import UserProfile from "./pages/UserProfile";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
@@ -37,6 +38,7 @@ export default function HomePage() {
               <Route path="message" element={<RoomHistory />} />
               <Route path="/item/:id" element={<ItemDetails />} />
               <Route path="/item/add" element={<AddItem />} />
+              <Route path="/profile" element={<UserProfile />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
