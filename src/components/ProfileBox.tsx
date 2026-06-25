@@ -3,8 +3,9 @@ import {
   Divider, Rating,
 } from "@mui/material";
 import { SellerUser } from "interfaces/Seller";
+import { ReviewAverage } from "services/reviewService";
 
-export default function ProfileBox ({seller, showContact = true}: { seller: SellerUser, showContact?: boolean }) {
+export default function ProfileBox ({seller, reviewAverage, showContact = true}: { seller: SellerUser, reviewAverage: ReviewAverage | null, showContact?: boolean }) {
   return (
     <Card sx={{ p: 2.5, borderRadius: 2 }}>
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, mb: 2 }}>
@@ -16,8 +17,8 @@ export default function ProfileBox ({seller, showContact = true}: { seller: Sell
         </Box>
         <Box sx={{ fontSize: 14, color: "text.secondary" }}>Localisation</Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-          <Rating value={0} precision={0.5} size="small" readOnly />
-          <Box sx={{ fontSize: 12, color: "text.secondary" }}>({0})</Box>
+          <Rating value={reviewAverage?.avgRating ?? 0} precision={0.5} size="small" readOnly />
+          <Box sx={{ fontSize: 12, color: "text.secondary" }}>({reviewAverage?.nbrReviews ?? 0})</Box>
         </Box>
         <Box sx={{ fontSize: 12, color: "text.secondary" }}>Membre depuis {seller.createdAt.getFullYear()}</Box>
       </Box>
