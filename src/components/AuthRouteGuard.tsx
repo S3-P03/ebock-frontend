@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-import useAuthSession from "../hooks/useAuthSession";
+import useAuthSession from "hooks/useAuthSession";
 
 const AuthRouteGuard = () => {
     const { isAuthenticated, isLoading } = useAuthSession();

@@ -12,14 +12,14 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import { User } from "../interfaces/User";
+import { User } from "interfaces/User";
+import useAuthSession from "hooks/useAuthSession";
 import { useNavigate } from "react-router-dom";
-import useAuthSession from "../hooks/useAuthSession";
 
 export default function MenuBar({ user }: { user: User | null }) {
-  const navigate = useNavigate();
   const [anchorUserMenu, setAnchorUserMenu] = useState<null | HTMLElement>(null);
   const {logout} = useAuthSession();
+  let navigate = useNavigate();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorUserMenu(event.currentTarget);
@@ -29,8 +29,18 @@ export default function MenuBar({ user }: { user: User | null }) {
     setAnchorUserMenu(null);
   };
 
+  const handleAddItem = () => {
+    navigate("/item/add");
+  }
+
   const handleProfile = () => {
     setAnchorUserMenu(null);
+    navigate("/profile");
+  }
+
+  const handleMessages = () => {
+    setAnchorUserMenu(null);
+    navigate("/message");
   }
 
   const handleLogout = () => {
@@ -46,7 +56,7 @@ export default function MenuBar({ user }: { user: User | null }) {
               variant="h6"
               noWrap
               component="a"
-              href=""
+              href="/search"
               sx={{
                 mr: 2,
                 display: "flex",
@@ -60,8 +70,11 @@ export default function MenuBar({ user }: { user: User | null }) {
             >
               EBOCK
             </Typography>
+            <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }} onClick={handleAddItem}>
+                + Ajouter un item
+            </Button>
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
+              <Tooltip title="Ouvrir options">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt={user?.firstName + " " + user?.lastName}
@@ -86,6 +99,7 @@ export default function MenuBar({ user }: { user: User | null }) {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem onClick={handleProfile}>Profil</MenuItem>
+                <MenuItem onClick={handleMessages}>Messages</MenuItem>
                 <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
               </Menu>
             </Box>

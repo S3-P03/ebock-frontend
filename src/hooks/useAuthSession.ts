@@ -1,5 +1,5 @@
 import {useAuth} from "react-oidc-context";
-import { logoutRedirectUri } from "../authConfig";
+import { logoutRedirectUri } from "authConfig";
 
 export default function useAuthSession(){
     const auth = useAuth();

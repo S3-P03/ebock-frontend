@@ -7,9 +7,17 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import SellerProfile from "./pages/SellerProfile";
 import { AppProvider } from "./context/AppContext";
 import useAuthSession from "./hooks/useAuthSession";
 import AuthRouteGuard from "./components/AuthRouteGuard";
+import ItemDetails from "./pages/ItemDetails";
+import MessageRoom from "./pages/MessageRoom";
+import RoomHistory from "pages/RoomHistory";
+import MenuBarLayout from "./components/MenuBarLayout";
+import AddItem from "pages/AddItem";
+import SearchPage from "pages/SearchPage";
+import UserProfile from "./pages/UserProfile";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
@@ -22,7 +30,16 @@ export default function HomePage() {
         <Routes>
           <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
           <Route element={<AuthRouteGuard />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<MenuBarLayout />} >
+              <Route index element={<Home />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/seller/:cip" element={<SellerProfile />} />
+              <Route path="message/:id" element={<MessageRoom />} />
+              <Route path="message" element={<RoomHistory />} />
+              <Route path="/item/:id" element={<ItemDetails />} />
+              <Route path="/item/add" element={<AddItem />} />
+              <Route path="/profile" element={<UserProfile />} />
+            </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
