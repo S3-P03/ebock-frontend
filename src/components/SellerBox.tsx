@@ -2,15 +2,17 @@ import {
   Avatar,
   Box,
   Card,
+  IconButton,
   Rating,
   Typography,
 } from "@mui/material";
 import { SellerUser } from "interfaces/Seller";
+import { ReviewAverage } from "services/reviewService";
 import { monthNames } from "utils/months";
 
 
 
-export default function SellerBox({ seller }: { seller: SellerUser }) {
+export default function SellerBox({ seller, reviewAverage, handleOpenStorefront }: { seller: SellerUser, reviewAverage: ReviewAverage | null, handleOpenStorefront: () => void }) {
   return (
     <Card sx={{ p: 2.5, borderRadius: 2 }}>
       <Typography
@@ -20,22 +22,24 @@ export default function SellerBox({ seller }: { seller: SellerUser }) {
         VENDEUR
       </Typography>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Avatar
-          sx={{
-            width: 48,
-            height: 48,
-            bgcolor: "primary.main",
-            fontSize: 22,
-            fontWeight: 700,
-          }}
-        >
-          {seller.firstName.charAt(0) + seller.lastName.charAt(0)}
-        </Avatar>
+        <IconButton onClick={handleOpenStorefront} sx={{ p: 0 }}>
+          <Avatar
+            sx={{
+              width: 48,
+              height: 48,
+              bgcolor: "primary.main",
+              fontSize: 22,
+              fontWeight: 700,
+            }}
+          >
+            {seller.firstName.charAt(0) + seller.lastName.charAt(0)}
+          </Avatar>
+        </IconButton>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            alignItems: "start",
             gap: 1,
             ml: 1.5,
           }}
@@ -44,8 +48,8 @@ export default function SellerBox({ seller }: { seller: SellerUser }) {
             {seller.firstName} {seller.lastName}
           </Box>
           <Box sx={{ display: "flex", gap: 0.5 }}>
-            <Rating value={3} precision={0.5} size="small" readOnly />
-            <Box sx={{ fontSize: 14, color: "text.secondary" }}>({0})</Box>
+            <Rating value={reviewAverage?.avgRating ?? 0} precision={0.5} size="small" readOnly />
+            <Box sx={{ fontSize: 14, color: "text.secondary" }}>({reviewAverage?.nbrReviews ?? 0})</Box>
           </Box>
           <Box sx={{ fontSize: 14, color: "text.secondary" }}>
             Membre depuis {monthNames[seller.createdAt.getMonth()]}{" "}
