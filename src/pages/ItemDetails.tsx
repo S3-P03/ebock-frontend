@@ -15,6 +15,7 @@ import ItemMainInfoBox from "components/items/ItemMainInfoBox";
 import { fetchImage } from "services/imageService";
 import { createRoom } from "services/messageService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
+import { fetchReviewAverage, ReviewAverage } from "services/reviewService";
 
 const itemComments: ItemComment[] = [
     { id: 1, authorCip: "pele3157", authorFirstName: "Eliane", authorLastName: "Pelletier", content: "Cet article est-il toujours disponible ?", respondToCommentId: null, timeAgo: "il y a 2 jours" },
@@ -31,6 +32,7 @@ export default function ItemDetails() {
     const [item, setItem] = useState<DetailedItem | null>(null);
     const [imagesReady, setImagesReady] = useState<boolean>(false);
     const [user, setUser] = useState<User | null>(null);
+    const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
     const { isAuthenticated, token, logout } = useAuthSession();
     let navigate = useNavigate();
 
@@ -43,8 +45,11 @@ export default function ItemDetails() {
             console.error("Erreur lors de l'envoi du message : ", error);
             return;
         }
-
     };
+
+    const handleOpenStorefront = () => {
+        navigate(`/seller/${item?.sellerCip}`);
+    }
 
     useEffect(() => {
         try {
@@ -62,6 +67,8 @@ export default function ItemDetails() {
         } catch (error) {
             console.error("Erreur lors de la récupération des images :", error);
         }
+        
+        
     }, [id]);
 
     useEffect(() => { 
@@ -99,6 +106,8 @@ export default function ItemDetails() {
         } catch (error) {
             console.error("Erreur lors de la récupération du vendeur :", error);
         }
+
+        fetchReviewAverage(item?.sellerCip).then((data) => setReviewAverage(data)).catch(console.error);
     }, [item?.sellerCip]);
 
     useEffect(() => {
@@ -141,7 +150,7 @@ export default function ItemDetails() {
                         <Card sx={{ p: 2.5, borderRadius: 2 }}>
                             <Button variant="contained" sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} fullWidth onClick={handleClick}>Contacter le vendeur</Button>
                         </Card>                        
-                        <SellerBox seller={seller} />
+                        <SellerBox seller={seller} reviewAverage={reviewAverage} handleOpenStorefront={handleOpenStorefront} />
                         <ItemAditionnalInfoBox item={item} />
                     </Box>
                 </Box>

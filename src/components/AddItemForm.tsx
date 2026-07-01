@@ -132,8 +132,6 @@ export default function AddItemForm({
       errs.paymentOptionList = "Veuillez sélectionner au moins une option de paiement.";
     if (form.deliveryOptionList.length === 0)
       errs.deliveryOptionList = "Veuillez sélectionner au moins une option de ramassage ou livraison.";
-    if (form.tagList.length === 0)
-      errs.tagList = "Veuillez sélectionner au moins un tag pour identifier votre produit.";
     if (form.imageList.length === 0)
       errs.imageList = "Veuillez ajouter au moins une image du produit.";
     else if (form.imageList.some((img) => img.status === "Uploading"))
