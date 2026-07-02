@@ -87,7 +87,7 @@ describe("AddItemForm Component", () => {
         expect(screen.getByText("Spécifications")).toBeInTheDocument();
         expect(screen.getByText("Condition")).toBeInTheDocument();
         expect(screen.getByText("Options de livraison/ramassage *")).toBeInTheDocument();
-        expect(screen.getByText("Tags *")).toBeInTheDocument();
+        expect(screen.getByText("Tags")).toBeInTheDocument();
         expect(screen.getByText("Images *")).toBeInTheDocument();
     });
     

@@ -177,9 +177,6 @@ export default function AddItemForm({
       setErrors(errs);
       return;
     }
-
-    console.log(uploadedImages.map((img) => ({ guid: img.guid, displayOrder: img.displayOrder })));
-
     const payload: ItemPayload = {
       name: form.name,
       description: form.description,
@@ -399,7 +396,7 @@ export default function AddItemForm({
             </Box>
  
             <Box>
-              <SectionLabel>Tags *</SectionLabel>
+              <SectionLabel>Tags</SectionLabel>
               <ChipGroup
                 options={tags.map((option) => {return({id: option.tagId, label: option.name})})}
                 selected={form.tagList}
