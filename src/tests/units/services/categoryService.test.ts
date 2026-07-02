@@ -24,7 +24,7 @@ describe("getCategoryList", () => {
 
     const result = await getCategoryList();
 
-    expect(mockedApiClient.get).toHaveBeenCalledWith("/category/list");
+    expect(mockedApiClient.get).toHaveBeenCalledWith("/category");
     expect(result).toEqual(mockCategories);
   });
 

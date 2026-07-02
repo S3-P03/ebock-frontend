@@ -15,7 +15,7 @@ export async function fetchImage(guid: string | undefined): Promise<string | nul
 }
 
 export async function uploadImageFile(file: File, token: string): Promise<{guid: string} | undefined> {
-  const response = await apiClient.post(`${SERVICE_BASE_URL}/upload`, {
+  const response = await apiClient.post(`${SERVICE_BASE_URL}`, {
       file
   },
   {

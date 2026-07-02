@@ -25,7 +25,7 @@ describe("getWearList", () => {
 
     const result = await getWearList();
 
-    expect(mockedApiClient.get).toHaveBeenCalledWith("/wear/list");
+    expect(mockedApiClient.get).toHaveBeenCalledWith("/wear");
     expect(result).toEqual(mockWears);
   });
 

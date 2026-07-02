@@ -24,7 +24,7 @@ describe("getTagList", () => {
 
     const result = await getTagList();
 
-    expect(mockedApiClient.get).toHaveBeenCalledWith("/tag/list");
+    expect(mockedApiClient.get).toHaveBeenCalledWith("/tag");
     expect(result).toEqual(mockTags);
   });
 
