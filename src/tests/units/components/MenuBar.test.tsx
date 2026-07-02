@@ -72,7 +72,7 @@ describe('MenuBar Component', () => {
 
       // Initially closed
       expect(screen.queryByText('Profil')).not.toBeVisible();
-      expect(screen.getByText('Mon étalage')).toBeVisible();
+      expect(screen.getByText('Mon étalage')).not.toBeVisible();
       expect(screen.queryByText('Déconnexion')).not.toBeVisible();
 
       // Click avatar to open
