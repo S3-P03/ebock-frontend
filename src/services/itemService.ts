@@ -46,7 +46,7 @@ export async function fetchItemImages(id: string | undefined): Promise<ItemImage
 }
 
 export async function addItem(item : ItemPayload, token: string): Promise<{itemId: number} | null> {
-  const response = await apiClient.post(`${SERVICE_BASE_URL}/insert`,
+  const response = await apiClient.post(`${SERVICE_BASE_URL}`,
         {
             name: item.name,
             description: item.description,
