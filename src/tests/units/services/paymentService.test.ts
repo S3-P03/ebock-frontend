@@ -25,7 +25,7 @@ describe("getPaymentList", () => {
 
     const result = await getPaymentList();
 
-    expect(mockedApiClient.get).toHaveBeenCalledWith("/paymentOption/list");
+    expect(mockedApiClient.get).toHaveBeenCalledWith("/paymentOption");
     expect(result).toEqual(mockPayments);
   });
 
