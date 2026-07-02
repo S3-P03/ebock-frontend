@@ -38,6 +38,11 @@ export default function MenuBar({ user }: { user: User | null }) {
     navigate("/profile");
   }
 
+  const handleStorefront = () => {
+    setAnchorUserMenu(null);
+    navigate(`/seller/${user?.cip}`);
+  }
+
   const handleMessages = () => {
     setAnchorUserMenu(null);
     navigate("/message");
@@ -99,6 +104,7 @@ export default function MenuBar({ user }: { user: User | null }) {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem onClick={handleProfile}>Profil</MenuItem>
+                <MenuItem onClick={handleStorefront}>Mon étalage</MenuItem>
                 <MenuItem onClick={handleMessages}>Messages</MenuItem>
                 <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
               </Menu>

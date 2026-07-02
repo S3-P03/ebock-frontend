@@ -117,7 +117,7 @@ export default function AddItemForm({
 
   const isUploading = form.imageList.some((img) => img.status === "Uploading");
 
-  const validate = (): ItemFormErrors => {
+  const validate = (imageEntries: ImageEntry[] = form.imageList): ItemFormErrors => {
     const errs: ItemFormErrors = {};
     if (!form.name.trim()) errs.name = "Veuillez indiquer le nom du produit.";
     if (!form.description.trim()) errs.description = "Veuillez fournir une description.";
@@ -128,39 +128,51 @@ export default function AddItemForm({
       errs.quantity = "Veuillez spécifier la quantité (minimum : 1).";
     if (form.categoryId === "") errs.categoryId = "Veuillez sélectionner une catégorie.";
     if (form.wearId === "") errs.wearId = "Veuillez sélectionner la condition de l'item.";
-    if (form.paymentOptionList.length === 0)
+    if (price > 0 && form.paymentOptionList.length === 0)
       errs.paymentOptionList = "Veuillez sélectionner au moins une option de paiement.";
     if (form.deliveryOptionList.length === 0)
       errs.deliveryOptionList = "Veuillez sélectionner au moins une option de ramassage ou livraison.";
-    if (form.imageList.length === 0)
+    if (imageEntries.length === 0)
       errs.imageList = "Veuillez ajouter au moins une image du produit.";
-    else if (form.imageList.some((img) => img.status === "Uploading"))
+    else if (imageEntries.some((img) => img.status === "Uploading"))
       errs.imageList = "Veuillez attendre le chargement des images.";
-    else if (form.imageList.some((img) => img.status === "Error"))
+    else if (imageEntries.some((img) => img.status === "Error"))
       errs.imageList = "Veuillez retirer les images en erreur.";
     return errs;
   };
 
   const handleSubmit = async () => {
-
-    await Promise.all(
+    const uploadedImages: ImageEntry[] = await Promise.all(
       form.imageList.map(async (placeholder) => {
         try {
           const response = await uploadImageFile(placeholder.file, token);
-          patchImage(placeholder.localId, { guid: response!.guid, status: "Uploaded" });
+          const nextImage: ImageEntry = {
+            ...placeholder,
+            guid: response!.guid,
+            status: "Uploaded",
+          };
+          patchImage(placeholder.localId, nextImage);
+          return nextImage;
         } catch (err) {
           const message =
             err instanceof Error ? err.message : "Unknown error";
-          patchImage(placeholder.localId, {
+          const nextImage: ImageEntry = {
+            ...placeholder,
             status: "Error",
             uploadError: message,
-          });
-          return;
+          };
+          patchImage(placeholder.localId, nextImage);
+          return nextImage;
         }
       })
     );
+
+    setForm((f) => ({
+      ...f,
+      imageList: uploadedImages,
+    }));
     
-    const errs = validate();
+    const errs = validate(uploadedImages);
     if (Object.keys(errs).length) {
       setErrors(errs);
       return;
@@ -175,7 +187,7 @@ export default function AddItemForm({
       paymentOptionList: form.paymentOptionList,
       deliveryOptionList: form.deliveryOptionList,
       tagList: form.tagList,
-      imageList: form.imageList.map(({ guid, displayOrder }) => ({
+      imageList: uploadedImages.map(({ guid, displayOrder }) => ({
         guid,
         displayorder: displayOrder,
       })),
@@ -281,8 +293,12 @@ export default function AddItemForm({
                     inputProps={{ step: "0.01", min: "0" }}
                     placeholder="0.00"
                     value={form.price}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      set("price", e.target.value)
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      set("price", e.target.value);
+                      if(parseFloat(e.target.value) <= 0) {
+                        set("paymentOptionList", []);
+                      };
+                    }
                     }
                     error={!!errors.price}
                     helperText={errors.price}
@@ -359,7 +375,7 @@ export default function AddItemForm({
               </Grid>
             </Box>
  
-            <Box>
+            {parseFloat(form.price) > 0 && <Box>
               <SectionLabel>Options de paiement *</SectionLabel>
               <ChipGroup
                 options={paymentOptions.map((option) => {return({id: option.paymentOptnId, label: option.name})})}
@@ -367,7 +383,7 @@ export default function AddItemForm({
                 onChange={(v) => set("paymentOptionList", v)}
                 error={errors.paymentOptionList}
               />
-            </Box>
+            </Box>}
  
             <Box>
               <SectionLabel>Options de livraison/ramassage *</SectionLabel>
@@ -380,7 +396,7 @@ export default function AddItemForm({
             </Box>
  
             <Box>
-              <SectionLabel>Tags *</SectionLabel>
+              <SectionLabel>Tags</SectionLabel>
               <ChipGroup
                 options={tags.map((option) => {return({id: option.tagId, label: option.name})})}
                 selected={form.tagList}

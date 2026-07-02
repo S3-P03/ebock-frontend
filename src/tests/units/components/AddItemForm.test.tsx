@@ -86,9 +86,8 @@ describe("AddItemForm Component", () => {
         expect(screen.getByText("Catégorie")).toBeInTheDocument();
         expect(screen.getByText("Spécifications")).toBeInTheDocument();
         expect(screen.getByText("Condition")).toBeInTheDocument();
-        expect(screen.getByText("Options de paiement *")).toBeInTheDocument();
         expect(screen.getByText("Options de livraison/ramassage *")).toBeInTheDocument();
-        expect(screen.getByText("Tags *")).toBeInTheDocument();
+        expect(screen.getByText("Tags")).toBeInTheDocument();
         expect(screen.getByText("Images *")).toBeInTheDocument();
     });
     
@@ -141,7 +140,6 @@ describe("AddItemForm Component", () => {
       expect(screen.getByText("Veuillez entrer un prix valide.")).toBeInTheDocument();
       expect(screen.getByText("Veuillez sélectionner une catégorie.")).toBeInTheDocument();
       expect(screen.getByText("Veuillez sélectionner la condition de l'item.")).toBeInTheDocument();
-      expect(screen.getByText("Veuillez sélectionner au moins une option de paiement.")).toBeInTheDocument();
       expect(screen.getByText("Veuillez sélectionner au moins une option de ramassage ou livraison.")).toBeInTheDocument();
       expect(screen.getByText("Veuillez ajouter au moins une image du produit.")).toBeInTheDocument();
     });
