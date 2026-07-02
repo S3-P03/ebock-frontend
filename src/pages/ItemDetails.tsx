@@ -4,7 +4,7 @@ import { SellerUser } from "interfaces/Seller";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchUser, fetchUserStoreFront } from "services/userService";
 import { DetailedItem, ItemComment, ItemImage } from "interfaces/Item";
-import { fetchItem, fetchItemImages } from "services/itemService";
+import { fetchItem, fetchItemImages, updateItem } from "services/itemService";
 import useAuthSession from "hooks/useAuthSession";
 import { User } from "interfaces/User";
 import CommentThread from "components/CommentThread";
@@ -18,6 +18,7 @@ import CenteredCircularProgress from "components/CenteredCircularProgress";
 import { fetchReviewAverage, ReviewAverage } from "services/reviewService";
 import { fetchComments, postComment } from "services/commentService";
 import { CommentDetail } from "interfaces/Comment";
+import ItemSellerOptionBox from "components/items/ItemSellerOptionBox";
 
 export default function ItemDetails() {
     const { id } = useParams();
@@ -61,7 +62,7 @@ export default function ItemDetails() {
             })
         
         try {
-            const response = fetchItemImages(id).then((data) => {
+            fetchItemImages(id).then((data) => {
                 setImages(data);
             });
         } catch (error) {
@@ -123,6 +124,13 @@ export default function ItemDetails() {
         }
     }, [isAuthenticated]);
 
+    var changeItemQuantity = (value: number) => {
+        if (item) {
+            setItem({ ...item, quantity: item.quantity - value });
+            updateItem(item.itemId, token!, { quantity: item.quantity - value });
+        }
+    }
+
     return ( seller == null || !imagesReady ?
         (<CenteredCircularProgress />) :
         (<Box sx={{ mx: "auto" }}>
@@ -158,7 +166,14 @@ export default function ItemDetails() {
                     <Box sx={{ width: "100%", flexShrink: 0, gap: 2, display: "flex", flexDirection: "column" }}>
                         <ItemMainInfoBox item={item} />
                         {isAuthenticated && <Card sx={{ p: 2.5, borderRadius: 2 }}>
-                            <Button variant="contained" sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} fullWidth onClick={handleClick}>Contacter le vendeur</Button>
+                            {item && (user?.cip == item?.sellerCip ? 
+                            (<ItemSellerOptionBox item={item} changeItemQuantity={changeItemQuantity} />) :
+                            (<Button 
+                                variant="contained" 
+                                sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} 
+                                fullWidth 
+                                onClick={handleClick}>Contacter le vendeur</Button>)
+                            )}
                         </Card>}                        
                         <SellerBox seller={seller} reviewAverage={reviewAverage} handleOpenStorefront={handleOpenStorefront} />
                         <ItemAditionnalInfoBox item={item} />
