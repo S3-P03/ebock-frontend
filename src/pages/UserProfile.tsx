@@ -81,8 +81,13 @@ export default function UserProfile() {
 
     return ( user == null || seller == null ?
         (<CenteredCircularProgress />) :
-        (<Box sx={{ maxWidth: 900, mx: "auto", px: 2, py: 3 }}>
-            <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+        (<Box sx={{ mx: "auto", px: 10, py: 10 }}>
+            <Box sx={{ display: "flex", gap: 5, alignItems: "flex-start" }}>
+
+                <Box sx={{ width: 220, flexShrink: 0 }}>
+                    <ProfileBox seller={seller} showContact={false} reviewAverage={reviewAverage} />
+                </Box>
+
                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2}}>
                     <UserInfo user={user} onSave={handleSaveProfile} />
                     <Security onSave={handleChangePassword} errorMessage={passwordError}/>
