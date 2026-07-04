@@ -1,5 +1,5 @@
 import { DetailedItem, ItemImage, SellerItem, ItemPayload } from "interfaces/Item";
-import apiClient from "./apiClient";
+import apiClient, { emitApiError } from "./apiClient";
 
 const SERVICE_BASE_URL = "/item";
 
@@ -31,6 +31,7 @@ export async function fetchItem(id: string | undefined): Promise<DetailedItem | 
   try {
     return (await response.data) as DetailedItem;
   } catch (error) {
+    emitApiError("Item impossible à récupérer", response.status);
     return null;
   }
 }
@@ -71,6 +72,7 @@ export async function addItem(item : ItemPayload, token: string): Promise<{itemI
     return (await response.data) as {itemId: number};
   } catch (error) {
     console.error(error);
+    emitApiError("Erreur lors de l'ajout de l'item, veuillez vérifier les données fournies", response.status);
     return null;
   }
 }
@@ -99,6 +101,7 @@ export async function getFilteredItems(token: string, pageNumber: number, filter
     });
     return (Array.isArray(response.data) ? response.data : []) as SellerItem[];
   } catch (error) {
+    emitApiError("Erreur lors de la récupération des items", 404);
     return [];
   }
 }
@@ -111,7 +114,7 @@ export async function favoriteItem(id: number, token: string): Promise<void> {
       },
     });
   } catch (error) {
-    console.error("Erreur lors de la mise en favori de l'article :", error);
+    emitApiError("Erreur lors de la mise en favori de l'article", 401);
   }
 }
 
@@ -123,6 +126,6 @@ export async function unfavoriteItem(id: number, token: string): Promise<void> {
       },
     });
   } catch (error) {
-    console.error("Erreur lors de la mise en favori de l'article :", error);
+    emitApiError("Erreur lors du retrait du favori de l'article", 401);
   }
 }

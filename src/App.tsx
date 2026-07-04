@@ -18,14 +18,34 @@ import MenuBarLayout from "./components/MenuBarLayout";
 import AddItem from "pages/AddItem";
 import SearchPage from "pages/SearchPage";
 import UserProfile from "./pages/UserProfile";
+import NotFound from "pages/NotFound";
+import { useEffect, useState } from "react";
+import ApiErrorAlert from "components/ApiErrorAlert";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiStatus, setApiStatus] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleApiError = (event: Event) => {
+      const customEvent = event as CustomEvent<{ error: string; status: number }>;
+      setApiError(customEvent.detail.error ?? null);
+      setApiStatus(customEvent.detail.status ?? null);
+    };
+
+    window.addEventListener("api_error", handleApiError as EventListener);
+
+    return () => {
+      window.removeEventListener("api_error", handleApiError as EventListener);
+    };
+  }, []);
 
   if (isLoading) { return <div className="spinner" />; }
 
   return (
     <AppProvider>
+      <ApiErrorAlert error={apiError} status={apiStatus} onClose={() => setApiError(null)} />
       <Router>
         <Routes>
           <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
@@ -41,7 +61,7 @@ export default function HomePage() {
               <Route path="/profile" element={<UserProfile />} />
             </Route>
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
       </Router>
     </AppProvider>
