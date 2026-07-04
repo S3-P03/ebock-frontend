@@ -134,10 +134,15 @@ describe("fetchAndModifyUserProfile", () => {
       expect(result).toEqual(mockUserInfoPerso);
     });
 
-    test("retourne null si erreur", async () => {
-      mockedApiClient.get.mockRejectedValue(new Error("Erreur réseau"));
-      const result = await fetchUserProfile({ token, logout });
-      expect(result).toBeNull();
+    test("rejette l'erreur", async () => {
+      mockedApiClient.get.mockRejectedValue({
+        response: { status: 500 },
+        message: "Erreur réseau",
+      });
+
+      await expect(fetchUserProfile({ token, logout })).rejects.toMatchObject({
+        message: "Erreur réseau",
+      });
     });
 
     test("appelle le bon endpoint", async () => {
@@ -154,10 +159,15 @@ describe("fetchAndModifyUserProfile", () => {
       expect(result).toEqual(mockUserInfoPerso);
     });
 
-    test("retourne null si erreur", async () => {
-      mockedApiClient.put.mockRejectedValue(new Error("Erreur réseau"));
-      const result = await updateUserProfile({ token, logout }, mockUserInfoForUpdate);
-      expect(result).toBeNull();
+    test("rejette l'erreur", async () => {
+      mockedApiClient.put.mockRejectedValue({
+        response: { status: 500 },
+        message: "Erreur réseau",
+      });
+
+      await expect(updateUserProfile({ token, logout }, mockUserInfoForUpdate)).rejects.toMatchObject({
+        message: "Erreur réseau",
+      });
     });
 
     test("appelle le bon endpoint avec les bonnes données", async () => {
@@ -180,10 +190,13 @@ describe("fetchAndModifyUserProfile", () => {
       expect(result).toBe(true);
     });
 
-    test("retourne false si erreur", async () => {
-      mockedApiClient.put.mockRejectedValue(new Error("Erreur réseau"));
+    test("retourne un message d'erreur", async () => {
+      mockedApiClient.put.mockRejectedValue({
+        response: { status: 500 },
+        message: "Erreur réseau",
+      });
       const result = await updateUserPassword({ token, logout }, mockPasswordData);
-      expect(result).toBe(false);
+      expect(result).toBe("Erreur lors de la mise à jour du mot de passe");
     });
 
     test("appelle le bon endpoint avec les bons mots de passe", async () => {

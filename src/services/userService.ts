@@ -107,27 +107,33 @@ export async function updateUserProfile({ token, logout }: FetchOptions, data: P
   }
 }
 
-export async function updateUserPassword({ token, logout }: FetchOptions, data: { oldPassword: string; newPassword: string }): Promise<boolean> {
-  const response = await apiClient.put(`${SERVICE_BASE_URL}/security`, data, {
+export async function updateUserPassword({ token, logout }: FetchOptions, data: { oldPassword: string; newPassword: string }): Promise<string | boolean> {
+  try {
+    const response = await apiClient.put(`${SERVICE_BASE_URL}/security`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-  try {
     if (response.status === 401) {
       logout();
+      return "Vous devez être connecté pour mettre à jour le mot de passe";
     }
 
     return true;
-  } catch (error) {
-    if(response.status === 401) {
-      emitApiError("Vous devez être connecté pour mettre à jour le mot de passe", response.status);
-    } else if(response.status === 400) {
-      emitApiError("Le mot de passe actuel est incorrect", response.status);
-    } else {
-      emitApiError("Erreur lors de la mise à jour du mot de passe", response.status);
+  } catch (error: any) {
+    if (error?.response?.status === 401) {
+      logout();
+      emitApiError("Vous devez être connecté pour mettre à jour le mot de passe", error.response.status);
+      return "Vous devez être connecté pour mettre à jour le mot de passe";
     }
-    return false;
+
+    if (error?.response?.status === 400) {
+      emitApiError("Le mot de passe actuel est incorrect", error.response.status);
+      return "Le mot de passe actuel est incorrect";
+    }
+
+    emitApiError("Erreur lors de la mise à jour du mot de passe", error?.response?.status ?? 500);
+    return "Erreur lors de la mise à jour du mot de passe";
   }
 }
