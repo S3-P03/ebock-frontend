@@ -190,13 +190,13 @@ describe("fetchAndModifyUserProfile", () => {
       expect(result).toBe(true);
     });
 
-    test("retourne un message d'erreur", async () => {
+    test("retourne false en cas d'erreur", async () => {
       mockedApiClient.put.mockRejectedValue({
         response: { status: 500 },
         message: "Erreur réseau",
       });
       const result = await updateUserPassword({ token, logout }, mockPasswordData);
-      expect(result).toBe("Erreur lors de la mise à jour du mot de passe");
+      expect(result).toBe(false);
     });
 
     test("appelle le bon endpoint avec les bons mots de passe", async () => {
