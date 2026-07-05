@@ -1,7 +1,7 @@
 // services/userService.ts
 import { SellerUser, SellerUserRaw } from "interfaces/Seller";
 import { User, UserInformation, UserUpdatePayload } from "interfaces/User";
-import apiClient from "./apiClient";
+import apiClient, { emitApiError } from "./apiClient";
 
 interface FetchOptions {
   token: string;
@@ -25,6 +25,13 @@ export async function fetchUser({ token, logout }: FetchOptions): Promise<User |
   try {
     return (await response.data) as User;
   } catch (error) {
+    if (response.status === 401) {
+      emitApiError("Vous devez être connecté pour récupérer les informations de l'utilisateur", response.status);
+    } else if (response.status === 404) {
+      emitApiError("L'utilisateur n'existe pas", response.status);
+    } else {
+      emitApiError("Erreur lors de la récupération des informations de l'utilisateur", response.status);
+    }
     console.error(error);
     return null;
   }
@@ -41,19 +48,20 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
     };
     return seller;
   } catch (error) {
-    console.error(error);
+    if (response.status === 404) {
+      emitApiError("L'utilisateur n'existe pas", response.status);
+    }
     return null;
   }
 }
 
 export async function fetchUserProfile({ token, logout }: FetchOptions): Promise<UserInformation | null> {
-  try {
-    const response = await apiClient.get(`${SERVICE_BASE_URL}/profile`, {
+  const response = await apiClient.get(`${SERVICE_BASE_URL}/profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-
+  try {
     if (response.status === 401) {
       logout();
       return null;
@@ -62,19 +70,25 @@ export async function fetchUserProfile({ token, logout }: FetchOptions): Promise
     const userInfo = (await response.data) as UserInformation;
     return userInfo;
   } catch (error) {
-    console.error(error);
+    if(response.status === 401) {
+      emitApiError("Vous devez être connecté pour récupérer les informations de l'utilisateur", response.status);
+    } else if(response.status === 404) {
+      emitApiError("L'utilisateur n'existe pas", response.status);
+    } else {
+      emitApiError("Erreur lors de la récupération des informations personnelles de l'utilisateur", response.status);
+    }
     return null;
   }
 }
 
 export async function updateUserProfile({ token, logout }: FetchOptions, data: Partial<UserUpdatePayload>): Promise<UserInformation | null> {
-  try {
-    const response = await apiClient.put(`${SERVICE_BASE_URL}/profile`, data, {
+  const response = await apiClient.put(`${SERVICE_BASE_URL}/profile`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });  
 
+  try {
     if (response.status === 401) {
       logout();
       return null;
@@ -82,7 +96,13 @@ export async function updateUserProfile({ token, logout }: FetchOptions, data: P
 
     return response.data as UserInformation;
   } catch (error) {
-    console.error(error);
+    if(response.status === 401) {
+      emitApiError("Vous devez être connecté pour mettre à jour les informations de l'utilisateur", response.status);
+    } else if(response.status === 404) {
+      emitApiError("L'utilisateur n'existe pas", response.status);
+    } else {
+      emitApiError("Erreur lors de la mise à jour des informations personnelles de l'utilisateur", response.status);
+    }
     return null;
   }
 }
@@ -94,14 +114,21 @@ export async function updateUserPassword({ token, logout }: FetchOptions, data: 
         Authorization: `Bearer ${token}`,
       },
     });
-    
-    if (response.status === 401) {
-      logout();
-    }
 
     return true;
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    if (error?.response?.status === 401) {
+      logout();
+      emitApiError("Vous devez être connecté pour mettre à jour le mot de passe", error.response.status);
+      return false;
+    }
+
+    if (error?.response?.status === 400) {
+      emitApiError("Le mot de passe actuel est incorrect", error.response.status);
+      return false;
+    }
+
+    emitApiError("Erreur lors de la mise à jour du mot de passe", error?.response?.status ?? 500);
     return false;
   }
 }

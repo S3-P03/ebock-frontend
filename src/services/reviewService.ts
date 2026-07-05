@@ -1,4 +1,4 @@
-import apiClient from "./apiClient";
+import apiClient, { emitApiError } from "./apiClient";
 
 const SERVICE_BASE_URL = "/review";
 
@@ -21,7 +21,7 @@ export async function fetchReviewAverage(cip: string | undefined): Promise<Revie
     const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/average`);
     return response.data as ReviewAverage;
   } catch (error) {
-    console.error("Erreur fetchReviewAverage :", error);
+    emitApiError("L'utilisateur n'existe pas", 404);
     return null;
   }
 }
@@ -31,7 +31,7 @@ export async function fetchReviewDetails(cip: string | undefined): Promise<Revie
     const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/details`);
     return response.data as ReviewDetail[];
   } catch (error) {
-    console.error("Erreur fetchReviewDetails :", error);
+    emitApiError("L'utilisateur n'existe pas", 404);
     return null;
   }
 }

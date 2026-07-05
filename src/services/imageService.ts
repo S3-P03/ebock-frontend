@@ -1,4 +1,4 @@
-import apiClient from "./apiClient";
+import apiClient, { emitApiError } from "./apiClient";
 
 const SERVICE_BASE_URL = "/image";
 
@@ -10,6 +10,7 @@ export async function fetchImage(guid: string | undefined): Promise<string | nul
   try {
     return(URL.createObjectURL(response.data));
   } catch (error) {
+    emitApiError("Image impossible à récupérer", response.status);
     return null;
   }
 }
@@ -29,6 +30,7 @@ export async function uploadImageFile(file: File, token: string): Promise<{guid:
   try {
     return(response.data) as {guid: string};
   } catch (error) {
+    emitApiError("Erreur lors du chargement de l'image, veuillez vérifier l'extension", response.status);
     return undefined;
   }
 }
