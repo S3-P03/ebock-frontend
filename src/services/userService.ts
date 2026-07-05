@@ -114,12 +114,7 @@ export async function updateUserPassword({ token, logout }: FetchOptions, data: 
         Authorization: `Bearer ${token}`,
       },
     });
-
-    if (response.status === 401) {
-      logout();
-      return "Vous devez être connecté pour mettre à jour le mot de passe";
-    }
-
+    
     return true;
   } catch (error: any) {
     if (error?.response?.status === 401) {
