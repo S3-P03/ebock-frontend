@@ -86,7 +86,7 @@ export default function UserProfile() {
             <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
 
                 <Box sx={{ width: 220, flexShrink: 0 }}>
-                    <ProfileBox seller={seller} showContact={false} reviewAverage={reviewAverage} />
+                    <ProfileBox seller={seller} reviewAverage={reviewAverage} />
                 </Box>
 
                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2}}>
