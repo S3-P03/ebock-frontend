@@ -5,7 +5,7 @@ import {
 import { SellerUser } from "interfaces/Seller";
 import { ReviewAverage } from "services/reviewService";
 
-export default function ProfileBox ({seller, reviewAverage}: { seller: SellerUser, reviewAverage: ReviewAverage | null }) {
+export default function ProfileBox ({seller, reviewAverage, showContact = true}: { seller: SellerUser, reviewAverage: ReviewAverage | null, showContact?: boolean }) {
   return (
     <Card sx={{ p: 2.5, borderRadius: 2 }}>
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, mb: 2 }}>
@@ -22,6 +22,12 @@ export default function ProfileBox ({seller, reviewAverage}: { seller: SellerUse
         </Box>
         <Box sx={{ fontSize: 12, color: "text.secondary" }}>Membre depuis {seller.createdAt.getFullYear()}</Box>
       </Box>
+
+      {showContact && (
+        <Button variant="contained" fullWidth size="small" sx={{ borderRadius: 2, mb: 2, textTransform: "none" }}>
+          Contacter
+        </Button>
+      )}
 
       <Divider sx={{ mb: 1.5 }} />
 
