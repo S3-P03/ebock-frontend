@@ -3,7 +3,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser } from "../interfaces/Seller";
-import ProfileBox from "../components/ProfileBox";
 import { fetchUser, fetchUserProfile, fetchUserStoreFront, updateUserPassword, updateUserProfile } from "../services/userService";
 import Security from "../components/Security";
 import UserInfo from "../components/UserInfo";
@@ -84,11 +83,6 @@ export default function UserProfile() {
         (<CenteredCircularProgress />) :
         (<Box sx={{ maxWidth: 900, mx: "auto", px: 2, py: 3 }}>
             <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
-
-                <Box sx={{ width: 220, flexShrink: 0 }}>
-                    <ProfileBox seller={seller} reviewAverage={reviewAverage} />
-                </Box>
-
                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2}}>
                     <UserInfo user={user} onSave={handleSaveProfile} />
                     <Security onSave={handleChangePassword} errorMessage={passwordError}/>
