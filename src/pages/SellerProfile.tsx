@@ -32,7 +32,7 @@ export default function SellerProfile() {
             <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
 
                 <Box sx={{ width: 220, flexShrink: 0 }}>
-                    <ProfileBox seller={seller} reviewAverage={reviewAverage} itemsOnSale={items?.length ?? null} />
+                    <ProfileBox seller={seller} reviewAverage={reviewAverage} itemsOnSaleCount={items?.length ?? null} />
                 </Box>
 
                 <Box sx={{ flexGrow: 1 }}>

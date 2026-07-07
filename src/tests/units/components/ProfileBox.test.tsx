@@ -8,7 +8,7 @@ const mockSeller: SellerUser = {
   lastName: "Pelletier",
   profilePictureUrl: null,
   createdAt: new Date("2022-09-01T00:00:00Z"),
-  soldItems: 14,
+  soldItemsCount: 14,
 };
 
 const mockReviewAverage = {
@@ -17,7 +17,7 @@ const mockReviewAverage = {
 }
 
 const renderBox = (seller: SellerUser = mockSeller, reviewAverage: ReviewAverage | null = mockReviewAverage) => {
-  return render(<ProfileBox seller={seller} reviewAverage={reviewAverage} itemsOnSale={12} />);
+  return render(<ProfileBox seller={seller} reviewAverage={reviewAverage} itemsOnSaleCount={12} />);
 };
 
 describe("ProfileBox Component", () => {

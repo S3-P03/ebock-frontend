@@ -8,7 +8,7 @@ const mockSeller: SellerUser = {
   lastName: "Pelletier",
   profilePictureUrl: null,
   createdAt: new Date("2022-09-01T00:00:00Z"),
-  soldItems: 14,
+  soldItemsCount: 14,
 };
 
 const mockReviewAverage = {

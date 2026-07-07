@@ -5,7 +5,7 @@ import {
 import { SellerUser } from "interfaces/Seller";
 import { ReviewAverage } from "services/reviewService";
 
-export default function ProfileBox ({seller, reviewAverage, itemsOnSale}: { seller: SellerUser, reviewAverage: ReviewAverage | null, itemsOnSale: number | null }) {
+export default function ProfileBox ({seller, reviewAverage, itemsOnSaleCount}: { seller: SellerUser, reviewAverage: ReviewAverage | null, itemsOnSaleCount: number | null }) {
   return (
     <Card sx={{ p: 2.5, borderRadius: 2 }}>
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, mb: 2 }}>
@@ -26,11 +26,11 @@ export default function ProfileBox ({seller, reviewAverage, itemsOnSale}: { sell
 
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
         <Box sx={{ fontSize: 14, color: "text.secondary" }}>Articles vendus</Box>
-        <Box sx={{ fontSize: 14, fontWeight: 600 }}>{seller.soldItems}</Box>
+        <Box sx={{ fontSize: 14, fontWeight: 600 }}>{seller.soldItemsCount}</Box>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ fontSize: 14, color: "text.secondary" }}>Articles en vente</Box>
-        <Box sx={{ fontSize: 14, fontWeight: 600 }}>{itemsOnSale!==null ? itemsOnSale: 0}</Box>
+        <Box sx={{ fontSize: 14, fontWeight: 600 }}>{itemsOnSaleCount!==null ? itemsOnSaleCount: 0}</Box>
       </Box>
     </Card>
   )
