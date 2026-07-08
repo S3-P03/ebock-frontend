@@ -50,7 +50,7 @@ export async function postReview(
     });
     return 200;
   } catch (error: any) {
-    console.error("Erreur postReview :", error);
+    emitApiError(error.message, error.response?.status ?? 500);
     return error.response?.status ?? 500;
   }
 }

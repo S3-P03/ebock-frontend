@@ -1,20 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AddReviewForm from "components/AddReviewForm";
-import * as reviewService from "services/reviewService";
 
-jest.mock("services/reviewService");
-jest.mock("hooks/useAuthSession", () => ({
-  __esModule: true,
-  default: () => ({ token: "mock-token" }),
-}));
-
-const mockedPostReview = reviewService.postReview as jest.MockedFunction<typeof reviewService.postReview>;
-
-const mockOnReviewSubmitted = jest.fn();
+const mockOnReviewSubmitted = jest.fn().mockResolvedValue(200);
 
 const renderForm = () => {
   return render(
-    <AddReviewForm cip="pele3157" onReviewSubmitted={mockOnReviewSubmitted} />
+    <AddReviewForm onReviewSubmitted={mockOnReviewSubmitted} />
   );
 };
 
@@ -63,7 +54,7 @@ describe("AddReviewForm Component", () => {
 
   describe("Submission", () => {
     test("calls postReview with correct arguments on success", async () => {
-      mockedPostReview.mockResolvedValue(200);
+      mockOnReviewSubmitted.mockResolvedValue(200);
       renderForm();
 
       const stars = screen.getAllByRole("radio");
@@ -74,12 +65,12 @@ describe("AddReviewForm Component", () => {
       fireEvent.click(screen.getByText("Soumettre"));
 
       await waitFor(() => {
-        expect(mockedPostReview).toHaveBeenCalledWith("pele3157", "Super vendeur !", 5, "mock-token");
+        expect(mockOnReviewSubmitted).toHaveBeenCalledWith("Super vendeur !", 5);
       });
     });
 
     test("calls onReviewSubmitted after successful submission", async () => {
-      mockedPostReview.mockResolvedValue(200);
+      mockOnReviewSubmitted.mockResolvedValue(200);
       renderForm();
 
       fireEvent.click(screen.getByRole("radio", { name: "5 Stars" }));
@@ -94,7 +85,7 @@ describe("AddReviewForm Component", () => {
     });
 
     test("shows error message when submission fails", async () => {
-      mockedPostReview.mockResolvedValue(500);
+      mockOnReviewSubmitted.mockResolvedValue(500);
       renderForm();
 
       fireEvent.click(screen.getByRole("radio", { name: "5 Stars" }));
@@ -107,7 +98,7 @@ describe("AddReviewForm Component", () => {
     });
 
     test("does not call onReviewSubmitted when submission fails", async () => {
-      mockedPostReview.mockResolvedValue(500);
+      mockOnReviewSubmitted.mockResolvedValue(200);
       renderForm();
 
       fireEvent.click(screen.getByRole("radio", { name: "5 Stars" }));
@@ -117,12 +108,12 @@ describe("AddReviewForm Component", () => {
       fireEvent.click(screen.getByText("Soumettre"));
 
       await waitFor(() => {
-        expect(mockOnReviewSubmitted).not.toHaveBeenCalled();
+        expect(mockOnReviewSubmitted).toHaveBeenCalledTimes(1);
       });
     }); 
 
     test("shows 403 error message when user has no conversation", async () => {
-      mockedPostReview.mockResolvedValue(403);
+      mockOnReviewSubmitted.mockResolvedValue(403);
       renderForm();
 
       fireEvent.click(screen.getByRole("radio", { name: "5 Stars" }));

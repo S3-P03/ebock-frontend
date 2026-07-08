@@ -1,19 +1,15 @@
 import { Box, Button, Rating, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { postReview } from "services/reviewService";
-import useAuthSession from "hooks/useAuthSession";
 
 interface AddReviewFormProps {
-    cip: string | undefined;
-    onReviewSubmitted: () => void;
+    onReviewSubmitted: (content: string, rating: number) => Promise<number>;
 }
 
-export default function AddReviewForm({ cip, onReviewSubmitted }: AddReviewFormProps) {
+export default function AddReviewForm({ onReviewSubmitted }: AddReviewFormProps) {
     const [rating, setRating] = useState<number | null>(null);
     const [content, setContent] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const { token } = useAuthSession();
 
     const handleSubmit = async () => {
         if (!rating) {
@@ -27,11 +23,10 @@ export default function AddReviewForm({ cip, onReviewSubmitted }: AddReviewFormP
         setIsSubmitting(true);
         setError(null);
         
-        const status = await postReview(cip, content, rating, token);
+        const status = await onReviewSubmitted(content, rating);
         if (status === 200) {
             setRating(null);
             setContent("");
-            onReviewSubmitted();
         } else if (status === 403) {
             setError("Vous devez avoir eu une conversation avec ce vendeur pour laisser un avis.");
         } else {
