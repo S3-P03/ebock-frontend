@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser } from "interfaces/Seller";
 import { SellerItem } from "interfaces/Item";
@@ -10,6 +10,7 @@ import { fetchUserStoreFront } from "services/userService";
 import { fetchUserItems } from "services/itemService";
 import { fetchReviewAverage, fetchReviewDetails, ReviewAverage, ReviewDetail } from "services/reviewService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
+import AddReviewForm from "components/AddReviewForm";
 
 export default function SellerProfile() {
     const { cip } = useParams();
@@ -18,11 +19,17 @@ export default function SellerProfile() {
     const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
     const [reviews, setReviews] = useState<ReviewDetail[]>([]);
 
+    const loadReviews = () => {
+        fetchReviewAverage(cip).then((data) => setReviewAverage(data)).catch(console.error);
+        fetchReviewDetails(cip).then((data) => setReviews(data ?? [])).catch(console.error);
+    };
+
     useEffect(() => {
         fetchUserStoreFront(cip).then((data) => setSeller(data)).catch(console.error);
         fetchUserItems(cip).then((data) => setItems(data)).catch(console.error);
         fetchReviewAverage(cip).then((data) => setReviewAverage(data)).catch(console.error);
         fetchReviewDetails(cip).then((data) => setReviews(data ?? [])).catch(console.error);
+        loadReviews();
     }, [cip]);
 
     if (seller == null) return <CenteredCircularProgress />;
@@ -37,6 +44,7 @@ export default function SellerProfile() {
 
                 <Box sx={{ flexGrow: 1 }}>
                     <ItemDisplayBox items={items ?? []} />
+                    <AddReviewForm cip={cip} onReviewSubmitted={loadReviews} />
 
                     {reviews.length > 0 && (
                         <Box sx={{ mt: 3 }}>
