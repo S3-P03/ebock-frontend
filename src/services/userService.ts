@@ -49,6 +49,8 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
   } catch (error: any) {
     if (error.status === 404) {
       emitApiError("L'utilisateur n'existe pas", error.status);
+    } else {
+      emitApiError("Erreur lors de la récupération du profil vendeur", error.status);
     }
     return null;
   }
