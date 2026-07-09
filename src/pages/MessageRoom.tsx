@@ -3,7 +3,7 @@ import {
     TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchUser } from "services/userService";
 import useAuthSession from "hooks/useAuthSession";
 import { User } from "interfaces/User";
@@ -23,7 +23,8 @@ export default function MessageRoom() {
     const [user, setUser] = useState<User | null>(null);
     const { isAuthenticated, token, logout } = useAuthSession();
     const [fieldValue, setFieldValue] = useState("");
-
+    let navigate = useNavigate();
+    
     const handleSend = () => {
         const sanitized = DOMPurify.sanitize(fieldValue.trim());
         if (!sanitized  || containsMalicious(sanitized)) return;
@@ -51,13 +52,14 @@ export default function MessageRoom() {
     });
 
     useEffect(() => {
-        try {
-            fetchRoom(id, token).then((data) => {
-                setRoom(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des informations de la discussion :", error);
-        }
+        fetchRoom(id, token)
+        .then((data) => {
+            if (!data) {
+                navigate("/404");
+                return;
+            }
+            setRoom(data);
+        })
         
         try {
             fetchMessages(id, token).then((data) => {

@@ -52,13 +52,14 @@ export default function ItemDetails() {
     }
 
     useEffect(() => {
-        try {
-            const response = fetchItem(id).then((data) => {
+        fetchItem(id)
+            .then((data) => {
+                if (!data) {
+                    navigate("/404");
+                    return;
+                }
                 setItem(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération de l'item :", error);
-        }
+            })
         
         try {
             const response = fetchItemImages(id).then((data) => {

@@ -5,7 +5,7 @@ import { SellerItem } from "interfaces/Item";
 import ProfileBox from "components/ProfileBox";
 import ItemDisplayBox from "components/items/ItemDisplayBox";
 import ReviewRow from "components/ReviewRow";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchUserStoreFront } from "services/userService";
 import { fetchUserItems } from "services/itemService";
 import { fetchReviewAverage, fetchReviewDetails, ReviewAverage, ReviewDetail } from "services/reviewService";
@@ -17,9 +17,17 @@ export default function SellerProfile() {
     const [items, setItems] = useState<SellerItem[] | null>(null);
     const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
     const [reviews, setReviews] = useState<ReviewDetail[]>([]);
-
+    let navigate = useNavigate();
+    
     useEffect(() => {
-        fetchUserStoreFront(cip).then((data) => setSeller(data)).catch(console.error);
+        fetchUserStoreFront(cip)
+            .then((data) => {
+                if (!data) {
+                    navigate("/404");
+                    return;
+                }
+                setSeller(data);
+            })
         fetchUserItems(cip).then((data) => setItems(data)).catch(console.error);
         fetchReviewAverage(cip).then((data) => setReviewAverage(data)).catch(console.error);
         fetchReviewDetails(cip).then((data) => setReviews(data ?? [])).catch(console.error);
