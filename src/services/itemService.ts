@@ -16,8 +16,8 @@ export interface FilterParams {
 }
 
 export async function fetchUserItems(cip: string | undefined): Promise<SellerItem[] | null> {
-  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
   try {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
     const items = (await response.data) as SellerItem[];
     return items;
   } catch (error) {
@@ -26,20 +26,22 @@ export async function fetchUserItems(cip: string | undefined): Promise<SellerIte
 }
 
 export async function fetchItem(id: string | undefined): Promise<DetailedItem | null> {
-    const response = await apiClient.get(`${SERVICE_BASE_URL}/${id}`);
-
   try {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/${id}`);
     return (await response.data) as DetailedItem;
-  } catch (error) {
-    emitApiError("Item impossible à récupérer", response.status);
+  } catch (error: any) {
+    if (error.status === 404) {
+      emitApiError("Item introuvable", 404);
+    } else {
+      emitApiError("Erreur lors de la récupération de l'item", error.status || 500);
+    }
     return null;
   }
 }
 
 export async function fetchItemImages(id: string | undefined): Promise<ItemImage[] | null> {
-  const response = await apiClient.get(`/image/forItem/${id}`);
-
   try {
+    const response = await apiClient.get(`/image/forItem/${id}`);
     return (await response.data) as ItemImage[];
   } catch (error) {
     return null;
@@ -47,7 +49,9 @@ export async function fetchItemImages(id: string | undefined): Promise<ItemImage
 }
 
 export async function addItem(item : ItemPayload, token: string): Promise<{itemId: number} | null> {
-  const response = await apiClient.post(`${SERVICE_BASE_URL}`,
+  
+  try {
+    const response = await apiClient.post(`${SERVICE_BASE_URL}`,
         {
             name: item.name,
             description: item.description,
@@ -68,11 +72,9 @@ export async function addItem(item : ItemPayload, token: string): Promise<{itemI
         }
     );
 
-  try {
     return (await response.data) as {itemId: number};
-  } catch (error) {
-    console.error(error);
-    emitApiError("Erreur lors de l'ajout de l'item, veuillez vérifier les données fournies", response.status);
+  } catch (error: any) {
+    emitApiError("Erreur lors de l'ajout de l'item, veuillez vérifier les données fournies", error.status);
     return null;
   }
 }
@@ -100,8 +102,8 @@ export async function getFilteredItems(token: string, pageNumber: number, filter
       },
     });
     return (Array.isArray(response.data) ? response.data : []) as SellerItem[];
-  } catch (error) {
-    emitApiError("Erreur lors de la récupération des items", 404);
+  } catch (error: any) {
+    emitApiError("Erreur lors de la récupération des items", error.status ?? 500);
     return [];
   }
 }
@@ -113,8 +115,12 @@ export async function favoriteItem(id: number, token: string): Promise<void> {
         Authorization: `Bearer ${token}`,
       },
     });
-  } catch (error) {
-    emitApiError("Erreur lors de la mise en favori de l'article", 401);
+  } catch (error: any) {
+    if(error.status === 404) {
+      emitApiError("L'article n'existe pas", error.status);
+    } else {
+      emitApiError("Erreur lors de la mise en favori de l'article", error.status ?? 401);
+    }
   }
 }
 
@@ -125,7 +131,11 @@ export async function unfavoriteItem(id: number, token: string): Promise<void> {
         Authorization: `Bearer ${token}`,
       },
     });
-  } catch (error) {
-    emitApiError("Erreur lors du retrait du favori de l'article", 401);
+  } catch (error: any) {
+    if(error.status === 404) {
+      emitApiError("L'article n'existe pas", error.status);
+    } else {
+      emitApiError("Erreur lors du retrait du favori de l'article", error.status ?? 401);
+    }
   }
 }

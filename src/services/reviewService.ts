@@ -20,8 +20,8 @@ export async function fetchReviewAverage(cip: string | undefined): Promise<Revie
   try {
     const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/average`);
     return response.data as ReviewAverage;
-  } catch (error) {
-    emitApiError("L'utilisateur n'existe pas", 404);
+  } catch (error: any) {
+    handleReviewError(error);
     return null;
   }
 }
@@ -30,8 +30,8 @@ export async function fetchReviewDetails(cip: string | undefined): Promise<Revie
   try {
     const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/details`);
     return response.data as ReviewDetail[];
-  } catch (error) {
-    emitApiError("L'utilisateur n'existe pas", 404);
+  } catch (error: any) {
+    handleReviewError(error);
     return null;
   }
 }
@@ -52,5 +52,13 @@ export async function postReview(
   } catch (error: any) {
     emitApiError(error.message, error.response?.status ?? 500);
     return error.response?.status ?? 500;
+  }
+}
+
+function handleReviewError(error: any) {
+  if (error.status === 404) {
+    emitApiError("L'utilisateur n'existe pas", 404);
+  } else {
+    emitApiError("Erreur lors de la récupération des avis", error.status ?? 500);
   }
 }

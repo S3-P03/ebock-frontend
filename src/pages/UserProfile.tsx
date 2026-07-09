@@ -46,7 +46,7 @@ export default function UserProfile() {
         setPasswordError(null);
         await updateUserPassword({token, logout}, { oldPassword, newPassword });
       } catch (error: any) {
-        if (error.response?.status === 400 || error.response?.status === 401) {
+        if (error.status === 400 || error.status === 401) {
         setPasswordError("Mot de passe actuel incorrect.");
         }
       }

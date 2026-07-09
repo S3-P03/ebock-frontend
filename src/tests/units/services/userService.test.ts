@@ -140,9 +140,8 @@ describe("fetchAndModifyUserProfile", () => {
         message: "Erreur réseau",
       });
 
-      await expect(fetchUserProfile({ token, logout })).rejects.toMatchObject({
-        message: "Erreur réseau",
-      });
+      const result = await updateUserProfile({ token, logout }, mockUserInfoForUpdate);
+      expect(result).toBeNull();
     });
 
     test("appelle le bon endpoint", async () => {
@@ -164,10 +163,8 @@ describe("fetchAndModifyUserProfile", () => {
         response: { status: 500 },
         message: "Erreur réseau",
       });
-
-      await expect(updateUserProfile({ token, logout }, mockUserInfoForUpdate)).rejects.toMatchObject({
-        message: "Erreur réseau",
-      });
+      const result = await updateUserProfile({ token, logout }, mockUserInfoForUpdate);
+      expect(result).toBeNull();
     });
 
     test("appelle le bon endpoint avec les bonnes données", async () => {

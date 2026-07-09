@@ -61,7 +61,8 @@ export default function HomePage() {
               <Route path="/profile" element={<UserProfile />} />
             </Route>
           </Route>
-          <Route path="*" element={<NotFound/>} />
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </Router>
     </AppProvider>

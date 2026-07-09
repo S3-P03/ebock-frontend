@@ -11,57 +11,59 @@ interface FetchOptions {
 const SERVICE_BASE_URL = "/user";
 
 export async function fetchUser({ token, logout }: FetchOptions): Promise<User | null> {
-  const response = await apiClient.get(`${SERVICE_BASE_URL}/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (response.status === 401) {
-    logout();
-    return null;
-  }
-
+  
   try {
-    return (await response.data) as User;
-  } catch (error) {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (response.status === 401) {
-      emitApiError("Vous devez être connecté pour récupérer les informations de l'utilisateur", response.status);
-    } else if (response.status === 404) {
-      emitApiError("L'utilisateur n'existe pas", response.status);
-    } else {
-      emitApiError("Erreur lors de la récupération des informations de l'utilisateur", response.status);
+      logout();
+      return null;
     }
-    console.error(error);
+    return (await response.data) as User;
+  } catch (error: any) {
+    if (error.status === 401) {
+      emitApiError("Vous devez être connecté pour récupérer les informations de l'utilisateur", error.status);
+    } else if (error.status === 404) {
+      emitApiError("L'utilisateur n'existe pas", error.status);
+    } else {
+      emitApiError("Erreur lors de la récupération des informations de l'utilisateur", error.status);
+    }
     return null;
   }
 }
 
 export async function fetchUserStoreFront(cip: string | undefined): Promise<SellerUser | null> {
-  const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
 
   try {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
     const rawSeller = (await response.data) as SellerUserRaw;
     const seller: SellerUser = {
       ...rawSeller,
       createdAt: new Date(rawSeller.createdAt),
     };
     return seller;
-  } catch (error) {
-    if (response.status === 404) {
-      emitApiError("L'utilisateur n'existe pas", response.status);
+  } catch (error: any) {
+    if (error.status === 404) {
+      emitApiError("L'utilisateur n'existe pas", error.status);
+    } else {
+      emitApiError("Erreur lors de la récupération du profil vendeur", error.status);
     }
     return null;
   }
 }
 
 export async function fetchUserProfile({ token, logout }: FetchOptions): Promise<UserInformation | null> {
-  const response = await apiClient.get(`${SERVICE_BASE_URL}/profile`, {
+  
+  try {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-  try {
     if (response.status === 401) {
       logout();
       return null;
@@ -69,39 +71,39 @@ export async function fetchUserProfile({ token, logout }: FetchOptions): Promise
 
     const userInfo = (await response.data) as UserInformation;
     return userInfo;
-  } catch (error) {
-    if(response.status === 401) {
-      emitApiError("Vous devez être connecté pour récupérer les informations de l'utilisateur", response.status);
-    } else if(response.status === 404) {
-      emitApiError("L'utilisateur n'existe pas", response.status);
+  } catch (error: any) {
+    if(error.status === 401) {
+      emitApiError("Vous devez être connecté pour récupérer les informations de l'utilisateur", error.status);
+    } else if(error.status === 404) {
+      emitApiError("L'utilisateur n'existe pas", error.status);
     } else {
-      emitApiError("Erreur lors de la récupération des informations personnelles de l'utilisateur", response.status);
+      emitApiError("Erreur lors de la récupération des informations personnelles de l'utilisateur", error.status);
     }
     return null;
   }
 }
 
 export async function updateUserProfile({ token, logout }: FetchOptions, data: Partial<UserUpdatePayload>): Promise<UserInformation | null> {
-  const response = await apiClient.put(`${SERVICE_BASE_URL}/profile`, data, {
+  
+  try {
+    const response = await apiClient.put(`${SERVICE_BASE_URL}/profile`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });  
-
-  try {
     if (response.status === 401) {
       logout();
       return null;
     }
 
     return response.data as UserInformation;
-  } catch (error) {
-    if(response.status === 401) {
-      emitApiError("Vous devez être connecté pour mettre à jour les informations de l'utilisateur", response.status);
-    } else if(response.status === 404) {
-      emitApiError("L'utilisateur n'existe pas", response.status);
+  } catch (error: any) {
+    if(error.status === 401) {
+      emitApiError("Vous devez être connecté pour mettre à jour les informations de l'utilisateur", error.status);
+    } else if(error.status === 404) {
+      emitApiError("L'utilisateur n'existe pas", error.status);
     } else {
-      emitApiError("Erreur lors de la mise à jour des informations personnelles de l'utilisateur", response.status);
+      emitApiError("Erreur lors de la mise à jour des informations personnelles de l'utilisateur", error.status);
     }
     return null;
   }
@@ -117,18 +119,12 @@ export async function updateUserPassword({ token, logout }: FetchOptions, data: 
 
     return true;
   } catch (error: any) {
-    if (error?.response?.status === 401) {
-      logout();
-      emitApiError("Vous devez être connecté pour mettre à jour le mot de passe", error.response.status);
+    if (error.status === 400 || error.status === 401) {
+      emitApiError("Le mot de passe actuel est incorrect", error.status);
       return false;
     }
 
-    if (error?.response?.status === 400) {
-      emitApiError("Le mot de passe actuel est incorrect", error.response.status);
-      return false;
-    }
-
-    emitApiError("Erreur lors de la mise à jour du mot de passe", error?.response?.status ?? 500);
+    emitApiError("Erreur lors de la mise à jour du mot de passe", error.status ?? 500);
     return false;
   }
 }
