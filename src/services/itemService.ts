@@ -102,8 +102,8 @@ export async function getFilteredItems(token: string, pageNumber: number, filter
       },
     });
     return (Array.isArray(response.data) ? response.data : []) as SellerItem[];
-  } catch (error) {
-    emitApiError("Erreur lors de la récupération des items", 404);
+  } catch (error: any) {
+    emitApiError("Erreur lors de la récupération des items", error.status ?? 500);
     return [];
   }
 }
@@ -115,8 +115,12 @@ export async function favoriteItem(id: number, token: string): Promise<void> {
         Authorization: `Bearer ${token}`,
       },
     });
-  } catch (error) {
-    emitApiError("Erreur lors de la mise en favori de l'article", 401);
+  } catch (error: any) {
+    if(error.status === 404) {
+      emitApiError("L'article n'existe pas", error.status);
+    } else {
+      emitApiError("Erreur lors de la mise en favori de l'article", error.status ?? 401);
+    }
   }
 }
 
@@ -127,7 +131,11 @@ export async function unfavoriteItem(id: number, token: string): Promise<void> {
         Authorization: `Bearer ${token}`,
       },
     });
-  } catch (error) {
-    emitApiError("Erreur lors du retrait du favori de l'article", 401);
+  } catch (error: any) {
+    if(error.status === 404) {
+      emitApiError("L'article n'existe pas", error.status);
+    } else {
+      emitApiError("Erreur lors du retrait du favori de l'article", error.status ?? 401);
+    }
   }
 }
