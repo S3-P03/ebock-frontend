@@ -3,6 +3,7 @@ import { fetchUser } from "services/userService";
 import { fetchRoom, fetchMessages } from "services/messageService";
 import useAuthSession from "hooks/useAuthSession";
 import MessageRoom from "pages/MessageRoom";
+import useWebSocket from "hooks/useWebSocket";
 
 const mockNavigate = jest.fn();
 
@@ -13,6 +14,11 @@ jest.mock("services/messageService", () => ({
 
 jest.mock("services/userService", () => ({
   fetchUser: jest.fn(),
+}));
+
+jest.mock("hooks/useWebSocket", () => ({
+  __esModule: true,
+  default: jest.fn(),
 }));
 
 jest.mock("hooks/useAuthSession", () => jest.fn());
@@ -34,6 +40,7 @@ describe("MessageRoom", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useAuthSession as jest.Mock).mockReturnValue({ isAuthenticated: false, token: null, logout: jest.fn() });
+    (useWebSocket as jest.Mock).mockImplementation(() => {});
     (fetchRoom as jest.Mock).mockResolvedValue(null);
     (fetchMessages as jest.Mock).mockResolvedValue([]);
     (fetchUser as jest.Mock).mockResolvedValue(null);
