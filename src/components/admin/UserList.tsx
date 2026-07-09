@@ -1,13 +1,28 @@
 import {
-    Box,
+  Box,
 } from "@mui/material";
+import { Users } from "interfaces/AdminUserList";
+import UserLine from "./UserLine";
 
-export default function UserList() {
+export default function UserList({ users, onToggleRequest }: { users: Users[], onToggleRequest: (user: Users) => void }) {
+
+    const usersArray = Array.isArray(users) ? users : [users];
+
     return (
-        (<Box sx={{ mx: "auto", px: 10, py: 10 }}>
-            <Box sx={{ display: "flex", gap: 5, alignItems: "flex-start" }}>
-            </Box>
+        <Box
+        sx={{
+            display: "flex",
+            flexDirection: "column",
+            maxHeight: "80vh",
+            overflowY: "auto",
+            borderRadius: 2,
+            border: "1px solid",
+            borderColor: "grey.200",
+        }}
+        >
+        {usersArray.map((user) => (
+            <UserLine key={user.cip} user={user} onToggleRequest={onToggleRequest} />
+        ))}
         </Box>
-        )
     );
 }
