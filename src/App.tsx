@@ -49,14 +49,14 @@ export default function HomePage() {
       <Router>
         <Routes>
           <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
-          <Route element={<AuthRouteGuard />}>
-            <Route path="/" element={<MenuBarLayout />} >
-              <Route index element={<Home />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/seller/:cip" element={<SellerProfile />} />
+          <Route path="/" element={<MenuBarLayout />} >
+            <Route index element={<Home />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/seller/:cip" element={<SellerProfile />} />
+            <Route path="/item/:id" element={<ItemDetails />} />
+            <Route element={<AuthRouteGuard />}>
               <Route path="message/:id" element={<MessageRoom />} />
               <Route path="message" element={<RoomHistory />} />
-              <Route path="/item/:id" element={<ItemDetails />} />
               <Route path="/item/add" element={<AddItem />} />
               <Route path="/profile" element={<UserProfile />} />
             </Route>

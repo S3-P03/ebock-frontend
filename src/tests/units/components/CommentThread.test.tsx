@@ -32,8 +32,8 @@ const mockComments: ItemComment[] = [
   },
 ];
  
-const renderThread = (comments: ItemComment[] = mockComments) => {
-  return render(<CommentThread comments={comments} />);
+const renderThread = (comments: ItemComment[] = mockComments, isAuthenticated: boolean = true) => {
+  return render(<CommentThread comments={comments} isAuthenticated={isAuthenticated}/>);
 };
  
 describe("CommentThread Component", () => {

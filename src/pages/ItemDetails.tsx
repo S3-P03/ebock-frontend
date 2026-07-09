@@ -142,15 +142,15 @@ export default function ItemDetails() {
                         </Box>}
                     {images!.length !== 0 && <ImageList images={images!}/>}
                     <Card sx={{ p: 2.5, borderRadius: 2 }}>
-                        <CommentThread comments={itemComments} />
+                        <CommentThread comments={itemComments} isAuthenticated={isAuthenticated} />
                     </Card>
                 </Box>
                 <Box  sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2, margin: 2, alignItems: "center" }}>
                     <Box sx={{ width: "100%", flexShrink: 0, gap: 2, display: "flex", flexDirection: "column" }}>
                         <ItemMainInfoBox item={item} />
-                        <Card sx={{ p: 2.5, borderRadius: 2 }}>
+                        {isAuthenticated && <Card sx={{ p: 2.5, borderRadius: 2 }}>
                             <Button variant="contained" sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} fullWidth onClick={handleClick}>Contacter le vendeur</Button>
-                        </Card>                        
+                        </Card>}                        
                         <SellerBox seller={seller} reviewAverage={reviewAverage} handleOpenStorefront={handleOpenStorefront} />
                         <ItemAditionnalInfoBox item={item} />
                     </Box>
