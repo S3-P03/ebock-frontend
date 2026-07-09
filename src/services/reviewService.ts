@@ -35,3 +35,22 @@ export async function fetchReviewDetails(cip: string | undefined): Promise<Revie
     return null;
   }
 }
+
+export async function postReview(
+  cip: string | undefined,
+  content: string,
+  rating: number,
+  token: string
+): Promise<number> {
+  try {
+    await apiClient.post(`${SERVICE_BASE_URL}/${cip}`, { content, rating }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return 200;
+  } catch (error: any) {
+    emitApiError(error.message, error.response?.status ?? 500);
+    return error.response?.status ?? 500;
+  }
+}

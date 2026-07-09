@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SellerUser } from "interfaces/Seller";
 import { SellerItem } from "interfaces/Item";
@@ -10,6 +10,9 @@ import { fetchUserStoreFront } from "services/userService";
 import { fetchUserItems } from "services/itemService";
 import { fetchReviewAverage, fetchReviewDetails, ReviewAverage, ReviewDetail } from "services/reviewService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
+import AddReviewForm from "components/AddReviewForm";
+import { postReview } from "services/reviewService";
+import useAuthSession from "hooks/useAuthSession";
 
 export default function SellerProfile() {
     const { cip } = useParams();
@@ -17,12 +20,17 @@ export default function SellerProfile() {
     const [items, setItems] = useState<SellerItem[] | null>(null);
     const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
     const [reviews, setReviews] = useState<ReviewDetail[]>([]);
+    const { token } = useAuthSession();
+
+    const loadReviews = () => {
+        fetchReviewAverage(cip).then((data) => setReviewAverage(data))
+        fetchReviewDetails(cip).then((data) => setReviews(data ?? []))
+    };
 
     useEffect(() => {
-        fetchUserStoreFront(cip).then((data) => setSeller(data)).catch(console.error);
-        fetchUserItems(cip).then((data) => setItems(data)).catch(console.error);
-        fetchReviewAverage(cip).then((data) => setReviewAverage(data)).catch(console.error);
-        fetchReviewDetails(cip).then((data) => setReviews(data ?? [])).catch(console.error);
+        fetchUserStoreFront(cip).then((data) => setSeller(data))
+        fetchUserItems(cip).then((data) => setItems(data))
+        loadReviews();
     }, [cip]);
 
     if (seller == null) return <CenteredCircularProgress />;
@@ -37,6 +45,11 @@ export default function SellerProfile() {
 
                 <Box sx={{ flexGrow: 1 }}>
                     <ItemDisplayBox items={items ?? []} />
+                    <AddReviewForm onReviewSubmitted={async (content, rating) => {
+                        const status = await postReview(cip, content, rating, token);
+                        if (status === 200) loadReviews();
+                        return status;
+                    }} />
 
                     {reviews.length > 0 && (
                         <Box sx={{ mt: 3 }}>
