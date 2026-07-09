@@ -1,11 +1,26 @@
 import apiClient from "./apiClient";
-import { Users } from "interfaces/AdminUserList";
+import { Users } from "interfaces/Admin";
+
+interface FetchOptions {
+  token: string;
+  logout: () => void;
+}
+
 const SERVICE_BASE_URL = "/user";
 
-export async function fetchUserList() {
+export async function fetchUserList({ token, logout }: FetchOptions): Promise<Users[] | null> {
   try {
-    const response = await apiClient.get(`${SERVICE_BASE_URL}/list`);
-    return response.data.utilisateurs as Users[];
+    const response = await apiClient.get(`${SERVICE_BASE_URL}/list`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.status === 401) {
+      logout();
+      return null;
+    }
+    const userInfo = response.data.utilisateurs as Users[];
+    return userInfo;
   } catch (error) {
     console.error(error);
     return null;

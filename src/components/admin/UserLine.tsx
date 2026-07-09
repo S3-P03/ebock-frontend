@@ -4,7 +4,7 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
-import { Users } from "interfaces/AdminUserList";
+import { Users } from "interfaces/Admin";
 
 export default function UserList({ user, onToggleRequest }: { user: Users, onToggleRequest: (user: Users) => void }) {
     return (

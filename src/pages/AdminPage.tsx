@@ -4,20 +4,44 @@ import {
 import { useEffect, useState } from "react";
 import { fetchUserList, enableUser, disableUser } from "../services/adminService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
-import { Users } from "interfaces/AdminUserList";
+import { Users } from "interfaces/Admin";
 import UserList from "components/admin/UserList";
 import ConfirmDialog from "components/admin/ConfirmDialog";
-
-
+import useAuthSession from "hooks/useAuthSession";
+import { fetchUser } from "services/userService";
+import { User } from "interfaces/User";
 
 export default function AdminPage() {
     const [activeTab, setActiveTab] = useState(0);
     const [pendingUser, setPendingUser] = useState<Users | null>(null);
     const [users, setUsers] = useState<Users[] | null>(null);
 
+    const { isAuthenticated, token, logout } = useAuthSession();
+    const [me, setMe] = useState<User | null>(null);
     useEffect(() => {
-        fetchUserList().then((data) => setUsers(data)).catch(console.error);
-    }, []);
+        if (!isAuthenticated || !token) return;
+        
+        try {
+            fetchUser({ token, logout }).then((data) => {
+                setMe(data);
+            });
+        } catch (error) {
+            console.error("Erreur lors de la récupération de l'utilisateur :", error);
+        }
+    }, [isAuthenticated]);
+    const cip = me?.cip;
+    
+    useEffect(() => {
+        try {
+            if (cip) {
+                fetchUserList({token, logout}).then((data) => {
+                    setUsers(data);
+                });
+            } 
+        } catch (error) {
+            console.error("Erreur lors de la récupération de la liste des utilisateurs :", error);
+        }
+    }, [cip]);
 
     const handleToggleRequest = (user: Users) => setPendingUser(user);
 
@@ -54,7 +78,7 @@ export default function AdminPage() {
 
         {activeTab === 0 && (
             <Card sx={{ borderRadius: 2, overflow: "hidden" }}>
-            <UserList users={users} onToggleRequest={handleToggleRequest} />
+                <UserList users={users} onToggleRequest={handleToggleRequest} />
             </Card>
         )}
 

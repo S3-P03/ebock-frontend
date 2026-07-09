@@ -1,13 +1,11 @@
 import {
   Box,
 } from "@mui/material";
-import { Users } from "interfaces/AdminUserList";
+import { Users } from "interfaces/Admin";
 import UserLine from "./UserLine";
 
 export default function UserList({ users, onToggleRequest }: { users: Users[], onToggleRequest: (user: Users) => void }) {
-
-    const usersArray = Array.isArray(users) ? users : [users];
-
+    const usersArray = Array.isArray(users) ? users : [];
     return (
         <Box
         sx={{

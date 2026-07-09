@@ -7,7 +7,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { Users } from "interfaces/AdminUserList";
+import { Users } from "interfaces/Admin";
 
 export default function ConfirmDialog( { user, onConfirm, onCancel }: { user: Users, onConfirm: (user: Users) => void, onCancel: () => void } ) {
   const open = Boolean(user);
