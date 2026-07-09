@@ -46,17 +46,13 @@ export default function AdminPage() {
     const handleToggleRequest = (user: Users) => setPendingUser(user);
 
     const handleConfirm = async (user: Users) => {
-        const updated = user.enabled
-        ? await disableUser(user.cip, { enabled: false })
-        : await enableUser(user.cip, { enabled: true });
+    await (user.enabled
+        ? disableUser({ token, logout }, user.cip, { enabled: false })
+        : enableUser({ token, logout }, user.cip, { enabled: true }));
 
-        if (updated) {
-            setUsers((currentUsers) => {
-            if (!currentUsers) return currentUsers;
-            return currentUsers.map((u) => (u.cip === updated.cip ? updated : u));
-            });
-        }
-        setPendingUser(null);
+    const freshList = await fetchUserList({ token, logout });
+    setUsers(freshList);
+    setPendingUser(null);
     };
 
     const handleCancel = () => setPendingUser(null);

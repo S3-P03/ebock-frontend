@@ -27,10 +27,17 @@ export async function fetchUserList({ token, logout }: FetchOptions): Promise<Us
   }
 }
 
-export async function enableUser(cip: string | undefined, data: Partial<Users>) {
-
+export async function enableUser({ token, logout }: FetchOptions,cip: string | undefined, data: Partial<Users>) {
     try {
-        const response = await apiClient.put(`${SERVICE_BASE_URL}/${cip}/enable`, data, {});  
+        const response = await apiClient.put(`${SERVICE_BASE_URL}/${cip}/enable`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.status === 401) {
+            logout();
+            return null;
+        } 
         return response.data as Users;
     } catch (error) {
         console.error(error);
@@ -38,10 +45,18 @@ export async function enableUser(cip: string | undefined, data: Partial<Users>) 
     }
 }
 
-export async function disableUser(cip: string | undefined, data: Partial<Users>) {
+export async function disableUser({ token, logout }: FetchOptions, cip: string | undefined, data: Partial<Users>) {
 
     try {
-        const response = await apiClient.put(`${SERVICE_BASE_URL}/${cip}/disable`, data, {});  
+        const response = await apiClient.put(`${SERVICE_BASE_URL}/${cip}/disable`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.status === 401) {
+            logout();
+            return null;
+        }
         return response.data as Users;
     } catch (error) {
         console.error(error);

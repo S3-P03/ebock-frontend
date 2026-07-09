@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { Users } from "interfaces/Admin";
 
-export default function UserList({ user, onToggleRequest }: { user: Users, onToggleRequest: (user: Users) => void }) {
+export default function UserLine({ user, onToggleRequest }: { user: Users, onToggleRequest: (user: Users) => void }) {
     return (
         <Box
         sx={{

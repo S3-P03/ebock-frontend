@@ -10,6 +10,7 @@ import { User, UserAddress, UserInformation} from "../interfaces/User";
 import useAuthSession from "hooks/useAuthSession";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 import { fetchReviewAverage, ReviewAverage } from "services/reviewService";
+import ProfileBox from "components/ProfileBox";
 
 export default function UserProfile() {
     const [me, setMe] = useState<User | null>(null);
@@ -83,10 +84,6 @@ export default function UserProfile() {
         (<CenteredCircularProgress />) :
         (<Box sx={{ mx: "auto", px: 10, py: 10 }}>
             <Box sx={{ display: "flex", gap: 5, alignItems: "flex-start" }}>
-
-                <Box sx={{ width: 220, flexShrink: 0 }}>
-                    <ProfileBox seller={seller} showContact={false} reviewAverage={reviewAverage} />
-                </Box>
 
                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2}}>
                     <UserInfo user={user} onSave={handleSaveProfile} />
