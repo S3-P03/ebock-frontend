@@ -119,13 +119,7 @@ export async function updateUserPassword({ token, logout }: FetchOptions, data: 
 
     return true;
   } catch (error: any) {
-    if (error.status === 401) {
-      logout();
-      emitApiError("Vous devez être connecté pour mettre à jour le mot de passe", error.status);
-      return false;
-    }
-
-    if (error.status === 400) {
+    if (error.status === 400 || error.status === 401) {
       emitApiError("Le mot de passe actuel est incorrect", error.status);
       return false;
     }
