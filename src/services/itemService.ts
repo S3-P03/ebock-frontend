@@ -30,10 +30,10 @@ export async function fetchItem(id: string | undefined): Promise<DetailedItem | 
     const response = await apiClient.get(`${SERVICE_BASE_URL}/${id}`);
     return (await response.data) as DetailedItem;
   } catch (error: any) {
-    if (error.response && error.response.status === 404) {
+    if (error.status === 404) {
       emitApiError("Item introuvable", 404);
     } else {
-      emitApiError("Erreur lors de la récupération de l'item", error.response?.status || 500);
+      emitApiError("Erreur lors de la récupération de l'item", error.status || 500);
     }
     return null;
   }
