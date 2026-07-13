@@ -8,7 +8,7 @@ const mockUsers: Users[] = [
     {
         cip: "u1",
         firstName: "Alice",
-        lastName: "Smtesth",
+        lastName: "Smith",
         email: "alice.smith@example.com",
         enabled: true,
     },
