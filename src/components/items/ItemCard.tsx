@@ -14,7 +14,7 @@ export default function ItemCard({ item }: { item: SellerItem }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const navigate = useNavigate();
-  const {token} = useAuthSession();
+  const { token, isAuthenticated } = useAuthSession();
 
   useEffect(() => {
     if (firstImage) {
@@ -32,12 +32,13 @@ export default function ItemCard({ item }: { item: SellerItem }) {
 
   return (
     <Card sx={{ borderRadius: 2, position: "relative", flex: "1 1 250px", maxWidth: "350px" }}>
-      <IconButton
-        size="small"
-        sx={{
-          position: "absolute",
-          top: 6,
-          right: 6,
+      {isAuthenticated && (
+        <IconButton
+          size="small"
+          sx={{
+            position: "absolute",
+            top: 6,
+            right: 6,
           zIndex: 1,
           bgcolor: "white",
           borderRadius: "50%",
@@ -59,7 +60,7 @@ export default function ItemCard({ item }: { item: SellerItem }) {
         }}
       >
         {isFavorite ? "♥" : "♡"}
-      </IconButton>
+      </IconButton>)}
       <CardActionArea onClick={handleCardClick}>
         <Box
           role="img"

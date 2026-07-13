@@ -27,9 +27,10 @@ import { getPaymentList } from "services/paymentOptionService";
 
 interface ItemFilterBarProps {
   onFiltersChange: (filters: FilterParams) => void;
+  isAuthenticated?: boolean;
 }
 
-export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
+export default function ItemFilterBar({ onFiltersChange, isAuthenticated }: ItemFilterBarProps) {
   const [minPrice, setMinPrice] = useState<number | "">("");
   const [maxPrice, setMaxPrice] = useState<number | "">("");
   const [maxDistance, setMaxDistance] = useState<number | "">("");
@@ -161,10 +162,12 @@ export default function ItemFilterBar({ onFiltersChange }: ItemFilterBarProps) {
           size="small"
           fullWidth
         />
-        <FormControlLabel
-          control={<Checkbox checked={favorites} onChange={(e) => setFavorites(e.target.checked)} />}
-          label="Favoris seulement"
-        />
+        {isAuthenticated && (
+          <FormControlLabel
+            control={<Checkbox checked={favorites} onChange={(e) => setFavorites(e.target.checked)} />}
+            label="Favoris seulement"
+          />
+        )}
 
         <FormControl fullWidth size="small">
           <InputLabel id="categories-label">Catégories</InputLabel>
