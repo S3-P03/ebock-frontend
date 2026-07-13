@@ -47,8 +47,8 @@ const setupMocks = () => {
   (paymentService.getPaymentList as jest.Mock).mockResolvedValue(mockPayments);
 };
 
-const renderItemFilterBar = (onFiltersChange = mockFiltersChange) => {
-  return render(<ItemFilterBar onFiltersChange={onFiltersChange} />);
+const renderItemFilterBar = (onFiltersChange = mockFiltersChange, isAuthenticated = true) => {
+  return render(<ItemFilterBar onFiltersChange={onFiltersChange} isAuthenticated={isAuthenticated} />);
 };
 
 describe("ItemFilterBar Component", () => {
@@ -107,8 +107,16 @@ describe("ItemFilterBar Component", () => {
       });
     });
 
-    test("renders favorites checkbox", async () => {
-      renderItemFilterBar();
+    test("does not render favorites checkbox when unauthenticated", async () => {
+      renderItemFilterBar(mockFiltersChange, false);
+
+      await waitFor(() => {
+        expect(screen.queryByLabelText("Favoris seulement")).toBeNull();
+      });
+    });
+
+    test("renders favorites checkbox when authenticated", async () => {
+      renderItemFilterBar(mockFiltersChange, true);
 
       await waitFor(() => {
         expect(screen.getByLabelText("Favoris seulement")).toBeInTheDocument();

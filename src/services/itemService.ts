@@ -79,7 +79,7 @@ export async function addItem(item : ItemPayload, token: string): Promise<{itemI
   }
 }
 
-export async function getFilteredItems(token: string, pageNumber: number, filters: FilterParams): Promise<SellerItem[]> {
+export async function getFilteredItems(isAuthenticated: boolean, token: string, pageNumber: number, filters: FilterParams): Promise<SellerItem[]> {
   try {
     const params = new URLSearchParams();
     
@@ -96,11 +96,8 @@ export async function getFilteredItems(token: string, pageNumber: number, filter
     const queryString = params.toString();
     const url = `${SERVICE_BASE_URL}/list/${pageNumber}${queryString ? `?${queryString}` : ""}`;
     
-    const response = await apiClient.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const config = token && isAuthenticated ? { headers: { Authorization: `Bearer ${token}` } } : {};
+    const response = await apiClient.get(url, config);
     return (Array.isArray(response.data) ? response.data : []) as SellerItem[];
   } catch (error: any) {
     emitApiError("Erreur lors de la récupération des items", error.status ?? 500);

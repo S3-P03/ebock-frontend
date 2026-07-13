@@ -7,7 +7,11 @@ import { useInfiniteScrollItems } from "hooks/useInfiniteScrollItems";
 import ItemCard from "./ItemCard";
 import ItemFilterBar from "./ItemFilterBar";
 
-export default function ItemListFiltered() {
+interface ItemListFilteredProps {
+  isAuthenticated?: boolean;
+}
+
+export default function ItemListFiltered({ isAuthenticated }: ItemListFilteredProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<FilterParams>({});
 
@@ -71,7 +75,7 @@ export default function ItemListFiltered() {
         }}
       >
         <Card sx={{ p: 2, position: { md: "sticky" }, top: { md: 16 } }}>
-          <ItemFilterBar onFiltersChange={handleFiltersChange} />
+          <ItemFilterBar onFiltersChange={handleFiltersChange} isAuthenticated={isAuthenticated} />
         </Card>
       </Box>
 

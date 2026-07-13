@@ -22,7 +22,7 @@ interface FilterParams {
 }
 
 export function useInfiniteScrollItems<T extends { itemId: number }>(
-  fetchFunction: (token: string, page: number, filters: FilterParams) => Promise<T[]>,
+  fetchFunction: (isAuthenticated: boolean, token: string, page: number, filters: FilterParams) => Promise<T[]>,
   filters: FilterParams
 ): UseInfiniteScrollResult<T> {
   const [items, setItems] = useState<T[]>([]);
@@ -38,7 +38,7 @@ export function useInfiniteScrollItems<T extends { itemId: number }>(
     setLoading(true);
     try {
       const currentPage = pageRef.current;
-      const data = await fetchFunction(token, currentPage, filters);
+      const data = await fetchFunction(isAuthenticated, token ?? "", currentPage, filters);
 
       const newHasMore = Array.isArray(data) && data.length > 0;
       
@@ -50,7 +50,7 @@ export function useInfiniteScrollItems<T extends { itemId: number }>(
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, fetchFunction, filters]);
+  }, [loading, hasMore, fetchFunction, filters, isAuthenticated, token]);
 
   // Reset and load first page when filters change
   useEffect(() => {
@@ -63,7 +63,7 @@ export function useInfiniteScrollItems<T extends { itemId: number }>(
     // Load first page directly
     (async () => {
       try {
-        const data = await fetchFunction(token, 1, filters);
+        const data = await fetchFunction(isAuthenticated, token ?? "", 1, filters);
         const newHasMore = Array.isArray(data) && data.length > 0;
         setItems(Array.isArray(data) ? data : []);
         setHasMore(newHasMore);
@@ -74,7 +74,7 @@ export function useInfiniteScrollItems<T extends { itemId: number }>(
         setLoading(false);
       }
     })();
-  }, [filters, fetchFunction]);
+  }, [filters, fetchFunction, isAuthenticated, token]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
