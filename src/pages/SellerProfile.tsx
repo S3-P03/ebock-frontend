@@ -44,8 +44,8 @@ export default function SellerProfile() {
     if (seller == null) return <CenteredCircularProgress />;
 
     return (
-        <Box sx={{ maxWidth: 900, mx: "auto", px: 2, py: 3 }}>
-            <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+        <Box sx={{ mx: "auto", px: 10, py: 10 }}>
+            <Box sx={{ display: "flex", gap: 5, alignItems: "flex-start" }}>
 
                 <Box sx={{ width: 220, flexShrink: 0 }}>
                     <ProfileBox seller={seller} reviewAverage={reviewAverage} itemsOnSaleCount={items?.length ?? null} />

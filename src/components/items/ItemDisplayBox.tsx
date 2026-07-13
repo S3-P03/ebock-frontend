@@ -1,6 +1,6 @@
 import ItemCard from "./ItemCard";
 import {
-  Box
+  Box, Grid
 } from "@mui/material";
 import { SellerItem } from "interfaces/Item";
 
@@ -16,9 +16,13 @@ export default function ItemDisplayBox({ items }: { items: SellerItem[] }) {
         overflowY: "auto",
       }}
     >
+    <Grid container spacing={2}>
       {itemsArray.map((item) => (
-      <ItemCard key={item.itemId} item={item} />
+        <Grid item xs={12} sm={6} md={4} lg={3} key={item.itemId}>
+            <ItemCard key={item.itemId} item={item} />
+        </Grid>
       ))}
+    </Grid>
     </Box> 
   );
 }
