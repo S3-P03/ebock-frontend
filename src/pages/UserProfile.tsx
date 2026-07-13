@@ -10,6 +10,7 @@ import { User, UserAddress, UserInformation} from "../interfaces/User";
 import useAuthSession from "hooks/useAuthSession";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 import { fetchReviewAverage, ReviewAverage } from "services/reviewService";
+import ProfileBox from "components/ProfileBox";
 
 export default function UserProfile() {
     const [me, setMe] = useState<User | null>(null);
@@ -81,8 +82,9 @@ export default function UserProfile() {
 
     return ( user == null || seller == null ?
         (<CenteredCircularProgress />) :
-        (<Box sx={{ maxWidth: 900, mx: "auto", px: 2, py: 3 }}>
-            <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+        (<Box sx={{ mx: "auto", px: 10, py: 10 }}>
+            <Box sx={{ display: "flex", gap: 5, alignItems: "flex-start" }}>
+
                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2}}>
                     <UserInfo user={user} onSave={handleSaveProfile} />
                     <Security onSave={handleChangePassword} errorMessage={passwordError}/>

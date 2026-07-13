@@ -1,4 +1,3 @@
-import "./App.css";
 import {
   Navigate,
   Route,
@@ -21,6 +20,7 @@ import UserProfile from "./pages/UserProfile";
 import NotFound from "pages/NotFound";
 import { useEffect, useState } from "react";
 import ApiErrorAlert from "components/ApiErrorAlert";
+import AdminPage from "pages/AdminPage";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
@@ -59,6 +59,7 @@ export default function HomePage() {
               <Route path="/item/:id" element={<ItemDetails />} />
               <Route path="/item/add" element={<AddItem />} />
               <Route path="/profile" element={<UserProfile />} />
+              <Route path="/admin" element={<AdminPage />} />
             </Route>
           </Route>
           <Route path="/404" element={<NotFound />} />
