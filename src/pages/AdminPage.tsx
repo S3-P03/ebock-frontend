@@ -22,14 +22,9 @@ export default function AdminPage() {
     const [me, setMe] = useState<User | null>(null);
     useEffect(() => {
         if (!isAuthenticated || !token) return;
-        
-        try {
-            fetchUser({ token, logout }).then((data) => {
-                setMe(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération de l'utilisateur :", error);
-        }
+        fetchUser({ token, logout }).then((data) => {
+            setMe(data);
+        });
     }, [isAuthenticated]);
     const cip = me?.cip;
     
@@ -47,13 +42,13 @@ export default function AdminPage() {
     const handleToggleRequest = (user: Users) => setPendingUser(user);
 
     const handleConfirm = async (user: Users) => {
-    await (user.enabled
-        ? disableUser({ token, logout }, user.cip, { enabled: false })
-        : enableUser({ token, logout }, user.cip, { enabled: true }));
+        await (user.enabled
+            ? disableUser({ token, logout }, user.cip, { enabled: false })
+            : enableUser({ token, logout }, user.cip, { enabled: true }));
 
-    const freshList = await fetchUserList({ token, logout });
-    setUsers(freshList);
-    setPendingUser(null);
+        const freshList = await fetchUserList({ token, logout });
+        setUsers(freshList);
+        setPendingUser(null);
     };
 
     const handleCancel = () => setPendingUser(null);
