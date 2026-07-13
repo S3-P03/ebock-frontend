@@ -6,13 +6,14 @@ import ProfileBox from "components/ProfileBox";
 import ItemDisplayBox from "components/items/ItemDisplayBox";
 import ReviewRow from "components/ReviewRow";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchUserStoreFront } from "services/userService";
+import { fetchUser, fetchUserStoreFront } from "services/userService";
 import { fetchUserItems } from "services/itemService";
 import { fetchReviewAverage, fetchReviewDetails, ReviewAverage, ReviewDetail } from "services/reviewService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 import AddReviewForm from "components/AddReviewForm";
 import { postReview } from "services/reviewService";
 import useAuthSession from "hooks/useAuthSession";
+import { User } from "interfaces/User";
 
 export default function SellerProfile() {
     const { cip } = useParams();
@@ -20,7 +21,9 @@ export default function SellerProfile() {
     const [items, setItems] = useState<SellerItem[] | null>(null);
     const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
     const [reviews, setReviews] = useState<ReviewDetail[]>([]);
-    const { token, isAuthenticated } = useAuthSession();
+    const [user, setUser] = useState<User | null>(null);
+
+    const { token, logout, isAuthenticated } = useAuthSession();
     let navigate = useNavigate();
     
     const loadReviews = () => {
@@ -39,6 +42,7 @@ export default function SellerProfile() {
             })
         fetchUserItems(cip).then((data) => setItems(data))
         loadReviews();
+        if(isAuthenticated) fetchUser({ token, logout }).then((data) => setUser(data));
     }, [cip]);
 
     if (seller == null) return <CenteredCircularProgress />;
@@ -53,7 +57,7 @@ export default function SellerProfile() {
 
                 <Box sx={{ flexGrow: 1 }}>
                     <ItemDisplayBox items={items ?? []} />
-                    {isAuthenticated && <AddReviewForm onReviewSubmitted={async (content, rating) => {
+                    {isAuthenticated && cip !== user!.cip && <AddReviewForm onReviewSubmitted={async (content, rating) => {
                         const status = await postReview(cip, content, rating, token);
                         if (status === 200) loadReviews();
                         return status;
