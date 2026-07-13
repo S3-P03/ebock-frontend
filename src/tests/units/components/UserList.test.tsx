@@ -21,20 +21,20 @@ const mockUsers: Users[] = [
 ];
 
 describe("UserList", () => {
-  it("affiche une ligne par utilisateur quand users est un tableau", () => {
+  test("affiche une ligne par utilisateur quand users est un tableau", () => {
     render(<UserList users={mockUsers} onToggleRequest={jest.fn()} />);
 
     expect(screen.getByText("Alice Smith")).toBeInTheDocument();
     expect(screen.getByText("Bob Johnson")).toBeInTheDocument();
   });
 
-  it("affiche une liste vide sans erreur", () => {
+  test("affiche une liste vide sans erreur", () => {
     render(<UserList users={[]} onToggleRequest={jest.fn()} />);
 
     expect(screen.queryByText("CIP :")).not.toBeInTheDocument();
   });
 
-  it("appelle onToggleRequest avec le bon utilisateur au clic", async () => {
+  test("appelle onToggleRequest avec le bon utilisateur au clic", async () => {
     const onToggleRequest = jest.fn();
     render(<UserList users={[mockUsers[0]]} onToggleRequest={onToggleRequest} />);
 
@@ -44,7 +44,7 @@ describe("UserList", () => {
     expect(onToggleRequest).toHaveBeenCalledWith(mockUsers[0]);
   });
 
-  it("utilise cip comme clé unique", () => {
+  test("utilise cip comme clé unique", () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     render(<UserList users={mockUsers} onToggleRequest={jest.fn()} />);
 
