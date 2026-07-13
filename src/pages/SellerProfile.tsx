@@ -20,7 +20,7 @@ export default function SellerProfile() {
     const [items, setItems] = useState<SellerItem[] | null>(null);
     const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
     const [reviews, setReviews] = useState<ReviewDetail[]>([]);
-    const { token } = useAuthSession();
+    const { token, isAuthenticated } = useAuthSession();
     let navigate = useNavigate();
     
     const loadReviews = () => {
@@ -53,11 +53,11 @@ export default function SellerProfile() {
 
                 <Box sx={{ flexGrow: 1 }}>
                     <ItemDisplayBox items={items ?? []} />
-                    <AddReviewForm onReviewSubmitted={async (content, rating) => {
+                    {isAuthenticated && <AddReviewForm onReviewSubmitted={async (content, rating) => {
                         const status = await postReview(cip, content, rating, token);
                         if (status === 200) loadReviews();
                         return status;
-                    }} />
+                    }} />}
 
                     {reviews.length > 0 && (
                         <Box sx={{ mt: 3 }}>

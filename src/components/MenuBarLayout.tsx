@@ -7,19 +7,22 @@ import MenuBar from './MenuBar';
 
 export default function MenuBarLayout() {
   const [user, setUser] = useState<User | null>(null);
-  const { token, logout } = useAuthSession();
+  const { token, logout, isAuthenticated } = useAuthSession();
 
   async function getUser() {
     setUser(await fetchUser({ token, logout }));
   };
 
   useEffect(() => {
-    getUser();
-  }, []);
+    if(isAuthenticated) {
+      getUser();
+    }
+  }, [isAuthenticated]);
   
   return (
     <div>
-      <MenuBar user={user} />
+      {isAuthenticated && <MenuBar user={user} />}
+      {!isAuthenticated && <MenuBar user={null} />}
       <main>
         <Outlet /> {}
       </main>

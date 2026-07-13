@@ -75,40 +75,50 @@ export default function MenuBar({ user }: { user: User | null }) {
             >
               EBOCK
             </Typography>
-            <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }} onClick={handleAddItem}>
-                + Ajouter un item
-            </Button>
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Ouvrir options">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={user?.firstName + " " + user?.lastName}
-                    src="/static/images/avatar/2.jpg"
-                  />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorUserMenu}    
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorUserMenu)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem onClick={handleProfile}>Profil</MenuItem>
-                <MenuItem onClick={handleStorefront}>Mon étalage</MenuItem>
-                <MenuItem onClick={handleMessages}>Messages</MenuItem>
-                <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
-              </Menu>
-            </Box>
+            {user !== null ? (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }} onClick={handleAddItem}>
+                    + Ajouter un item
+                </Button>
+                <Box sx={{ flexGrow: 0 }}>
+                  <Tooltip title="Ouvrir options">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar
+                        alt={user?.firstName + " " + user?.lastName}
+                        src="/static/images/avatar/2.jpg"
+                      />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorUserMenu}    
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorUserMenu)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    <MenuItem onClick={handleProfile}>Profil</MenuItem>
+                    <MenuItem onClick={handleStorefront}>Mon étalage</MenuItem>
+                    <MenuItem onClick={handleMessages}>Messages</MenuItem>
+                    <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
+                  </Menu>
+                </Box>
+              </Box>
+            ) : (
+              <Box sx={{display: "flex", alignItems: "center"}}>
+                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }} href="/login">
+                  Se connecter
+                </Button>
+              </Box>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
