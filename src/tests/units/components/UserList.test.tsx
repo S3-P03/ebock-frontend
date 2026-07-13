@@ -30,7 +30,8 @@ describe("UserList", () => {
 
   it("affiche une liste vide sans erreur", () => {
     render(<UserList users={[]} onToggleRequest={jest.fn()} />);
-    expect(screen.queryByText("Alice Smith")).not.toBeInTheDocument();
+
+    expect(screen.queryByText("CIP :")).not.toBeInTheDocument();
   });
 
   it("appelle onToggleRequest avec le bon utilisateur au clic", async () => {

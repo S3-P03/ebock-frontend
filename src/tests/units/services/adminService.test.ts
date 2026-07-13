@@ -8,7 +8,7 @@ const mockUsers: Users[] = [
     {
         cip: "u1",
         firstName: "Alice",
-        lastName: "Smith",
+        lastName: "Smtesth",
         email: "alice.smith@example.com",
         enabled: true,
     },
@@ -27,154 +27,146 @@ describe("adminService", () => {
     });
 
     describe("fetchUserList", () => {
-        it("retourne la liste des utilisateurs en cas de succès", async () => {
-        (apiClient.get as jest.Mock).mockResolvedValue({
-            status: 200,
-            data: { utilisateurs: mockUsers },
+        test("retourne la liste des utilisateurs en cas de succès", async () => {
+            (apiClient.get as jest.Mock).mockResolvedValue({
+                status: 200,
+                data: { utilisateurs: mockUsers },
+            });
+
+            const result = await fetchUserList({ token: "test-token", logout: jest.fn() });
+
+            expect(apiClient.get).toHaveBeenCalledWith("/user/list", {
+                headers: { Authorization: "Bearer test-token" },
+            });
+            expect(result).toEqual(mockUsers);
         });
 
-        const result = await fetchUserList({ token: "test-token", logout: jest.fn() });
+        test("appelle logout et retourne null en cas de 401", async () => {
+            const logout = jest.fn();
+            (apiClient.get as jest.Mock).mockResolvedValue({
+                status: 401,
+                data: null,
+            });
 
-        expect(apiClient.get).toHaveBeenCalledWith("/user/list", {
-            headers: { Authorization: "Bearer test-token" },
-        });
-        expect(result).toEqual(mockUsers);
-        });
+            const result = await fetchUserList({ token: "test-token", logout });
 
-        it("appelle logout et retourne null en cas de 401", async () => {
-        const logout = jest.fn();
-        (apiClient.get as jest.Mock).mockResolvedValue({
-            status: 401,
-            data: null,
+            expect(logout).toHaveBeenCalled();
+            expect(result).toBeNull();
         });
 
-        const result = await fetchUserList({ token: "test-token", logout });
+        test("retourne null en cas d'échec", async () => {
+            const error = new Error("server error");
 
-        expect(logout).toHaveBeenCalled();
-        expect(result).toBeNull();
+            (apiClient.get as jest.Mock).mockRejectedValue(error);
+
+            const result = await fetchUserList({token: "test-token", logout: jest.fn()});
+
+            expect(result).toBeNull();
         });
 
-        it("retourne null et logue l'erreur en cas d'échec", async () => {
-        const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-        const error = new Error("network error");
-        (apiClient.get as jest.Mock).mockRejectedValue(error);
+        test("retourne un tableau vide si l'API renvoie une liste vide", async () => {
+            (apiClient.get as jest.Mock).mockResolvedValue({
+                status: 200,
+                data: { utilisateurs: [] },
+            });
 
-        const result = await fetchUserList({ token: "test-token", logout: jest.fn() });
+            const result = await fetchUserList({ token: "test-token", logout: jest.fn() });
 
-        expect(result).toBeNull();
-        expect(consoleSpy).toHaveBeenCalledWith(error);
-        consoleSpy.mockRestore();
-        });
-
-        it("retourne un tableau vide si l'API renvoie une liste vide", async () => {
-        (apiClient.get as jest.Mock).mockResolvedValue({
-            status: 200,
-            data: { utilisateurs: [] },
-        });
-
-        const result = await fetchUserList({ token: "test-token", logout: jest.fn() });
-
-        expect(result).toEqual([]);
+            expect(result).toEqual([]);
         });
     });
 
     describe("enableUser", () => {
-        it("appelle PUT sur /user/{cip}/enable avec le bon header et les bonnes données", async () => {
-        const updatedUser: Users = { ...mockUsers[1], enabled: true };
-        (apiClient.put as jest.Mock).mockResolvedValue({ status: 200, data: updatedUser });
+        test("appelle PUT sur /user/{cip}/enable avec le bon header et les bonnes données", async () => {
+            const updatedUser: Users = { ...mockUsers[1], enabled: true };
+            (apiClient.put as jest.Mock).mockResolvedValue({ status: 200, data: updatedUser });
 
-        const result = await enableUser({ token: "test-token", logout: jest.fn() }, "u2", { enabled: true });
+            const result = await enableUser({ token: "test-token", logout: jest.fn() }, "u2", { enabled: true });
 
-        expect(apiClient.put).toHaveBeenCalledWith(
-            "/user/u2/enable",
-            { enabled: true },
-            { headers: { Authorization: "Bearer test-token" } }
-        );
-        expect(result).toEqual(updatedUser);
+            expect(apiClient.put).toHaveBeenCalledWith(
+                "/user/u2/enable",
+                { enabled: true },
+                { headers: { Authorization: "Bearer test-token" } }
+            );
+            expect(result).toEqual(updatedUser);
         });
 
-        it("appelle logout et retourne null en cas de 401", async () => {
-        const logout = jest.fn();
-        (apiClient.put as jest.Mock).mockResolvedValue({ status: 401, data: null });
+        test("appelle logout et retourne null en cas de 401", async () => {
+            const logout = jest.fn();
+            (apiClient.put as jest.Mock).mockResolvedValue({ status: 401, data: null });
 
-        const result = await enableUser({ token: "test-token", logout }, "u2", { enabled: true });
+            const result = await enableUser({ token: "test-token", logout }, "u2", { enabled: true });
 
-        expect(logout).toHaveBeenCalled();
-        expect(result).toBeNull();
+            expect(logout).toHaveBeenCalled();
+            expect(result).toBeNull();
         });
 
-        it("retourne null et logue l'erreur en cas d'échec", async () => {
-        const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-        const error = new Error("server error");
-        (apiClient.put as jest.Mock).mockRejectedValue(error);
+        test("retourne null en cas d'échec", async () => {
+            const error = new Error("server error");
+            (apiClient.put as jest.Mock).mockRejectedValue(error);
 
-        const result = await enableUser({ token: "test-token", logout: jest.fn() }, "u2", { enabled: true });
+            const result = await enableUser({ token: "test-token", logout: jest.fn() }, "u2", { enabled: true });
 
-        expect(result).toBeNull();
-        expect(consoleSpy).toHaveBeenCalledWith(error);
-        consoleSpy.mockRestore();
+            expect(result).toBeNull();
         });
 
-        it("fonctionne même si cip est undefined", async () => {
-        (apiClient.put as jest.Mock).mockResolvedValue({ status: 200, data: mockUsers[0] });
+        test("fonctionne même si cip est undefined", async () => {
+            (apiClient.put as jest.Mock).mockResolvedValue({ status: 200, data: mockUsers[0] });
 
-        await enableUser({ token: "test-token", logout: jest.fn() }, undefined, { enabled: true });
+            await enableUser({ token: "test-token", logout: jest.fn() }, undefined, { enabled: true });
 
-        expect(apiClient.put).toHaveBeenCalledWith(
-            "/user/undefined/enable",
-            { enabled: true },
-            { headers: { Authorization: "Bearer test-token" } }
-        );
+            expect(apiClient.put).toHaveBeenCalledWith(
+                "/user/undefined/enable",
+                { enabled: true },
+                { headers: { Authorization: "Bearer test-token" } }
+            );
         });
     });
 
     describe("disableUser", () => {
-        it("appelle PUT sur /user/{cip}/disable avec le bon header et les bonnes données", async () => {
-        const updatedUser: Users = { ...mockUsers[0], enabled: false };
-        (apiClient.put as jest.Mock).mockResolvedValue({ status: 200, data: updatedUser });
+        test("appelle PUT sur /user/{cip}/disable avec le bon header et les bonnes données", async () => {
+            const updatedUser: Users = { ...mockUsers[0], enabled: false };
+            (apiClient.put as jest.Mock).mockResolvedValue({ status: 200, data: updatedUser });
 
-        const result = await disableUser({ token: "test-token", logout: jest.fn() }, "u1", { enabled: false });
+            const result = await disableUser({ token: "test-token", logout: jest.fn() }, "u1", { enabled: false });
 
-        expect(apiClient.put).toHaveBeenCalledWith(
-            "/user/u1/disable",
-            { enabled: false },
-            { headers: { Authorization: "Bearer test-token" } }
-        );
-        expect(result).toEqual(updatedUser);
+            expect(apiClient.put).toHaveBeenCalledWith(
+                "/user/u1/disable",
+                { enabled: false },
+                { headers: { Authorization: "Bearer test-token" } }
+            );
+            expect(result).toEqual(updatedUser);
         });
 
-        it("appelle logout et retourne null en cas de 401", async () => {
-        const logout = jest.fn();
-        (apiClient.put as jest.Mock).mockResolvedValue({ status: 401, data: null });
+        test("appelle logout et retourne null en cas de 401", async () => {
+            const logout = jest.fn();
+            (apiClient.put as jest.Mock).mockResolvedValue({ status: 401, data: null });
 
-        const result = await disableUser({ token: "test-token", logout }, "u1", { enabled: false });
+            const result = await disableUser({ token: "test-token", logout }, "u1", { enabled: false });
 
-        expect(logout).toHaveBeenCalled();
-        expect(result).toBeNull();
+            expect(logout).toHaveBeenCalled();
+            expect(result).toBeNull();
         });
 
-        it("retourne null et logue l'erreur en cas d'échec", async () => {
-        const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-        const error = new Error("server error");
-        (apiClient.put as jest.Mock).mockRejectedValue(error);
+        test("retourne null en cas d'échec", async () => {
+            const error = new Error("server error");
+            (apiClient.put as jest.Mock).mockRejectedValue(error);
 
-        const result = await disableUser({ token: "test-token", logout: jest.fn() }, "u1", { enabled: false });
+            const result = await disableUser({ token: "test-token", logout: jest.fn() }, "u1", { enabled: false });
 
-        expect(result).toBeNull();
-        expect(consoleSpy).toHaveBeenCalledWith(error);
-        consoleSpy.mockRestore();
+            expect(result).toBeNull();
         });
 
-        it("fonctionne même si cip est undefined", async () => {
-        (apiClient.put as jest.Mock).mockResolvedValue({ status: 200, data: mockUsers[0] });
+        test("fonctionne même si cip est undefined", async () => {
+            (apiClient.put as jest.Mock).mockResolvedValue({ status: 200, data: mockUsers[0] });
 
-        await disableUser({ token: "test-token", logout: jest.fn() }, undefined, { enabled: false });
+            await disableUser({ token: "test-token", logout: jest.fn() }, undefined, { enabled: false });
 
-        expect(apiClient.put).toHaveBeenCalledWith(
-            "/user/undefined/disable",
-            { enabled: false },
-            { headers: { Authorization: "Bearer test-token" } }
-        );
+            expect(apiClient.put).toHaveBeenCalledWith(
+                "/user/undefined/disable",
+                { enabled: false },
+                { headers: { Authorization: "Bearer test-token" } }
+            );
         });
     });
 });

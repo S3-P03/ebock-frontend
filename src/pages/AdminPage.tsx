@@ -10,8 +10,10 @@ import ConfirmDialog from "components/admin/ConfirmDialog";
 import useAuthSession from "hooks/useAuthSession";
 import { fetchUser } from "services/userService";
 import { User } from "interfaces/User";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminPage() {
+    let navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(0);
     const [pendingUser, setPendingUser] = useState<Users | null>(null);
     const [users, setUsers] = useState<Users[] | null>(null);
@@ -32,15 +34,14 @@ export default function AdminPage() {
     const cip = me?.cip;
     
     useEffect(() => {
-        try {
-            if (cip) {
-                fetchUserList({token, logout}).then((data) => {
-                    setUsers(data);
-                });
-            } 
-        } catch (error) {
-            console.error("Erreur lors de la récupération de la liste des utilisateurs :", error);
-        }
+        if (cip) {
+            fetchUserList({token, logout}).then((data) => {
+                if (data == null) {
+                    navigate("/404");
+                }
+                setUsers(data);
+            });
+        } 
     }, [cip]);
 
     const handleToggleRequest = (user: Users) => setPendingUser(user);

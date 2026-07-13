@@ -127,6 +127,4 @@ export async function updateUserPassword({ token, logout }: FetchOptions, data: 
     emitApiError("Erreur lors de la mise à jour du mot de passe", error.status ?? 500);
     return false;
   }
-
-  return true;
 }

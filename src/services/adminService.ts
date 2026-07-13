@@ -1,4 +1,4 @@
-import apiClient from "./apiClient";
+import apiClient, { emitApiError } from "./apiClient";
 import { Users } from "interfaces/Admin";
 
 interface FetchOptions {
@@ -21,8 +21,8 @@ export async function fetchUserList({ token, logout }: FetchOptions): Promise<Us
     }
     const userInfo = response.data.utilisateurs as Users[];
     return userInfo;
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    emitApiError("Erreur lors de la récupération des utilisateurs", error.status ?? 500);
     return null;
   }
 }
@@ -39,10 +39,10 @@ export async function enableUser({ token, logout }: FetchOptions,cip: string | u
             return null;
         } 
         return response.data as Users;
-    } catch (error) {
-        console.error(error);
+    } catch (error: any) {
+        emitApiError("Erreur lors de l'activation de l'utilisateur", error.status ?? 500);
         return null;
-    }
+  }
 }
 
 export async function disableUser({ token, logout }: FetchOptions, cip: string | undefined, data: Partial<Users>) {
@@ -58,8 +58,8 @@ export async function disableUser({ token, logout }: FetchOptions, cip: string |
             return null;
         }
         return response.data as Users;
-    } catch (error) {
-        console.error(error);
+    } catch (error: any) {
+        emitApiError("Erreur lors de la désactivation de l'utilisateur", error.status ?? 500);
         return null;
     }
 }
