@@ -1,5 +1,6 @@
 import apiClient from "services/apiClient";
-import { fetchUserList, enableUser, disableUser, fetchCategoryList, createCategory } from "services/adminService";
+import { fetchUserList, enableUser, disableUser } from "services/adminService";
+import { fetchCategoryList, createCategory } from "services/categoryService";
 import { Users } from "interfaces/Admin";
 
 jest.mock("services/apiClient");

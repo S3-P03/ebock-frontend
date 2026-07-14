@@ -9,19 +9,11 @@ import useAuthSession from "hooks/useAuthSession";
 import { CategoryInfo } from "interfaces/Category";
 
 import {
-  fetchCategoryList,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-  fetchDeliveryOptionList,
-  createDeliveryOption,
-  updateDeliveryOption,
-  deleteDeliveryOption,
   fetchWearList,
   createWear,
   updateWear,
   deleteWear,
-} from "services/adminService";
+} from "services/wearService";
 
 import CategoryForm from "components/admin/CategoryForm";
 import CategoryList from "components/admin/CategoryList";

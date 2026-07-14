@@ -4,13 +4,13 @@ import {
   Tab,
 } from "@mui/material";
 import { useState } from "react";
-import AdminUserPage from "./AdminUserPage";
-import AdminCategory from "./AdminCategory";
-import AdminDelivery from "./AdminDelivery";
-import AdminPayment from "./AdminPayment";
-import AdminTag from "./AdminTag";
-import AdminWear from "./AdminWear";
-import AdminBanItem from "./AdminBanItem";
+import AdminUserPage from "../components/admin/AdminUserPage";
+import AdminCategory from "../components/admin/AdminCategory";
+import AdminDelivery from "../components/admin/AdminDelivery";
+import AdminPayment from "../components/admin/AdminPayment";
+import AdminTag from "../components/admin/AdminTag";
+import AdminWear from "../components/admin/AdminWear";
+import AdminBanItem from "../components/admin/AdminBanItem";
 
 export default function AdminPage() {
     const [activeTab, setActiveTab] = useState(0);

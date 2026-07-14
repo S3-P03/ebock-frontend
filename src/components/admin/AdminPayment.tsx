@@ -9,18 +9,18 @@ import useAuthSession from "hooks/useAuthSession";
 import { CategoryInfo } from "interfaces/Category";
 
 import {
-  fetchDeliveryOptionList,
-  createDeliveryOption,
-  updateDeliveryOption,
-  deleteDeliveryOption,
-} from "services/adminService";
+  fetchPaymentOptionList,
+  createPaymentOption,
+  updatePaymentOption,
+  deletePaymentOption,
+} from "services/paymentOptionService";
 
 import CategoryForm from "components/admin/CategoryForm";
 import CategoryList from "components/admin/CategoryList";
 import DeleteCategory from "components/admin/DeleteCategory";
 
 
-export default function AdminDelivery() {
+export default function AdminPayment() {
 
     const [categories, setCategories] = useState<CategoryInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
@@ -29,7 +29,7 @@ export default function AdminDelivery() {
     const { token, logout } = useAuthSession();
 
     const loadCategories = async () => {
-        const data = await fetchDeliveryOptionList({token, logout});
+        const data = await fetchPaymentOptionList({token, logout});
 
         if (data) {
             setCategories(data);
@@ -41,7 +41,7 @@ export default function AdminDelivery() {
     }, []);
 
     const handleCreate = async (name: string, parentCategory: number | null) => {
-        const success = await createDeliveryOption({token,logout},{name, parentCategory});
+        const success = await createPaymentOption({token,logout},{name, parentCategory});
 
         if (success) {
             await loadCategories();
@@ -50,7 +50,7 @@ export default function AdminDelivery() {
     };
 
     const handleUpdate = async (id: number, name: string, parentCategory: number | null) => {
-        const success = await updateDeliveryOption({token, logout}, id, {name, parentCategory});
+        const success = await updatePaymentOption({token, logout}, id, {name, parentCategory});
 
         if (success) {
             await loadCategories();
@@ -61,8 +61,8 @@ export default function AdminDelivery() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deleteDeliveryOption({token, logout}, deleteTarget.categoryId);
-        console.log("test", deleteTarget.categoryId);
+        const success = await deletePaymentOption({token, logout}, deleteTarget.categoryId);
+
         if (success) {
             await loadCategories();
             setDeleteTarget(null);

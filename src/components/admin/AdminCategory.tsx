@@ -13,22 +13,14 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
-  fetchDeliveryOptionList,
-  createDeliveryOption,
-  updateDeliveryOption,
-  deleteDeliveryOption,
-  fetchTagList,
-  createTag,
-  updateTag,
-  deleteTag,
-} from "services/adminService";
+} from "services/categoryService";
 
 import CategoryForm from "components/admin/CategoryForm";
 import CategoryList from "components/admin/CategoryList";
 import DeleteCategory from "components/admin/DeleteCategory";
 
 
-export default function AdminTag() {
+export default function AdminCategory() {
 
     const [categories, setCategories] = useState<CategoryInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
@@ -37,7 +29,7 @@ export default function AdminTag() {
     const { token, logout } = useAuthSession();
 
     const loadCategories = async () => {
-        const data = await fetchTagList({token, logout});
+        const data = await fetchCategoryList({token, logout});
 
         if (data) {
             setCategories(data);
@@ -49,7 +41,7 @@ export default function AdminTag() {
     }, []);
 
     const handleCreate = async (name: string, parentCategory: number | null) => {
-        const success = await createTag({token,logout},{name, parentCategory});
+        const success = await createCategory({token,logout},{name, parentCategory});
 
         if (success) {
             await loadCategories();
@@ -58,8 +50,8 @@ export default function AdminTag() {
     };
 
     const handleUpdate = async (id: number, name: string, parentCategory: number | null) => {
-        const success = await updateTag({token, logout}, id, {name, parentCategory});
-
+        const success = await updateCategory({token, logout}, id, {name, parentCategory});
+        
         if (success) {
             await loadCategories();
             setOpenForm(false);
@@ -69,8 +61,7 @@ export default function AdminTag() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deleteTag({token, logout}, deleteTarget.categoryId);
-
+        const success = await deleteCategory({token, logout}, deleteTarget.categoryId);
         if (success) {
             await loadCategories();
             setDeleteTarget(null);
@@ -116,7 +107,7 @@ export default function AdminTag() {
                 onDelete={(category) => {
                     setDeleteTarget(category);
                 }}
-                showParent={false}
+                showParent={true}
             />
 
         </Card>
@@ -130,14 +121,17 @@ export default function AdminTag() {
                     setEditingCategory(null);
                     setOpenForm(false);
                 }}
-                showParent={false}
+                showParent={true}
             />
         )}
 
         {deleteTarget && (
             <DeleteCategory
                 category={deleteTarget}
-                hasChildren={false}
+                hasChildren={categories.some(
+                    c =>
+                    c.parentCategory === deleteTarget.categoryId
+                )}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}
             />

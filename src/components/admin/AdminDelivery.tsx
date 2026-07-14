@@ -9,18 +9,18 @@ import useAuthSession from "hooks/useAuthSession";
 import { CategoryInfo } from "interfaces/Category";
 
 import {
-  fetchCategoryList,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-} from "services/adminService";
+  fetchDeliveryOptionList,
+  createDeliveryOption,
+  updateDeliveryOption,
+  deleteDeliveryOption,
+} from "services/deliveryOptionService";
 
 import CategoryForm from "components/admin/CategoryForm";
 import CategoryList from "components/admin/CategoryList";
 import DeleteCategory from "components/admin/DeleteCategory";
 
 
-export default function AdminCategory() {
+export default function AdminDelivery() {
 
     const [categories, setCategories] = useState<CategoryInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
@@ -29,7 +29,7 @@ export default function AdminCategory() {
     const { token, logout } = useAuthSession();
 
     const loadCategories = async () => {
-        const data = await fetchCategoryList({token, logout});
+        const data = await fetchDeliveryOptionList({token, logout});
 
         if (data) {
             setCategories(data);
@@ -41,7 +41,7 @@ export default function AdminCategory() {
     }, []);
 
     const handleCreate = async (name: string, parentCategory: number | null) => {
-        const success = await createCategory({token,logout},{name, parentCategory});
+        const success = await createDeliveryOption({token,logout},{name, parentCategory});
 
         if (success) {
             await loadCategories();
@@ -50,8 +50,8 @@ export default function AdminCategory() {
     };
 
     const handleUpdate = async (id: number, name: string, parentCategory: number | null) => {
-        const success = await updateCategory({token, logout}, id, {name, parentCategory});
-        
+        const success = await updateDeliveryOption({token, logout}, id, {name, parentCategory});
+
         if (success) {
             await loadCategories();
             setOpenForm(false);
@@ -61,8 +61,7 @@ export default function AdminCategory() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deleteCategory({token, logout}, deleteTarget.categoryId);
-        console.log(deleteTarget.categoryId);
+        const success = await deleteDeliveryOption({token, logout}, deleteTarget.categoryId);
         if (success) {
             await loadCategories();
             setDeleteTarget(null);
@@ -108,7 +107,7 @@ export default function AdminCategory() {
                 onDelete={(category) => {
                     setDeleteTarget(category);
                 }}
-                showParent={true}
+                showParent={false}
             />
 
         </Card>
@@ -122,17 +121,14 @@ export default function AdminCategory() {
                     setEditingCategory(null);
                     setOpenForm(false);
                 }}
-                showParent={true}
+                showParent={false}
             />
         )}
 
         {deleteTarget && (
             <DeleteCategory
                 category={deleteTarget}
-                hasChildren={categories.some(
-                    c =>
-                    c.parentCategory === deleteTarget.categoryId
-                )}
+                hasChildren={false}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}
             />

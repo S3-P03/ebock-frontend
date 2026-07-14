@@ -9,26 +9,18 @@ import useAuthSession from "hooks/useAuthSession";
 import { CategoryInfo } from "interfaces/Category";
 
 import {
-  fetchCategoryList,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-  fetchDeliveryOptionList,
-  createDeliveryOption,
-  updateDeliveryOption,
-  deleteDeliveryOption,
-  fetchPaymentOptionList,
-  createPaymentOption,
-  updatePaymentOption,
-  deletePaymentOption,
-} from "services/adminService";
+  fetchTagList,
+  createTag,
+  updateTag,
+  deleteTag,
+} from "services/tagService";
 
 import CategoryForm from "components/admin/CategoryForm";
 import CategoryList from "components/admin/CategoryList";
 import DeleteCategory from "components/admin/DeleteCategory";
 
 
-export default function AdminPayment() {
+export default function AdminTag() {
 
     const [categories, setCategories] = useState<CategoryInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
@@ -37,7 +29,7 @@ export default function AdminPayment() {
     const { token, logout } = useAuthSession();
 
     const loadCategories = async () => {
-        const data = await fetchPaymentOptionList({token, logout});
+        const data = await fetchTagList({token, logout});
 
         if (data) {
             setCategories(data);
@@ -49,7 +41,7 @@ export default function AdminPayment() {
     }, []);
 
     const handleCreate = async (name: string, parentCategory: number | null) => {
-        const success = await createPaymentOption({token,logout},{name, parentCategory});
+        const success = await createTag({token,logout},{name, parentCategory});
 
         if (success) {
             await loadCategories();
@@ -58,7 +50,7 @@ export default function AdminPayment() {
     };
 
     const handleUpdate = async (id: number, name: string, parentCategory: number | null) => {
-        const success = await updatePaymentOption({token, logout}, id, {name, parentCategory});
+        const success = await updateTag({token, logout}, id, {name, parentCategory});
 
         if (success) {
             await loadCategories();
@@ -69,7 +61,7 @@ export default function AdminPayment() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deletePaymentOption({token, logout}, deleteTarget.categoryId);
+        const success = await deleteTag({token, logout}, deleteTarget.categoryId);
 
         if (success) {
             await loadCategories();

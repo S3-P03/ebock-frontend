@@ -7,7 +7,7 @@ import ConfirmDialog from "components/admin/ConfirmDialog";
 import useAuthSession from "hooks/useAuthSession";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 import { fetchUser } from "services/userService";
-import { User } from "../interfaces/User";
+import { User } from "../../interfaces/User";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminUserPage() {

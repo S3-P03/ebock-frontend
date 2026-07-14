@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import AdminBanItem from "pages/AdminBanItem";
+import AdminBanItem from "components/admin/AdminBanItem";
 
 describe("AdminBanItem", () => {
     test("affiche le formulaire", () => {
