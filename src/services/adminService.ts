@@ -148,7 +148,12 @@ export async function fetchDeliveryOptionList({ token, logout }: FetchOptions): 
       logout();
       return null;
     }
-    return response.data as CategoryInfo[];;
+
+    return response.data.map((item: any) => ({
+      categoryId: item.deliveryOptnId,
+      name: item.name,
+    }));
+
   } catch (error: any) {
     emitApiError("Erreur lors de la récupération des options de livraison", error.status ?? 500);
     return null;
@@ -220,7 +225,11 @@ export async function fetchPaymentOptionList({ token, logout }: FetchOptions): P
       logout();
       return null;
     }
-    return response.data as CategoryInfo[];;
+    return response.data.map((item: any) => ({
+      categoryId: item.paymentOptnId,
+      name: item.name,
+    }));
+
   } catch (error: any) {
     emitApiError("Erreur lors de la récupération des options de paiement", error.status ?? 500);
     return null;
@@ -292,7 +301,10 @@ export async function fetchTagList({ token, logout }: FetchOptions): Promise<Cat
       logout();
       return null;
     }
-    return response.data as CategoryInfo[];;
+    return response.data.map((item: any) => ({
+      categoryId: item.tagId,
+      name: item.name,
+    }));
   } catch (error: any) {
     emitApiError("Erreur lors de la récupération des tags", error.status ?? 500);
     return null;
@@ -364,7 +376,10 @@ export async function fetchWearList({ token, logout }: FetchOptions): Promise<Ca
       logout();
       return null;
     }
-    return response.data as CategoryInfo[];;
+    return response.data.map((item: any) => ({
+      categoryId: item.wearId,
+      name: item.name,
+    }));
   } catch (error: any) {
     emitApiError("Erreur lors de la récupération de l'état", error.status ?? 500);
     return null;
@@ -424,4 +439,5 @@ export async function deleteWear({ token, logout }: FetchOptions, id: number): P
         return false;
     }
 }
+
 

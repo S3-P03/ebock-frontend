@@ -9,10 +9,6 @@ import useAuthSession from "hooks/useAuthSession";
 import { CategoryInfo } from "interfaces/Category";
 
 import {
-  fetchCategoryList,
-  createCategory,
-  updateCategory,
-  deleteCategory,
   fetchDeliveryOptionList,
   createDeliveryOption,
   updateDeliveryOption,
@@ -66,7 +62,7 @@ export default function AdminDelivery() {
         if (!deleteTarget) return;
 
         const success = await deleteDeliveryOption({token, logout}, deleteTarget.categoryId);
-
+        console.log("test", deleteTarget.categoryId);
         if (success) {
             await loadCategories();
             setDeleteTarget(null);
@@ -133,10 +129,7 @@ export default function AdminDelivery() {
         {deleteTarget && (
             <DeleteCategory
                 category={deleteTarget}
-                hasChildren={categories.some(
-                    c =>
-                    c.parentCategory === deleteTarget.categoryId
-                )}
+                hasChildren={false}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}
             />

@@ -8,34 +8,38 @@ import useAuthSession from "hooks/useAuthSession";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 import { fetchUser } from "services/userService";
 import { User } from "../interfaces/User";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminUserPage() {
+  let navigate = useNavigate();
   const [users, setUsers] = useState<Users[] | null>(null);
   const [pendingUser, setPendingUser] = useState<Users | null>(null);
 
   const { token, logout, isAuthenticated } = useAuthSession();
+  const [me, setMe] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated || !token) return;
+    fetchUser({ token, logout }).then((data) => {
+      setMe(data);
+    });
+  }, [isAuthenticated]);
+  const cip = me?.cip;
 
   const loadUsers = async () => {
-    const data = await fetchUserList({
-      token,
-      logout,
-    });
-
-    setUsers(data);
-  };
-
-  const [me, setMe] = useState<User | null>(null);
-    
-  useEffect(() => {
-      if (!isAuthenticated || !token) return;
-      fetchUser({ token, logout }).then((data) => {
-        setMe(data);
+    if (cip) {
+      fetchUserList({token, logout}).then((data) => {
+        if (data == null) {
+          navigate("/404");
+        }
+        setUsers(data);
       });
-  }, [isAuthenticated]);
+    }
+  }
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [cip]);
 
 
   const handleConfirm = async (user: Users) => {
@@ -56,11 +60,9 @@ export default function AdminUserPage() {
     setPendingUser(null);
   };
 
-
   if (!users) {
     return <CenteredCircularProgress />;
   }
-
 
   return (
     <>

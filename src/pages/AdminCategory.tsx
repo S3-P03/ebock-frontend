@@ -62,7 +62,7 @@ export default function AdminCategory() {
         if (!deleteTarget) return;
 
         const success = await deleteCategory({token, logout}, deleteTarget.categoryId);
-
+        console.log(deleteTarget.categoryId);
         if (success) {
             await loadCategories();
             setDeleteTarget(null);
@@ -108,6 +108,7 @@ export default function AdminCategory() {
                 onDelete={(category) => {
                     setDeleteTarget(category);
                 }}
+                showParent={true}
             />
 
         </Card>
@@ -121,6 +122,7 @@ export default function AdminCategory() {
                     setEditingCategory(null);
                     setOpenForm(false);
                 }}
+                showParent={true}
             />
         )}
 

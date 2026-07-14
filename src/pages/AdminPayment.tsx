@@ -137,10 +137,7 @@ export default function AdminPayment() {
         {deleteTarget && (
             <DeleteCategory
                 category={deleteTarget}
-                hasChildren={categories.some(
-                    c =>
-                    c.parentCategory === deleteTarget.categoryId
-                )}
+                hasChildren={false}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}
             />
