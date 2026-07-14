@@ -16,14 +16,7 @@ import { fetchImage } from "services/imageService";
 import { createRoom } from "services/messageService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 import { fetchReviewAverage, ReviewAverage } from "services/reviewService";
-
-const itemComments: ItemComment[] = [
-    { id: 1, authorCip: "pele3157", authorFirstName: "Eliane", authorLastName: "Pelletier", content: "Cet article est-il toujours disponible ?", respondToCommentId: null, timeAgo: "il y a 2 jours" },
-    { id: 2, authorCip: "herl2700", authorFirstName: "Leanne", authorLastName: "Héroux", content: "Et si je vous offre 2$ pour ce produit ?", respondToCommentId: null, timeAgo: "il y a 5 jours" },
-    { id: 3, authorCip: "bela3439", authorFirstName: "Alex", authorLastName: "Lefkakis", content: "Je peux passer le chercher dans 6 ou 7 jours.", respondToCommentId: null, timeAgo: "il y a 1 semaine" },
-    { id: 4, authorCip: "larj4236", authorFirstName: "Jean-Félix", authorLastName: "Larouche", content: "Oui", respondToCommentId: 1, timeAgo: "il y a 2 jours" },
-    { id: 5, authorCip: "larj4236", authorFirstName: "Jean-Félix", authorLastName: "Larouche", content: "Je vous attendais et vous n'étiez pas là...", respondToCommentId: 3, timeAgo: "il y a 1 jours" },
-];
+import { fetchComments, postComment, CommentDetail } from "services/commentService";
 
 export default function ItemDetails() {
     const { id } = useParams();
@@ -34,6 +27,7 @@ export default function ItemDetails() {
     const [user, setUser] = useState<User | null>(null);
     const [reviewAverage, setReviewAverage] = useState<ReviewAverage | null>(null);
     const { isAuthenticated, token, logout } = useAuthSession();
+    const [comments, setComments] = useState<CommentDetail[]>([]);
     let navigate = useNavigate();
 
     const handleClick = () => {        
@@ -50,6 +44,10 @@ export default function ItemDetails() {
     const handleOpenStorefront = () => {
         navigate(`/seller/${item?.sellerCip}`);
     }
+
+    const loadComments = () => {
+    fetchComments(id).then((data) => setComments(data ?? []));
+    };
 
     useEffect(() => {
         fetchItem(id)
@@ -69,6 +67,7 @@ export default function ItemDetails() {
             console.error("Erreur lors de la récupération des images :", error);
         }
         
+        loadComments();
         
     }, [id]);
 
@@ -142,7 +141,14 @@ export default function ItemDetails() {
                         </Box>}
                     {images!.length !== 0 && <ImageList images={images!}/>}
                     <Card sx={{ p: 2.5, borderRadius: 2 }}>
-                        <CommentThread comments={itemComments} isAuthenticated={isAuthenticated} />
+                        <CommentThread
+                            comments={comments}
+                            onCommentSubmitted={async (content, idParent) => {
+                                const status = await postComment(id, content, idParent, token);
+                                if (status === 200) loadComments();
+                                return status;
+                            }}
+                        />
                     </Card>
                 </Box>
                 <Box  sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2, margin: 2, alignItems: "center" }}>

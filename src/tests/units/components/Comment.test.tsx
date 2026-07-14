@@ -3,13 +3,12 @@ import Comment from "components/Comment";
 import { ItemComment } from "interfaces/Item";
 
 const mockComment: ItemComment = {
-  id: 1,
-  content: "Est-ce que le livre est toujours disponible?",
-  authorFirstName: "Milo",
-  authorLastName: "Boucher",
-  timeAgo: "il y a 2 jours",
-  authorCip: "boum7113",
-  respondToCommentId: null,
+    idComment: 1,
+    content: "Est-ce que le livre est toujours disponible?",
+    firstName: "Milo",
+    lastName: "Boucher",
+    timestamp: "2026-07-09 13:17:37.959103",
+    idParentComment: null,
 };
 
 const renderComment = (comment: ItemComment = mockComment, isReply = false) => {
