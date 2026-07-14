@@ -5,3 +5,14 @@ export interface Users {
     email: string;
     enabled: boolean;
 }
+
+export interface Category {
+  categoryId: number;
+  name: string;
+  parentCategory: number | null;
+}
+
+export interface CategoryPayload {
+  name: string;
+  parentCategory: number | null;
+}

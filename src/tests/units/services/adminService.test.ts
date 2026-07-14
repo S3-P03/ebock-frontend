@@ -1,5 +1,5 @@
 import apiClient from "services/apiClient";
-import { fetchUserList, enableUser, disableUser } from "services/adminService";
+import { fetchUserList, enableUser, disableUser, fetchCategoryList, createCategory } from "services/adminService";
 import { Users } from "interfaces/Admin";
 
 jest.mock("services/apiClient");
@@ -169,4 +169,53 @@ describe("adminService", () => {
             );
         });
     });
+    
+    describe("fetchCategoryList", () => {
+        test("retourne les catégories", async () => {
+            apiClient.get = jest.fn().mockResolvedValue({
+                status: 200,
+                data: [{ categoryId: 1, name: "Catégorie", parentCategory: null }],
+            });
+
+            const result = await fetchCategoryList({
+                token: "token",
+                logout: jest.fn(),
+            });
+
+            expect(result).toHaveLength(1);
+        });
+
+        test("retourne null si une erreur survient", async () => {
+            apiClient.get = jest.fn().mockRejectedValue(new Error());
+
+            const result = await fetchCategoryList({
+                token: "token",
+                logout: jest.fn(),
+            });
+
+            expect(result).toBeNull();
+        });
+    });
+
+    describe("createCategory", () => {
+        test("retourne true lorsque la création réussit", async () => {
+                apiClient.post = jest.fn().mockResolvedValue({
+                status: 201,
+            });
+
+            const result = await createCategory(
+                {
+                    token: "token",
+                    logout: jest.fn(),
+                },
+                {
+                    name: "Test",
+                    parentCategory: null,
+                }
+            );
+
+            expect(result).toBe(true);
+        });
+    });
+
 });
