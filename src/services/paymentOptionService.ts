@@ -25,7 +25,7 @@ export async function getPaymentList(): Promise<PaymentOption[]> {
 
 export async function fetchPaymentOptionList({ token, logout }: FetchOptions): Promise<CategoryInfo[] | null> {
   try {
-    const response = await apiClient.get(`{SERVICE_BASE_URL}`, {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -47,7 +47,7 @@ export async function fetchPaymentOptionList({ token, logout }: FetchOptions): P
 
 export async function createPaymentOption({ token, logout }: FetchOptions, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
     try {
-        const response = await apiClient.post(`{SERVICE_BASE_URL}`, payload, {
+        const response = await apiClient.post(`${SERVICE_BASE_URL}`, payload, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -65,7 +65,7 @@ export async function createPaymentOption({ token, logout }: FetchOptions, paylo
 
 export async function updatePaymentOption({ token, logout }: FetchOptions, id: number, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
     try {
-        const response = await apiClient.put(`{SERVICE_BASE_URL}/${id}`, payload, {
+        const response = await apiClient.put(`${SERVICE_BASE_URL}/${id}`, payload, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -83,7 +83,7 @@ export async function updatePaymentOption({ token, logout }: FetchOptions, id: n
 
 export async function deletePaymentOption({ token, logout }: FetchOptions, id: number): Promise<boolean> {
     try {
-        const response = await apiClient.delete(`{SERVICE_BASE_URL}/${id}`, {
+        const response = await apiClient.delete(`${SERVICE_BASE_URL}/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
