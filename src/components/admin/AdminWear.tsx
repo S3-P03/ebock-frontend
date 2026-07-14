@@ -40,14 +40,17 @@ export default function AdminWear() {
         loadCategories();
     }, []);
 
+    const scrollToForm = () => {
+        setTimeout(() => {
+            formRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }, 0);
+    };
     useEffect(() => {
         if (openForm) {
-            setTimeout(() => {
-                formRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                });
-            }, 0);
+            scrollToForm();
         }
     }, [openForm]);
 
@@ -104,7 +107,11 @@ export default function AdminWear() {
                 size="small"
                 onClick={() => {
                     setEditingCategory(null);
-                    setOpenForm(true);
+                    if (openForm) {
+                        scrollToForm();
+                    } else {
+                        setOpenForm(true);
+                    }
                 }}
             >
                 Ajouter une catégorie
@@ -114,7 +121,11 @@ export default function AdminWear() {
                 categories={categories}
                 onEdit={(category) => {
                     setEditingCategory(category);
-                    setOpenForm(true);
+                    if (openForm) {
+                        scrollToForm();
+                    } else {
+                        setOpenForm(true);
+                    }
                 }}
                 onDelete={(category) => {
                     setDeleteTarget(category);
@@ -123,9 +134,8 @@ export default function AdminWear() {
             />
 
         </Card>
-
-        {openForm && (
-            <Box ref={formRef}>
+        <Box ref={formRef}>
+            {openForm && (
                 <SpecificationForm
                     categories={categories}
                     category={editingCategory}
@@ -136,8 +146,8 @@ export default function AdminWear() {
                     }}
                     showParent={false}
                 />
-            </Box>
-        )}
+            )}
+        </Box>
 
         {deleteTarget && (
             <DeleteSpecification

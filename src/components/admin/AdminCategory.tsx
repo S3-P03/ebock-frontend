@@ -40,14 +40,17 @@ export default function AdminCategory() {
         loadCategories();
     }, []);
 
+    const scrollToForm = () => {
+        setTimeout(() => {
+            formRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }, 0);
+    };
     useEffect(() => {
         if (openForm) {
-            setTimeout(() => {
-                formRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                });
-            }, 0);
+            scrollToForm();
         }
     }, [openForm]);
 
@@ -103,7 +106,11 @@ export default function AdminCategory() {
                 size="small"
                 onClick={() => {
                     setEditingCategory(null);
-                    setOpenForm(true);
+                    if (openForm) {
+                        scrollToForm();
+                    } else {
+                        setOpenForm(true);
+                    }
                 }}
             >
                 Ajouter une catégorie
@@ -113,7 +120,11 @@ export default function AdminCategory() {
                 categories={categories}
                 onEdit={(category) => {
                     setEditingCategory(category);
-                    setOpenForm(true);
+                    if (openForm) {
+                        scrollToForm();
+                    } else {
+                        setOpenForm(true);
+                    }
                 }}
                 onDelete={(category) => {
                     setDeleteTarget(category);
