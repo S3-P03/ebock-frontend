@@ -6,13 +6,14 @@ import UserList from "components/admin/UserList";
 import ConfirmDialog from "components/admin/ConfirmDialog";
 import useAuthSession from "hooks/useAuthSession";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
+import { fetchUser } from "services/userService";
+import { User } from "../interfaces/User";
 
 export default function AdminUserPage() {
   const [users, setUsers] = useState<Users[] | null>(null);
   const [pendingUser, setPendingUser] = useState<Users | null>(null);
 
-  const { token, logout } = useAuthSession();
-
+  const { token, logout, isAuthenticated } = useAuthSession();
 
   const loadUsers = async () => {
     const data = await fetchUserList({
@@ -23,6 +24,14 @@ export default function AdminUserPage() {
     setUsers(data);
   };
 
+  const [me, setMe] = useState<User | null>(null);
+    
+  useEffect(() => {
+      if (!isAuthenticated || !token) return;
+      fetchUser({ token, logout }).then((data) => {
+        setMe(data);
+      });
+  }, [isAuthenticated]);
 
   useEffect(() => {
     loadUsers();
@@ -57,7 +66,7 @@ export default function AdminUserPage() {
     <>
       <Card sx={{ borderRadius: 2 }}>
         <UserList
-          users={users}
+          users={users.filter((user) => user.cip !== me?.cip)}
           onToggleRequest={setPendingUser}
         />
       </Card>
