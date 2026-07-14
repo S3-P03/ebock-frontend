@@ -3,7 +3,7 @@ import {
   Button,
   Card,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import useAuthSession from "hooks/useAuthSession";
 import { CategoryInfo } from "interfaces/Category";
@@ -21,7 +21,7 @@ import DeleteSpecification from "components/admin/DeleteSpecification";
 
 
 export default function AdminDelivery() {
-
+    const formRef = useRef<HTMLDivElement | null>(null);
     const [categories, setCategories] = useState<CategoryInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
     const [editingCategory, setEditingCategory] = useState<CategoryInfo | null>(null);
@@ -39,6 +39,17 @@ export default function AdminDelivery() {
     useEffect(() => {
         loadCategories();
     }, []);
+
+    useEffect(() => {
+        if (openForm) {
+            setTimeout(() => {
+                formRef.current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }, 0);
+        }
+    }, [openForm]);
 
     const handleCreate = async (name: string, parentCategory: number | null) => {
         const success = await createDeliveryOption({token,logout},{name, parentCategory});
@@ -113,16 +124,18 @@ export default function AdminDelivery() {
         </Card>
 
         {openForm && (
-            <SpecificationForm
-                categories={categories}
-                category={editingCategory}
-                onSave={handleSave}
-                onCancel={() => {
-                    setEditingCategory(null);
-                    setOpenForm(false);
-                }}
-                showParent={false}
-            />
+            <Box ref={formRef}>
+                <SpecificationForm
+                    categories={categories}
+                    category={editingCategory}
+                    onSave={handleSave}
+                    onCancel={() => {
+                        setEditingCategory(null);
+                        setOpenForm(false);
+                    }}
+                    showParent={false}
+                />
+            </Box>
         )}
 
         {deleteTarget && (
