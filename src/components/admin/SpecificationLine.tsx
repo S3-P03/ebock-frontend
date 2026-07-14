@@ -15,7 +15,7 @@ interface CategoryLineProps {
   showParent?: boolean;
 }
 
-export default function CategoryLine({
+export default function SpecificationLine({
   category,
   onEdit,
   onDelete,

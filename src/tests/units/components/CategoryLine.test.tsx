@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import CategoryLine from "components/admin/CategoryLine";
+import SpecificationLine from "components/admin/SpecificationLine";
 import { CategoryInfo } from "interfaces/Category";
 
 describe("CategoryLine", () => {
@@ -16,7 +16,7 @@ describe("CategoryLine", () => {
         const onDelete = jest.fn();
 
         render(
-            <CategoryLine
+            <SpecificationLine
                 category={category}
                 onEdit={onEdit}
                 onDelete={onDelete}

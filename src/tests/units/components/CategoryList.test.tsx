@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import CategoryList from "components/admin/CategoryList";
+import SpecificationList from "components/admin/SpecificationList";
 
 describe("CategoryList", () => {
     const categories = [
@@ -17,7 +17,7 @@ describe("CategoryList", () => {
 
     test("affiche toutes les catégories", () => {
         render(
-            <CategoryList
+            <SpecificationList
                 categories={categories}
                 onEdit={jest.fn()}
                 onDelete={jest.fn()}
@@ -36,7 +36,7 @@ describe("CategoryList", () => {
 
     test("affiche une liste vide sans erreur", () => {
         render(
-            <CategoryList
+            <SpecificationList
                 categories={[]}
                 onEdit={jest.fn()}
                 onDelete={jest.fn()}

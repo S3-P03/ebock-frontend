@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import CategoryForm from "components/admin/CategoryForm";
+import SpecificationForm from "components/admin/SpecificationForm";
 import { CategoryInfo } from "interfaces/Category";
 
 describe("CategoryForm", () => {
@@ -22,7 +22,7 @@ describe("CategoryForm", () => {
         const onCancel = jest.fn();
 
         render(
-            <CategoryForm
+            <SpecificationForm
                 categories={categories}
                 category={null}
                 onSave={onSave}

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import DeleteCategory from "components/admin/DeleteCategory";
+import DeleteSpecification from "components/admin/DeleteSpecification";
 
 describe("DeleteCategory", () => {
     const category = {
@@ -10,7 +10,7 @@ describe("DeleteCategory", () => {
 
     test("affiche le message de suppression sans enfants", () => {
         render(
-            <DeleteCategory
+            <DeleteSpecification
                 category={category}
                 hasChildren={false}
                 onConfirm={jest.fn()}
@@ -32,7 +32,7 @@ describe("DeleteCategory", () => {
 
     test("affiche le message si la catégorie contient des enfants", () => {
         render(
-            <DeleteCategory
+            <DeleteSpecification
                 category={category}
                 hasChildren={true}
                 onConfirm={jest.fn()}
@@ -50,7 +50,7 @@ describe("DeleteCategory", () => {
 
     test("désactive le bouton Supprimer si la catégorie a des enfants", () => {
         render(
-            <DeleteCategory
+            <DeleteSpecification
                 category={category}
                 hasChildren={true}
                 onConfirm={jest.fn()}
@@ -70,7 +70,7 @@ describe("DeleteCategory", () => {
         const onConfirm = jest.fn();
 
         render(
-            <DeleteCategory
+            <DeleteSpecification
                 category={category}
                 hasChildren={false}
                 onConfirm={onConfirm}
@@ -92,7 +92,7 @@ describe("DeleteCategory", () => {
         const onCancel = jest.fn();
 
         render(
-            <DeleteCategory
+            <DeleteSpecification
                 category={category}
                 hasChildren={false}
                 onConfirm={jest.fn()}

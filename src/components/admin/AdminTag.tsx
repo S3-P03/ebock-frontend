@@ -15,9 +15,9 @@ import {
   deleteTag,
 } from "services/tagService";
 
-import CategoryForm from "components/admin/CategoryForm";
-import CategoryList from "components/admin/CategoryList";
-import DeleteCategory from "components/admin/DeleteCategory";
+import SpecificationForm from "components/admin/SpecificationForm";
+import SpecificationList from "components/admin/SpecificationList";
+import DeleteSpecification from "components/admin/DeleteSpecification";
 
 
 export default function AdminTag() {
@@ -99,7 +99,7 @@ export default function AdminTag() {
                 Ajouter une catégorie
             </Button>
 
-            <CategoryList
+            <SpecificationList
                 categories={categories}
                 onEdit={(category) => {
                     setEditingCategory(category);
@@ -114,7 +114,7 @@ export default function AdminTag() {
         </Card>
 
         {openForm && (
-            <CategoryForm
+            <SpecificationForm
                 categories={categories}
                 category={editingCategory}
                 onSave={handleSave}
@@ -127,7 +127,7 @@ export default function AdminTag() {
         )}
 
         {deleteTarget && (
-            <DeleteCategory
+            <DeleteSpecification
                 category={deleteTarget}
                 hasChildren={false}
                 onConfirm={handleDelete}

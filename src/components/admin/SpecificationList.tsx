@@ -2,7 +2,7 @@ import {
   Box,
 } from "@mui/material";
 import { CategoryInfo } from "interfaces/Category";
-import CategoryLine from "./CategoryLine";
+import SpecificationLine from "./SpecificationLine";
 
 interface CategoryListProps {
     categories: CategoryInfo[];
@@ -11,7 +11,7 @@ interface CategoryListProps {
     showParent?: boolean;
 }
 
-export default function CategoryList({
+export default function SpecificationList({
     categories,
     onEdit,
     onDelete,
@@ -32,7 +32,7 @@ export default function CategoryList({
         }}
         >
         {categoriesArray.map((category) => (
-            <CategoryLine
+            <SpecificationLine
                 key={category.categoryId}
                 category={category}
                 onEdit={onEdit}

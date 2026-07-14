@@ -10,7 +10,7 @@ interface DeleteCategoryDialogProps {
   onCancel: () => void;
 }
 
-export default function DeleteCategory({
+export default function DeleteSpecification({
   category, hasChildren, onConfirm, onCancel,
 }: DeleteCategoryDialogProps) {
   return (

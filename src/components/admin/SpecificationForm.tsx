@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { CategoryInfo } from "../../interfaces/Category";
 
-export default function CategoryForm({
+export default function SpecificationForm({
   categories,
   category,
   onSave,
