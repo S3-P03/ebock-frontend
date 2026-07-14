@@ -13,7 +13,7 @@ export interface CommentDetail {
 
 export async function fetchComments(id: string | undefined): Promise<CommentDetail[] | null> {
     try {
-        const response = await apiClient.get(`${SERVICE_BASE_URL}/${id}/details`);
+        const response = await apiClient.get(`/item/${id}/comment`);
         return response.data as CommentDetail[];
     } catch (error: any) {
         emitApiError(error.message, error.response?.status ?? 500);
@@ -28,7 +28,7 @@ export async function postComment(
     token: string
 ): Promise<number> {
     try {
-        await apiClient.post(`${SERVICE_BASE_URL}/${id}`, { content, idParent }, {
+        await apiClient.post(`/item/${id}/comment`, { content, idParent }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

@@ -143,6 +143,7 @@ export default function ItemDetails() {
                     <Card sx={{ p: 2.5, borderRadius: 2 }}>
                         <CommentThread
                             comments={comments}
+                            isSeller={user?.cip === item?.sellerCip}
                             onCommentSubmitted={async (content, idParent) => {
                                 const status = await postComment(id, content, idParent, token);
                                 if (status === 200) loadComments();
