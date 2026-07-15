@@ -61,12 +61,15 @@ export default function ItemDetails() {
                 setItem(data);
             })
         
-        try {
-            fetchItemImages(id).then((data) => {
-                setImages(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des images :", error);
+        fetchItemImages(id).then((data) => {
+            setImages(data);
+        });
+    }, [id]);
+
+    useEffect(() => { 
+        if (!images || images.length == 0) {
+            setImages([]);
+            setImagesReady(true);
         }
         
         loadComments();
@@ -81,18 +84,14 @@ export default function ItemDetails() {
         }
  
         const resolveImageUrls = async () => {
-            try {
-                const resolved = await Promise.all(
-                    images.map(async (image) => {
-                        const url = await fetchImage(image.guid);
-                        return { ...image, url: url! };
-                    })
-                );
-                setImages(resolved);
-                setImagesReady(true);
-            } catch (error) {
-                console.error("Erreur lors de la récupération des images :", error);
-            }
+            const resolved = await Promise.all(
+                images.map(async (image) => {
+                    const url = await fetchImage(image.guid);
+                    return { ...image, url: url! };
+                })
+            );
+            setImages(resolved);
+            setImagesReady(true);
         };
  
         resolveImageUrls();
@@ -101,13 +100,9 @@ export default function ItemDetails() {
     useEffect(() => {
         if (!item?.sellerCip) return;
         
-        try {
-            fetchUserStoreFront(item.sellerCip).then((data) => {
-                setSeller(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération du vendeur :", error);
-        }
+        fetchUserStoreFront(item.sellerCip).then((data) => {
+            setSeller(data);
+        });
 
         fetchReviewAverage(item?.sellerCip).then((data) => setReviewAverage(data)).catch(console.error);
     }, [item?.sellerCip]);
@@ -115,13 +110,9 @@ export default function ItemDetails() {
     useEffect(() => {
         if (!isAuthenticated || !token) return;
         
-        try {
-            fetchUser({ token, logout }).then((data) => {
-                setUser(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération de l'utilisateur :", error);
-        }
+        fetchUser({ token, logout }).then((data) => {
+            setUser(data);
+        });
     }, [isAuthenticated]);
 
     var changeItemQuantity = (value: number) => {
