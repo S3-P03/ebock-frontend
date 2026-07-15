@@ -1,6 +1,5 @@
 import apiClient, { emitApiError } from "./apiClient";
 import { Users } from "interfaces/Admin";
-import { SpecificationInfo } from "interfaces/Specification";
 
 interface FetchOptions {
   token: string;
