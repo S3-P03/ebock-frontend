@@ -6,7 +6,7 @@ import {
 import { useEffect, useState, useRef } from "react";
 
 import useAuthSession from "hooks/useAuthSession";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 import {
   fetchDeliveryOptionList,
@@ -22,22 +22,22 @@ import DeleteSpecification from "components/admin/DeleteSpecification";
 
 export default function AdminDelivery() {
     const formRef = useRef<HTMLDivElement | null>(null);
-    const [categories, setCategories] = useState<CategoryInfo[]>([]);
+    const [deliveryOptions, setDeliveryOptions] = useState<SpecificationInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
-    const [editingCategory, setEditingCategory] = useState<CategoryInfo | null>(null);
-    const [deleteTarget, setDeleteTarget] = useState<CategoryInfo | null>(null);
+    const [editingDeliveryOption, setEditingDeliveryOption] = useState<SpecificationInfo | null>(null);
+    const [deleteTarget, setDeleteTarget] = useState<SpecificationInfo | null>(null);
     const { token, logout } = useAuthSession();
 
-    const loadCategories = async () => {
+    const loadDeliveryOptions = async () => {
         const data = await fetchDeliveryOptionList({token, logout});
 
         if (data) {
-            setCategories(data);
+            setDeliveryOptions(data);
         }
     };
 
     useEffect(() => {
-        loadCategories();
+        loadDeliveryOptions();
     }, []);
 
     const scrollToForm = () => {
@@ -54,20 +54,20 @@ export default function AdminDelivery() {
         }
     }, [openForm]);
 
-    const handleCreate = async (name: string, parentCategory: number | null) => {
-        const success = await createDeliveryOption({token,logout},{name, parentCategory});
+    const handleCreate = async (name: string) => {
+        const success = await createDeliveryOption({token,logout},{name});
 
         if (success) {
-            await loadCategories();
+            await loadDeliveryOptions();
             setOpenForm(false);
         }
     };
 
-    const handleUpdate = async (id: number, name: string, parentCategory: number | null) => {
-        const success = await updateDeliveryOption({token, logout}, id, {name, parentCategory});
+    const handleUpdate = async (id: number, name: string) => {
+        const success = await updateDeliveryOption({token, logout}, id, {name});
 
         if (success) {
-            await loadCategories();
+            await loadDeliveryOptions();
             setOpenForm(false);
         }
     };
@@ -75,24 +75,22 @@ export default function AdminDelivery() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deleteDeliveryOption({token, logout}, deleteTarget.categoryId);
+        const success = await deleteDeliveryOption({token, logout}, deleteTarget.specificationId);
         if (success) {
-            await loadCategories();
+            await loadDeliveryOptions();
             setDeleteTarget(null);
         }
     };
 
-    const handleSave = (name: string, parentCategory: number | null) => {
-        if (editingCategory) {
+    const handleSave = (name: string) => {
+        if (editingDeliveryOption) {
             handleUpdate(
-                editingCategory.categoryId,
-                name,
-                parentCategory
+                editingDeliveryOption.specificationId,
+                name
             );
         } else {
             handleCreate(
-                name,
-                parentCategory
+                name
             );
         }
     };
@@ -105,7 +103,7 @@ export default function AdminDelivery() {
                 variant="contained"
                 size="small"
                 onClick={() => {
-                    setEditingCategory(null);
+                    setEditingDeliveryOption(null);
                     if (openForm) {
                         scrollToForm();
                     } else {
@@ -113,21 +111,21 @@ export default function AdminDelivery() {
                     }
                 }}
             >
-                Ajouter une catégorie
+                Ajouter une option de livraison
             </Button>
 
             <SpecificationList
-                categories={categories}
-                onEdit={(category) => {
-                    setEditingCategory(category);
+                specifications={deliveryOptions}
+                onEdit={(specification) => {
+                    setEditingDeliveryOption(specification);
                     if (openForm) {
                         scrollToForm();
                     } else {
                         setOpenForm(true);
                     }
                 }}
-                onDelete={(category) => {
-                    setDeleteTarget(category);
+                onDelete={(specification) => {
+                    setDeleteTarget(specification);
                 }}
                 showParent={false}
             />
@@ -137,11 +135,11 @@ export default function AdminDelivery() {
         {openForm && (
             <Box ref={formRef}>
                 <SpecificationForm
-                    categories={categories}
-                    category={editingCategory}
+                    categories={deliveryOptions}
+                    category={editingDeliveryOption}
                     onSave={handleSave}
                     onCancel={() => {
-                        setEditingCategory(null);
+                        setEditingDeliveryOption(null);
                         setOpenForm(false);
                     }}
                     showParent={false}
@@ -151,7 +149,7 @@ export default function AdminDelivery() {
 
         {deleteTarget && (
             <DeleteSpecification
-                category={deleteTarget}
+                specification={deleteTarget}
                 hasChildren={false}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}

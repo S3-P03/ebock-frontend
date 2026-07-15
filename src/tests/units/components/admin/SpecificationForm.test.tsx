@@ -1,19 +1,19 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SpecificationForm from "components/admin/SpecificationForm";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 describe("CategoryForm", () => {
-    const categories: CategoryInfo[] = [
+    const categories: SpecificationInfo[] = [
         {
-            categoryId: 1,
+            specificationId: 1,
             name: "Parent 1",
-            parentCategory: null,
+            parentSpecification: null,
         },
         {
-            categoryId: 2,
+            specificationId: 2,
             name: "Parent 2",
-            parentCategory: null,
+            parentSpecification: null,
         },
     ];
 
@@ -41,7 +41,7 @@ describe("CategoryForm", () => {
         setup();
 
         expect(
-            screen.getByText("Créer une catégorie")
+            screen.getByText("Créer une spécification")
         ).toBeInTheDocument();
 
         expect(
@@ -60,7 +60,7 @@ describe("CategoryForm", () => {
         setup({ category });
 
         expect(
-            screen.getByText("Modifier une catégorie")
+            screen.getByText("Modifier une spécification")
         ).toBeInTheDocument();
 
         expect(
@@ -77,12 +77,12 @@ describe("CategoryForm", () => {
         setup();
 
         const input = screen.getByLabelText(
-            "Nom de la catégorie"
+            "Nom de la spécification"
         );
 
-        await userEvent.type(input, "Nouvelle catégorie");
+        await userEvent.type(input, "Nouvelle spécification");
 
-        expect(input).toHaveValue("Nouvelle catégorie");
+        expect(input).toHaveValue("Nouvelle spécification");
     });
 
 
@@ -92,7 +92,7 @@ describe("CategoryForm", () => {
         });
 
         const input = screen.getByLabelText(
-            "Nom de la catégorie"
+            "Nom de la spécification"
         );
 
         await userEvent.type(input, "Catégorie enfant");
@@ -122,7 +122,7 @@ describe("CategoryForm", () => {
         const { onSave } = setup();
 
         await userEvent.type(
-            screen.getByLabelText("Nom de la catégorie"),
+            screen.getByLabelText("Nom de la spécification"),
             "Catégorie racine"
         );
 
@@ -141,7 +141,7 @@ describe("CategoryForm", () => {
         const { } = setup();
 
         const input = screen.getByLabelText(
-            "Nom de la catégorie"
+            "Nom de la spécification"
         );
 
         await userEvent.type(input, "Test");

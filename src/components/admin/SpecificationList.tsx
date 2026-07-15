@@ -1,18 +1,18 @@
 import {
   Box,
 } from "@mui/material";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 import SpecificationLine from "./SpecificationLine";
 
 interface CategoryListProps {
-    categories: CategoryInfo[];
-    onEdit: (category: CategoryInfo) => void;
-    onDelete: (category: CategoryInfo) => void;
+    specifications: SpecificationInfo[];
+    onEdit: (category: SpecificationInfo) => void;
+    onDelete: (category: SpecificationInfo) => void;
     showParent?: boolean;
 }
 
 export default function SpecificationList({
-    categories,
+    specifications: categories,
     onEdit,
     onDelete,
     showParent,
@@ -33,7 +33,7 @@ export default function SpecificationList({
         >
         {categoriesArray.map((category) => (
             <SpecificationLine
-                key={category.categoryId}
+                key={category.specificationId}
                 category={category}
                 onEdit={onEdit}
                 onDelete={onDelete}

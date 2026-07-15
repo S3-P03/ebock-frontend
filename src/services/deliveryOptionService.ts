@@ -1,6 +1,6 @@
 import { DeliveryOption } from "interfaces/DeliveryOption";
 import apiClient, { emitApiError } from "./apiClient";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 const SERVICE_BASE_URL = "/deliveryOption";
 
@@ -23,7 +23,7 @@ export async function getDeliveryList(): Promise<DeliveryOption[]> {
   }
 }
 
-export async function fetchDeliveryOptionList({ token, logout }: FetchOptions): Promise<CategoryInfo[] | null> {
+export async function fetchDeliveryOptionList({ token, logout }: FetchOptions): Promise<SpecificationInfo[] | null> {
   try {
     const response = await apiClient.get(`${SERVICE_BASE_URL}`, {
       headers: {
@@ -36,7 +36,7 @@ export async function fetchDeliveryOptionList({ token, logout }: FetchOptions): 
     }
 
     return response.data.map((item: any) => ({
-      categoryId: item.deliveryOptnId,
+      specificationId: item.deliveryOptnId,
       name: item.name,
     }));
 
@@ -46,7 +46,7 @@ export async function fetchDeliveryOptionList({ token, logout }: FetchOptions): 
   }
 }
 
-export async function createDeliveryOption({ token, logout }: FetchOptions, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
+export async function createDeliveryOption({ token, logout }: FetchOptions, payload: {name: string}): Promise<boolean> {
     try {
         const response = await apiClient.post(`${SERVICE_BASE_URL}`, payload, {
             headers: {
@@ -64,7 +64,7 @@ export async function createDeliveryOption({ token, logout }: FetchOptions, payl
   }
 }
 
-export async function updateDeliveryOption({ token, logout }: FetchOptions, id: number, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
+export async function updateDeliveryOption({ token, logout }: FetchOptions, id: number, payload: {name: string}): Promise<boolean> {
     try {
         const response = await apiClient.put(`${SERVICE_BASE_URL}/${id}`, payload, {
             headers: {

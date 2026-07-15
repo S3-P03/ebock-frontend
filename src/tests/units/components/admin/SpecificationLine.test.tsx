@@ -1,12 +1,12 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import SpecificationLine from "components/admin/SpecificationLine";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 describe("CategoryLine", () => {
-    const category: CategoryInfo = {
-        categoryId: 1,
+    const category: SpecificationInfo = {
+        specificationId: 1,
         name: "Informatique",
-        parentCategory: null,
+        parentSpecification: null,
     };
 
     const setup = (
@@ -113,10 +113,10 @@ describe("CategoryLine", () => {
 
 
     test("affiche correctement une sous-catégorie avec showParent", () => {
-        const subCategory: CategoryInfo = {
-            categoryId: 3,
+        const subCategory: SpecificationInfo = {
+            specificationId: 3,
             name: "Claviers",
-            parentCategory: 1,
+            parentSpecification: 1,
         };
 
         setup({

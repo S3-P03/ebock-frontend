@@ -1,21 +1,21 @@
 import {
   Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button,
 } from "@mui/material";
-import { CategoryInfo } from "../../interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 interface DeleteCategoryDialogProps {
-  category: CategoryInfo;
+  specification: SpecificationInfo;
   hasChildren: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
 export default function DeleteSpecification({
-  category, hasChildren, onConfirm, onCancel,
+  specification: category, hasChildren, onConfirm, onCancel,
 }: DeleteCategoryDialogProps) {
   return (
     <Dialog open onClose={onCancel}>
-      <DialogTitle>Supprimer la catégorie</DialogTitle>
+      <DialogTitle>Supprimer une spécification</DialogTitle>
       <DialogContent>
         <DialogContentText>
           {hasChildren

@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { CategoryInfo } from "../../interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 export default function SpecificationForm({
   categories,
@@ -16,8 +16,8 @@ export default function SpecificationForm({
   onCancel,
   showParent,
 }: {
-  categories: CategoryInfo[];
-  category: CategoryInfo | null;
+  categories: SpecificationInfo[];
+  category: SpecificationInfo | null;
   onSave: (name: string, parentId: number | null) => void;
   onCancel: () => void;
   showParent?: boolean;
@@ -34,7 +34,7 @@ export default function SpecificationForm({
   useEffect(() => {
   if (category) {
     setName(category.name);
-    setParentId(category.parentCategory);
+    setParentId(category.parentSpecification);
   } else {
     setName("");
     setParentId(null);
@@ -44,7 +44,7 @@ export default function SpecificationForm({
   return (
     <Card sx={{ p: 2.5, borderRadius: 2, width: "100%" }}>
       <Typography sx={{ fontWeight: 700, fontSize: 16, mb: 2 }}>
-        {category ? "Modifier une catégorie" : "Créer une catégorie"}
+        {category ? "Modifier une spécification" : "Créer une spécification"}
       </Typography>
 
       <Box
@@ -56,7 +56,7 @@ export default function SpecificationForm({
         }}
       >
         <TextField
-          label="Nom de la catégorie"
+          label="Nom de la spécification"
           size="small"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -81,8 +81,8 @@ export default function SpecificationForm({
 
             {categories.map((category) => (
               <MenuItem
-                key={category.categoryId}
-                value={category.categoryId}
+                key={category.specificationId}
+                value={category.specificationId}
               >
                 {category.name}
               </MenuItem>

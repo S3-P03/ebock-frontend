@@ -6,7 +6,7 @@ import {
 import { useEffect, useState, useRef } from "react";
 
 import useAuthSession from "hooks/useAuthSession";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 import {
   fetchTagList,
@@ -22,22 +22,22 @@ import DeleteSpecification from "components/admin/DeleteSpecification";
 
 export default function AdminTag() {
     const formRef = useRef<HTMLDivElement | null>(null);
-    const [categories, setCategories] = useState<CategoryInfo[]>([]);
+    const [tags, setTags] = useState<SpecificationInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
-    const [editingCategory, setEditingCategory] = useState<CategoryInfo | null>(null);
-    const [deleteTarget, setDeleteTarget] = useState<CategoryInfo | null>(null);
+    const [editingTags, setEditingTags] = useState<SpecificationInfo | null>(null);
+    const [deleteTarget, setDeleteTarget] = useState<SpecificationInfo | null>(null);
     const { token, logout } = useAuthSession();
 
-    const loadCategories = async () => {
+    const loadTags = async () => {
         const data = await fetchTagList({token, logout});
 
         if (data) {
-            setCategories(data);
+            setTags(data);
         }
     };
 
     useEffect(() => {
-        loadCategories();
+        loadTags();
     }, []);
 
     const scrollToForm = () => {
@@ -54,20 +54,20 @@ export default function AdminTag() {
         }
     }, [openForm]);
 
-    const handleCreate = async (name: string, parentCategory: number | null) => {
-        const success = await createTag({token,logout},{name, parentCategory});
+    const handleCreate = async (name: string) => {
+        const success = await createTag({token,logout},{name});
 
         if (success) {
-            await loadCategories();
+            await loadTags();
             setOpenForm(false);
         }
     };
 
-    const handleUpdate = async (id: number, name: string, parentCategory: number | null) => {
-        const success = await updateTag({token, logout}, id, {name, parentCategory});
+    const handleUpdate = async (id: number, name: string) => {
+        const success = await updateTag({token, logout}, id, {name});
 
         if (success) {
-            await loadCategories();
+            await loadTags();
             setOpenForm(false);
         }
     };
@@ -75,25 +75,23 @@ export default function AdminTag() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deleteTag({token, logout}, deleteTarget.categoryId);
+        const success = await deleteTag({token, logout}, deleteTarget.specificationId);
 
         if (success) {
-            await loadCategories();
+            await loadTags();
             setDeleteTarget(null);
         }
     };
 
-    const handleSave = (name: string, parentCategory: number | null) => {
-        if (editingCategory) {
+    const handleSave = (name: string) => {
+        if (editingTags) {
             handleUpdate(
-                editingCategory.categoryId,
-                name,
-                parentCategory
+                editingTags.specificationId,
+                name
             );
         } else {
             handleCreate(
-                name,
-                parentCategory
+                name
             );
         }
     };
@@ -106,7 +104,7 @@ export default function AdminTag() {
                 variant="contained"
                 size="small"
                 onClick={() => {
-                    setEditingCategory(null);
+                    setEditingTags(null);
                     if (openForm) {
                         scrollToForm();
                     } else {
@@ -114,21 +112,21 @@ export default function AdminTag() {
                     }
                 }}
             >
-                Ajouter une catégorie
+                Ajouter un tag
             </Button>
 
             <SpecificationList
-                categories={categories}
-                onEdit={(category) => {
-                    setEditingCategory(category);
+                specifications={tags}
+                onEdit={(specification) => {
+                    setEditingTags(specification);
                     if (openForm) {
                         scrollToForm();
                     } else {
                         setOpenForm(true);
                     }
                 }}
-                onDelete={(category) => {
-                    setDeleteTarget(category);
+                onDelete={(specification) => {
+                    setDeleteTarget(specification);
                 }}
                 showParent={false}
             />
@@ -138,11 +136,11 @@ export default function AdminTag() {
         {openForm && (
             <Box ref={formRef}>
                 <SpecificationForm
-                    categories={categories}
-                    category={editingCategory}
+                    categories={tags}
+                    category={editingTags}
                     onSave={handleSave}
                     onCancel={() => {
-                        setEditingCategory(null);
+                        setEditingTags(null);
                         setOpenForm(false);
                     }}
                     showParent={false}
@@ -152,7 +150,7 @@ export default function AdminTag() {
 
         {deleteTarget && (
             <DeleteSpecification
-                category={deleteTarget}
+                specification={deleteTarget}
                 hasChildren={false}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}

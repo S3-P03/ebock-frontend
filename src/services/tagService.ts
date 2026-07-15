@@ -1,6 +1,6 @@
 import { Tag } from "interfaces/Tag";
 import apiClient, { emitApiError } from "./apiClient";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 const SERVICE_BASE_URL = "/tag";
 
@@ -23,7 +23,7 @@ export async function getTagList(): Promise<Tag[]> {
   }
 }
 
-export async function fetchTagList({ token, logout }: FetchOptions): Promise<CategoryInfo[] | null> {
+export async function fetchTagList({ token, logout }: FetchOptions): Promise<SpecificationInfo[] | null> {
   try {
     const response = await apiClient.get(`tag`, {
       headers: {
@@ -35,7 +35,7 @@ export async function fetchTagList({ token, logout }: FetchOptions): Promise<Cat
       return null;
     }
     return response.data.map((item: any) => ({
-      categoryId: item.tagId,
+      specificationId: item.tagId,
       name: item.name,
     }));
   } catch (error: any) {
@@ -44,7 +44,7 @@ export async function fetchTagList({ token, logout }: FetchOptions): Promise<Cat
   }
 }
 
-export async function createTag({ token, logout }: FetchOptions, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
+export async function createTag({ token, logout }: FetchOptions, payload: {name: string}): Promise<boolean> {
     try {
         const response = await apiClient.post(`tag`, payload, {
             headers: {
@@ -62,7 +62,7 @@ export async function createTag({ token, logout }: FetchOptions, payload: {name:
   }
 }
 
-export async function updateTag({ token, logout }: FetchOptions, id: number, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
+export async function updateTag({ token, logout }: FetchOptions, id: number, payload: {name: string}): Promise<boolean> {
     try {
         const response = await apiClient.put(`tag/${id}`, payload, {
             headers: {

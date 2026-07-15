@@ -1,6 +1,6 @@
 import { Category } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 import apiClient, { emitApiError } from "./apiClient";
-import { CategoryInfo } from "interfaces/Category";
 
 const SERVICE_BASE_URL = "/category";
 
@@ -23,7 +23,7 @@ export async function getCategoryList(): Promise<Category[]> {
   }
 }
 
-export async function fetchCategoryList({ token, logout }: FetchOptions): Promise<CategoryInfo[] | null> {
+export async function fetchCategoryList({ token, logout }: FetchOptions): Promise<SpecificationInfo[] | null> {
   try {
     const response = await apiClient.get(`${SERVICE_BASE_URL}`, {
       headers: {
@@ -34,7 +34,11 @@ export async function fetchCategoryList({ token, logout }: FetchOptions): Promis
       logout();
       return null;
     }
-    return response.data as CategoryInfo[];;
+    return response.data.map((item: any) => ({
+      specificationId: item.categoryId,
+      name: item.name,
+      parentSpecification: item.parentCategory
+    }));
   } catch (error: any) {
     emitApiError("Erreur lors de la récupération des catégories", error.status ?? 500);
     return null;

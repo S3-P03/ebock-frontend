@@ -1,6 +1,6 @@
 import { Wear } from "interfaces/Wear";
 import apiClient, { emitApiError } from "./apiClient";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 interface FetchOptions {
   token: string;
@@ -23,7 +23,7 @@ export async function getWearList(): Promise<Wear[]> {
   }
 }
 
-export async function fetchWearList({ token, logout }: FetchOptions): Promise<CategoryInfo[] | null> {
+export async function fetchWearList({ token, logout }: FetchOptions): Promise<SpecificationInfo[] | null> {
   try {
     const response = await apiClient.get(`${SERVICE_BASE_URL}`, {
       headers: {
@@ -35,7 +35,7 @@ export async function fetchWearList({ token, logout }: FetchOptions): Promise<Ca
       return null;
     }
     return response.data.map((item: any) => ({
-      categoryId: item.wearId,
+      specificationId: item.wearId,
       name: item.name,
     }));
   } catch (error: any) {
@@ -44,7 +44,7 @@ export async function fetchWearList({ token, logout }: FetchOptions): Promise<Ca
   }
 }
 
-export async function createWear({ token, logout }: FetchOptions, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
+export async function createWear({ token, logout }: FetchOptions, payload: {name: string}): Promise<boolean> {
     try {
         const response = await apiClient.post(`${SERVICE_BASE_URL}`, payload, {
             headers: {
@@ -62,7 +62,7 @@ export async function createWear({ token, logout }: FetchOptions, payload: {name
   }
 }
 
-export async function updateWear({ token, logout }: FetchOptions, id: number, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
+export async function updateWear({ token, logout }: FetchOptions, id: number, payload: {name: string}): Promise<boolean> {
     try {
         const response = await apiClient.put(`${SERVICE_BASE_URL}/${id}`, payload, {
             headers: {

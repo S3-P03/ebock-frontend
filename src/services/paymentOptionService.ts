@@ -1,6 +1,6 @@
 import { PaymentOption } from "interfaces/PaymentOption";
 import apiClient, { emitApiError } from "./apiClient";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 interface FetchOptions {
   token: string;
@@ -23,7 +23,7 @@ export async function getPaymentList(): Promise<PaymentOption[]> {
   }
 }
 
-export async function fetchPaymentOptionList({ token, logout }: FetchOptions): Promise<CategoryInfo[] | null> {
+export async function fetchPaymentOptionList({ token, logout }: FetchOptions): Promise<SpecificationInfo[] | null> {
   try {
     const response = await apiClient.get(`${SERVICE_BASE_URL}`, {
       headers: {
@@ -35,7 +35,7 @@ export async function fetchPaymentOptionList({ token, logout }: FetchOptions): P
       return null;
     }
     return response.data.map((item: any) => ({
-      categoryId: item.paymentOptnId,
+      specificationId: item.paymentOptnId,
       name: item.name,
     }));
 
@@ -45,7 +45,7 @@ export async function fetchPaymentOptionList({ token, logout }: FetchOptions): P
   }
 }
 
-export async function createPaymentOption({ token, logout }: FetchOptions, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
+export async function createPaymentOption({ token, logout }: FetchOptions, payload: {name: string}): Promise<boolean> {
     try {
         const response = await apiClient.post(`${SERVICE_BASE_URL}`, payload, {
             headers: {
@@ -63,7 +63,7 @@ export async function createPaymentOption({ token, logout }: FetchOptions, paylo
   }
 }
 
-export async function updatePaymentOption({ token, logout }: FetchOptions, id: number, payload: {name: string, parentCategory: number | null}): Promise<boolean> {
+export async function updatePaymentOption({ token, logout }: FetchOptions, id: number, payload: {name: string}): Promise<boolean> {
     try {
         const response = await apiClient.put(`${SERVICE_BASE_URL}/${id}`, payload, {
             headers: {

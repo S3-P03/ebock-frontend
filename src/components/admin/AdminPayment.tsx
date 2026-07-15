@@ -6,7 +6,7 @@ import {
 import { useEffect, useState, useRef } from "react";
 
 import useAuthSession from "hooks/useAuthSession";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 import {
   fetchPaymentOptionList,
@@ -22,22 +22,22 @@ import DeleteSpecification from "components/admin/DeleteSpecification";
 
 export default function AdminPayment() {
     const formRef = useRef<HTMLDivElement | null>(null);
-    const [categories, setCategories] = useState<CategoryInfo[]>([]);
+    const [paymentOptions, setPaymentOptions] = useState<SpecificationInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
-    const [editingCategory, setEditingCategory] = useState<CategoryInfo | null>(null);
-    const [deleteTarget, setDeleteTarget] = useState<CategoryInfo | null>(null);
+    const [editingPaymentOptions, setEditingPaymentOptions] = useState<SpecificationInfo | null>(null);
+    const [deleteTarget, setDeleteTarget] = useState<SpecificationInfo | null>(null);
     const { token, logout } = useAuthSession();
 
-    const loadCategories = async () => {
+    const loadPaymentOptions = async () => {
         const data = await fetchPaymentOptionList({token, logout});
 
         if (data) {
-            setCategories(data);
+            setPaymentOptions(data);
         }
     };
 
     useEffect(() => {
-        loadCategories();
+        loadPaymentOptions();
     }, []);
 
     const scrollToForm = () => {
@@ -54,20 +54,20 @@ export default function AdminPayment() {
         }
     }, [openForm]);
 
-    const handleCreate = async (name: string, parentCategory: number | null) => {
-        const success = await createPaymentOption({token,logout},{name, parentCategory});
+    const handleCreate = async (name: string) => {
+        const success = await createPaymentOption({token,logout},{name});
 
         if (success) {
-            await loadCategories();
+            await loadPaymentOptions();
             setOpenForm(false);
         }
     };
 
-    const handleUpdate = async (id: number, name: string, parentCategory: number | null) => {
-        const success = await updatePaymentOption({token, logout}, id, {name, parentCategory});
+    const handleUpdate = async (id: number, name: string) => {
+        const success = await updatePaymentOption({token, logout}, id, {name});
 
         if (success) {
-            await loadCategories();
+            await loadPaymentOptions();
             setOpenForm(false);
         }
     };
@@ -75,25 +75,23 @@ export default function AdminPayment() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deletePaymentOption({token, logout}, deleteTarget.categoryId);
+        const success = await deletePaymentOption({token, logout}, deleteTarget.specificationId);
 
         if (success) {
-            await loadCategories();
+            await loadPaymentOptions();
             setDeleteTarget(null);
         }
     };
 
-    const handleSave = (name: string, parentCategory: number | null) => {
-        if (editingCategory) {
+    const handleSave = (name: string) => {
+        if (editingPaymentOptions) {
             handleUpdate(
-                editingCategory.categoryId,
-                name,
-                parentCategory
+                editingPaymentOptions.specificationId,
+                name
             );
         } else {
             handleCreate(
-                name,
-                parentCategory
+                name
             );
         }
     };
@@ -106,7 +104,7 @@ export default function AdminPayment() {
                 variant="contained"
                 size="small"
                 onClick={() => {
-                    setEditingCategory(null);
+                    setEditingPaymentOptions(null);
                     if (openForm) {
                         scrollToForm();
                     } else {
@@ -114,21 +112,21 @@ export default function AdminPayment() {
                     }
                 }}
             >
-                Ajouter une catégorie
+                Ajouter une option de payment
             </Button>
 
             <SpecificationList
-                categories={categories}
-                onEdit={(category) => {
-                    setEditingCategory(category);
+                specifications={paymentOptions}
+                onEdit={(specification) => {
+                    setEditingPaymentOptions(specification);
                     if (openForm) {
                         scrollToForm();
                     } else {
                         setOpenForm(true);
                     }
                 }}
-                onDelete={(category) => {
-                    setDeleteTarget(category);
+                onDelete={(specification) => {
+                    setDeleteTarget(specification);
                 }}
                 showParent={false}
             />
@@ -138,11 +136,11 @@ export default function AdminPayment() {
         {openForm && (
             <Box ref={formRef}>
                 <SpecificationForm
-                    categories={categories}
-                    category={editingCategory}
+                    categories={paymentOptions}
+                    category={editingPaymentOptions}
                     onSave={handleSave}
                     onCancel={() => {
-                        setEditingCategory(null);
+                        setEditingPaymentOptions(null);
                         setOpenForm(false);
                     }}
                     showParent={false}
@@ -152,7 +150,7 @@ export default function AdminPayment() {
 
         {deleteTarget && (
             <DeleteSpecification
-                category={deleteTarget}
+                specification={deleteTarget}
                 hasChildren={false}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}

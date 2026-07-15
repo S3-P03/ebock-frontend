@@ -4,21 +4,21 @@ import SpecificationList from "components/admin/SpecificationList";
 describe("CategoryList", () => {
     const categories = [
         {
-            categoryId: 1,
+            specificationId: 1,
             name: "Catégorie A",
-            parentCategory: null,
+            parentSpecification: null,
         },
         {
-            categoryId: 2,
+            specificationId: 2,
             name: "Catégorie B",
-            parentCategory: 1,
+            parentSpecification: 1,
         },
     ];
 
     test("affiche toutes les catégories", () => {
         render(
             <SpecificationList
-                categories={categories}
+                specifications={categories}
                 onEdit={jest.fn()}
                 onDelete={jest.fn()}
             />
@@ -37,7 +37,7 @@ describe("CategoryList", () => {
     test("affiche une liste vide sans erreur", () => {
         render(
             <SpecificationList
-                categories={[]}
+                specifications={[]}
                 onEdit={jest.fn()}
                 onDelete={jest.fn()}
             />

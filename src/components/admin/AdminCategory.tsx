@@ -6,7 +6,7 @@ import {
 import { useEffect, useState, useRef} from "react";
 
 import useAuthSession from "hooks/useAuthSession";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 import {
   fetchCategoryList,
@@ -22,10 +22,10 @@ import DeleteSpecification from "components/admin/DeleteSpecification";
 
 export default function AdminCategory() {
     const formRef = useRef<HTMLDivElement | null>(null);
-    const [categories, setCategories] = useState<CategoryInfo[]>([]);
+    const [categories, setCategories] = useState<SpecificationInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
-    const [editingCategory, setEditingCategory] = useState<CategoryInfo | null>(null);
-    const [deleteTarget, setDeleteTarget] = useState<CategoryInfo | null>(null);
+    const [editingCategory, setEditingCategory] = useState<SpecificationInfo | null>(null);
+    const [deleteTarget, setDeleteTarget] = useState<SpecificationInfo | null>(null);
     const { token, logout } = useAuthSession();
 
     const loadCategories = async () => {
@@ -75,7 +75,7 @@ export default function AdminCategory() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deleteCategory({token, logout}, deleteTarget.categoryId);
+        const success = await deleteCategory({token, logout}, deleteTarget.specificationId);
         if (success) {
             await loadCategories();
             setDeleteTarget(null);
@@ -85,7 +85,7 @@ export default function AdminCategory() {
     const handleSave = (name: string, parentCategory: number | null) => {
         if (editingCategory) {
             handleUpdate(
-                editingCategory.categoryId,
+                editingCategory.specificationId,
                 name,
                 parentCategory
             );
@@ -117,17 +117,17 @@ export default function AdminCategory() {
             </Button>
 
             <SpecificationList
-                categories={categories}
-                onEdit={(category) => {
-                    setEditingCategory(category);
+                specifications={categories}
+                onEdit={(specification) => {
+                    setEditingCategory(specification);
                     if (openForm) {
                         scrollToForm();
                     } else {
                         setOpenForm(true);
                     }
                 }}
-                onDelete={(category) => {
-                    setDeleteTarget(category);
+                onDelete={(specification) => {
+                    setDeleteTarget(specification);
                 }}
                 showParent={true}
             />
@@ -151,10 +151,10 @@ export default function AdminCategory() {
 
         {deleteTarget && (
             <DeleteSpecification
-                category={deleteTarget}
+                specification={deleteTarget}
                 hasChildren={categories.some(
                     c =>
-                    c.parentCategory === deleteTarget.categoryId
+                    c.parentSpecification === deleteTarget.specificationId
                 )}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}

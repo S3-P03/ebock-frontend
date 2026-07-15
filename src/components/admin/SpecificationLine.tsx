@@ -6,12 +6,12 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 interface CategoryLineProps {
-  category: CategoryInfo;
-  onEdit: (category: CategoryInfo) => void;
-  onDelete: (category: CategoryInfo) => void;
+  category: SpecificationInfo;
+  onEdit: (category: SpecificationInfo) => void;
+  onDelete: (category: SpecificationInfo) => void;
   showParent?: boolean;
 }
 
@@ -54,7 +54,7 @@ export default function SpecificationLine({
             {showParent && (
                 <Chip
                 label={
-                    category.parentCategory === null
+                    category.parentSpecification === null
                     ? "Catégorie"
                     : "Sous-catégorie"
                 }
@@ -63,11 +63,11 @@ export default function SpecificationLine({
                     fontSize: 11,
                     fontWeight: 600,
                     bgcolor:
-                    category.parentCategory === null
+                    category.parentSpecification === null
                         ? "primary.50"
                         : "secondary.50",
                     color:
-                    category.parentCategory === null
+                    category.parentSpecification === null
                         ? "primary.main"
                         : "secondary.main",
                 }}

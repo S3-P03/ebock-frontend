@@ -3,15 +3,15 @@ import DeleteSpecification from "components/admin/DeleteSpecification";
 
 describe("DeleteCategory", () => {
     const category = {
-        categoryId: 1,
+        specificationId: 1,
         name: "Informatique",
-        parentCategory: null,
+        parentSpecification: null,
     };
 
     test("affiche le message de suppression sans enfants", () => {
         render(
             <DeleteSpecification
-                category={category}
+                specification={category}
                 hasChildren={false}
                 onConfirm={jest.fn()}
                 onCancel={jest.fn()}
@@ -19,7 +19,7 @@ describe("DeleteCategory", () => {
         );
 
         expect(
-            screen.getByText("Supprimer la catégorie")
+            screen.getByText("Supprimer une spécification")
         ).toBeInTheDocument();
 
         expect(
@@ -33,7 +33,7 @@ describe("DeleteCategory", () => {
     test("affiche le message si la catégorie contient des enfants", () => {
         render(
             <DeleteSpecification
-                category={category}
+                specification={category}
                 hasChildren={true}
                 onConfirm={jest.fn()}
                 onCancel={jest.fn()}
@@ -51,7 +51,7 @@ describe("DeleteCategory", () => {
     test("désactive le bouton Supprimer si la catégorie a des enfants", () => {
         render(
             <DeleteSpecification
-                category={category}
+                specification={category}
                 hasChildren={true}
                 onConfirm={jest.fn()}
                 onCancel={jest.fn()}
@@ -71,7 +71,7 @@ describe("DeleteCategory", () => {
 
         render(
             <DeleteSpecification
-                category={category}
+                specification={category}
                 hasChildren={false}
                 onConfirm={onConfirm}
                 onCancel={jest.fn()}
@@ -93,7 +93,7 @@ describe("DeleteCategory", () => {
 
         render(
             <DeleteSpecification
-                category={category}
+                specification={category}
                 hasChildren={false}
                 onConfirm={jest.fn()}
                 onCancel={onCancel}

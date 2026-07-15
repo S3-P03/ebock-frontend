@@ -6,7 +6,7 @@ import {
 import { useEffect, useState, useRef } from "react";
 
 import useAuthSession from "hooks/useAuthSession";
-import { CategoryInfo } from "interfaces/Category";
+import { SpecificationInfo } from "interfaces/Specification";
 
 import {
   fetchWearList,
@@ -22,22 +22,22 @@ import DeleteSpecification from "components/admin/DeleteSpecification";
 
 export default function AdminWear() {
     const formRef = useRef<HTMLDivElement | null>(null);    
-    const [categories, setCategories] = useState<CategoryInfo[]>([]);
+    const [wear, setWear] = useState<SpecificationInfo[]>([]);
     const [openForm, setOpenForm] = useState(false);
-    const [editingCategory, setEditingCategory] = useState<CategoryInfo | null>(null);
-    const [deleteTarget, setDeleteTarget] = useState<CategoryInfo | null>(null);
+    const [editingWear, setEditingWear] = useState<SpecificationInfo | null>(null);
+    const [deleteTarget, setDeleteTarget] = useState<SpecificationInfo | null>(null);
     const { token, logout } = useAuthSession();
 
-    const loadCategories = async () => {
+    const loadWear = async () => {
         const data = await fetchWearList({token, logout});
 
         if (data) {
-            setCategories(data);
+            setWear(data);
         }
     };
 
     useEffect(() => {
-        loadCategories();
+        loadWear();
     }, []);
 
     const scrollToForm = () => {
@@ -54,20 +54,20 @@ export default function AdminWear() {
         }
     }, [openForm]);
 
-    const handleCreate = async (name: string, parentCategory: number | null) => {
-        const success = await createWear({token,logout},{name, parentCategory});
+    const handleCreate = async (name: string) => {
+        const success = await createWear({token,logout},{name});
 
         if (success) {
-            await loadCategories();
+            await loadWear();
             setOpenForm(false);
         }
     };
 
-    const handleUpdate = async (id: number, name: string, parentCategory: number | null) => {
-        const success = await updateWear({token, logout}, id, {name, parentCategory});
+    const handleUpdate = async (id: number, name: string) => {
+        const success = await updateWear({token, logout}, id, {name});
 
         if (success) {
-            await loadCategories();
+            await loadWear();
             setOpenForm(false);
         }
     };
@@ -75,25 +75,23 @@ export default function AdminWear() {
     const handleDelete = async () => {
         if (!deleteTarget) return;
 
-        const success = await deleteWear({token, logout}, deleteTarget.categoryId);
+        const success = await deleteWear({token, logout}, deleteTarget.specificationId);
 
         if (success) {
-            await loadCategories();
+            await loadWear();
             setDeleteTarget(null);
         }
     };
 
-    const handleSave = (name: string, parentCategory: number | null) => {
-        if (editingCategory) {
+    const handleSave = (name: string) => {
+        if (editingWear) {
             handleUpdate(
-                editingCategory.categoryId,
-                name,
-                parentCategory
+                editingWear.specificationId,
+                name
             );
         } else {
             handleCreate(
-                name,
-                parentCategory
+                name
             );
         }
     };
@@ -106,7 +104,7 @@ export default function AdminWear() {
                 variant="contained"
                 size="small"
                 onClick={() => {
-                    setEditingCategory(null);
+                    setEditingWear(null);
                     if (openForm) {
                         scrollToForm();
                     } else {
@@ -114,21 +112,21 @@ export default function AdminWear() {
                     }
                 }}
             >
-                Ajouter une catégorie
+                Ajouter un état
             </Button>
 
             <SpecificationList
-                categories={categories}
-                onEdit={(category) => {
-                    setEditingCategory(category);
+                specifications={wear}
+                onEdit={(specification) => {
+                    setEditingWear(specification);
                     if (openForm) {
                         scrollToForm();
                     } else {
                         setOpenForm(true);
                     }
                 }}
-                onDelete={(category) => {
-                    setDeleteTarget(category);
+                onDelete={(specification) => {
+                    setDeleteTarget(specification);
                 }}
                 showParent={false}
             />
@@ -137,11 +135,11 @@ export default function AdminWear() {
         <Box ref={formRef}>
             {openForm && (
                 <SpecificationForm
-                    categories={categories}
-                    category={editingCategory}
+                    categories={wear}
+                    category={editingWear}
                     onSave={handleSave}
                     onCancel={() => {
-                        setEditingCategory(null);
+                        setEditingWear(null);
                         setOpenForm(false);
                     }}
                     showParent={false}
@@ -151,10 +149,10 @@ export default function AdminWear() {
 
         {deleteTarget && (
             <DeleteSpecification
-                category={deleteTarget}
-                hasChildren={categories.some(
+                specification={deleteTarget}
+                hasChildren={wear.some(
                     c =>
-                    c.parentCategory === deleteTarget.categoryId
+                    c.parentSpecification === deleteTarget.specificationId
                 )}
                 onConfirm={handleDelete}
                 onCancel={() => setDeleteTarget(null)}
