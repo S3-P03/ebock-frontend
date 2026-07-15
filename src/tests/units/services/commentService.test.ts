@@ -52,7 +52,7 @@ describe("postComment", () => {
   });
 
   test("returns 200 when request succeeds", async () => {
-    mockedApiClient.post.mockResolvedValue({ data: {} });
+    mockedApiClient.post.mockResolvedValue({ data: {}, status: 201 });
 
     const result = await postComment("1", "Super article !", null, "mock-token");
 
@@ -61,11 +61,11 @@ describe("postComment", () => {
         { content: "Super article !", idParent: null },
         { headers: { Authorization: "Bearer mock-token" } }
     );
-    expect(result).toBe(200);
+    expect(result).toBe(201);
   });
 
   test("returns 200 when posting a reply", async () => {
-    mockedApiClient.post.mockResolvedValue({ data: {} });
+    mockedApiClient.post.mockResolvedValue({ data: {}, status: 201 });
 
     const result = await postComment("1", "Oui !", 3, "mock-token");
 
@@ -74,7 +74,7 @@ describe("postComment", () => {
         { content: "Oui !", idParent: 3 },
         { headers: { Authorization: "Bearer mock-token" } }
     );
-    expect(result).toBe(200);
+    expect(result).toBe(201);
   });
 
   test("returns 500 when request fails", async () => {
@@ -92,7 +92,7 @@ describe("deleteComment", () => {
   });
 
   test("returns 200 when request succeeds", async () => {
-    mockedApiClient.delete.mockResolvedValue({ data: {} });
+    mockedApiClient.delete.mockResolvedValue({ data: {}, status: 200 });
 
     const result = await deleteComment(1, "mock-token");
 

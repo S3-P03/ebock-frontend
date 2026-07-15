@@ -2,14 +2,7 @@ import apiClient, { emitApiError } from "./apiClient";
 
 const SERVICE_BASE_URL = "/comment";
 
-export interface CommentDetail {
-    firstName: string;
-    lastName: string;
-    content: string;
-    idParentComment: number | null;
-    idComment: number;
-    timestamp: string;
-}
+import { CommentDetail } from "interfaces/Comment";
 
 export async function fetchComments(id: string | undefined): Promise<CommentDetail[] | null> {
     try {
@@ -28,12 +21,12 @@ export async function postComment(
     token: string
 ): Promise<number> {
     try {
-        await apiClient.post(`/item/${id}/comment`, { content, idParent }, {
+        const response = await apiClient.post(`/item/${id}/comment`, { content, idParent }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        return 200;
+        return response.status;
     } catch (error: any) {
         emitApiError(error.message, error.response?.status ?? 500);
         return error.response?.status ?? 500;
@@ -45,16 +38,14 @@ export async function deleteComment(
     token: string
 ): Promise<number> {
     try {
-        await apiClient.delete(`${SERVICE_BASE_URL}/${id}`, {
+        const response = await apiClient.delete(`${SERVICE_BASE_URL}/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        return 200;
+        return response.status;
     } catch (error: any) {
         emitApiError(error.message, error.response?.status ?? 500);
         return error.response?.status ?? 500;
     }
 }
-
-export {};

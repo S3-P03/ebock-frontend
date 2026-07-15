@@ -32,7 +32,7 @@ const mockComments: ItemComment[] = [
 const mockOnCommentSubmitted = jest.fn().mockResolvedValue(200);
 
 const renderThread = (comments: ItemComment[] = mockComments, isSeller = true) => {
-    return render(<CommentThread comments={comments} onCommentSubmitted={mockOnCommentSubmitted} isSeller={isSeller} />);
+    return render(<CommentThread comments={comments} onCommentSubmitted={mockOnCommentSubmitted} isSeller={isSeller} isAuthenticated={true} />);
 };
  
 describe("CommentThread Component", () => {

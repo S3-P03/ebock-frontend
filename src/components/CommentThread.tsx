@@ -7,9 +7,10 @@ interface CommentThreadProps {
     comments: ItemComment[];
     onCommentSubmitted: (content: string, idParent: number | null) => Promise<number>;
     isSeller: boolean;
+    isAuthenticated: boolean;
 }
 
-export default function CommentThread({ comments, onCommentSubmitted, isSeller }: CommentThreadProps) {
+export default function CommentThread({ comments, onCommentSubmitted, isSeller, isAuthenticated }: CommentThreadProps) {
     const [inputValue, setInputValue] = useState("");
     const [replyingTo, setReplyingTo] = useState<ItemComment | null>(null);
 
@@ -29,32 +30,34 @@ export default function CommentThread({ comments, onCommentSubmitted, isSeller }
                 QUESTIONS & RÉPONSES
             </Typography>
 
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 2, mb: 3 }}>
-                {replyingTo && (
-                    <Box sx={{ fontSize: 13, color: "text.secondary", display: "flex", alignItems: "center", gap: 1 }}>
-                        Répondre à <strong>{replyingTo.firstName} {replyingTo.lastName[0]}</strong>
-                        <Button size="small" onClick={() => setReplyingTo(null)} sx={{ textTransform: "none", p: 0, minWidth: "auto", color: "error.main" }}>
-                            Annuler
+            {isAuthenticated && (
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 2, mb: 3 }}>
+                    {replyingTo && (
+                        <Box sx={{ fontSize: 13, color: "text.secondary", display: "flex", alignItems: "center", gap: 1 }}>
+                            Répondre à <strong>{replyingTo.firstName} {replyingTo.lastName[0]}</strong>
+                            <Button size="small" onClick={() => setReplyingTo(null)} sx={{ textTransform: "none", p: 0, minWidth: "auto", color: "error.main" }}>
+                                Annuler
+                            </Button>
+                        </Box>
+                    )}
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                        <TextField
+                            fullWidth
+                            placeholder={replyingTo ? `Répondre à ${replyingTo.firstName}...` : "Ajouter un commentaire..."}
+                            variant="outlined"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                        />
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 0.5, mb: 0.5, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }}
+                            onClick={handleSend}
+                        >
+                            Envoyer
                         </Button>
                     </Box>
-                )}
-                <Box sx={{ display: "flex", gap: 2 }}>
-                    <TextField
-                        fullWidth
-                        placeholder={replyingTo ? `Répondre à ${replyingTo.firstName}...` : "Ajouter un commentaire..."}
-                        variant="outlined"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                    />
-                    <Button
-                        variant="contained"
-                        sx={{ mt: 0.5, mb: 0.5, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }}
-                        onClick={handleSend}
-                    >
-                        Envoyer
-                    </Button>
                 </Box>
-            </Box>
+            )}
 
             {comments.filter((c) => c.idParentComment === null).map((comment) => {
                 const replies = comments.filter((c) => c.idParentComment === comment.idComment).map((reply) => {

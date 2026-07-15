@@ -16,7 +16,8 @@ import { fetchImage } from "services/imageService";
 import { createRoom } from "services/messageService";
 import CenteredCircularProgress from "components/CenteredCircularProgress";
 import { fetchReviewAverage, ReviewAverage } from "services/reviewService";
-import { fetchComments, postComment, CommentDetail } from "services/commentService";
+import { fetchComments, postComment } from "services/commentService";
+import { CommentDetail } from "interfaces/Comment";
 
 export default function ItemDetails() {
     const { id } = useParams();
@@ -142,6 +143,7 @@ export default function ItemDetails() {
                     {images!.length !== 0 && <ImageList images={images!}/>}
                     <Card sx={{ p: 2.5, borderRadius: 2 }}>
                         <CommentThread
+                            isAuthenticated={isAuthenticated}
                             comments={comments}
                             isSeller={user?.cip === item?.sellerCip}
                             onCommentSubmitted={async (content, idParent) => {
