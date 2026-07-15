@@ -11,7 +11,7 @@ interface DeleteCategoryDialogProps {
 }
 
 export default function DeleteSpecification({
-  specification: category, hasChildren, onConfirm, onCancel,
+  specification, hasChildren, onConfirm, onCancel,
 }: DeleteCategoryDialogProps) {
   return (
     <Dialog open onClose={onCancel}>
@@ -19,8 +19,8 @@ export default function DeleteSpecification({
       <DialogContent>
         <DialogContentText>
           {hasChildren
-            ? `"${category.name}" contient des sous-catégories. Supprime ou déplace d'abord ses sous-catégories.`
-            : `Supprimer "${category.name}" ? Cette action est irréversible.`}
+            ? `"${specification.name}" contient des sous-catégories. Supprime ou déplace d'abord ses sous-catégories.`
+            : `Supprimer "${specification.name}" ? Cette action est irréversible.`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
