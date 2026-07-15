@@ -1,8 +1,7 @@
 import apiClient, { emitApiError } from "./apiClient";
+import { CommentDetail } from "interfaces/Comment";
 
 const SERVICE_BASE_URL = "/comment";
-
-import { CommentDetail } from "interfaces/Comment";
 
 export async function fetchComments(id: string | undefined): Promise<CommentDetail[] | null> {
     try {
