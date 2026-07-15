@@ -21,13 +21,12 @@ export interface ItemImage {
 }
 
 export interface ItemComment {
-    id: number;
+    idComment: number;
     content: string;
-    respondToCommentId: number | null;
-    authorCip: string;
-    authorFirstName: string;
-    authorLastName: string;
-    timeAgo: string;
+    idParentComment: number | null;
+    firstName: string;
+    lastName: string;
+    timestamp: string;
 }
 
 export interface ItemPayload {

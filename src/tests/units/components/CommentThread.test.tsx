@@ -3,37 +3,36 @@ import CommentThread from "components/CommentThread";
 import { ItemComment } from "interfaces/Item";
  
 const mockComments: ItemComment[] = [
-  {
-    id: 1,
-    content: "Le manuel est-il en bon état?",
-    authorFirstName: "Jean-Félix",
-    authorLastName: "Larouche",
-    timeAgo: "il y a 3 jours",
-    authorCip: "larj4236",
-    respondToCommentId: null,
-  },
-  {
-    id: 2,
-    content: "Oui, quelques annotations seulement.",
-    authorFirstName: "Éliane",
-    authorLastName: "Pelletier",
-    timeAgo: "il y a 2 jours",
-    authorCip: "pele3157",
-    respondToCommentId: 1,
-  },
-  {
-    id: 3,
-    content: "Est-ce que la livraison est possible?",
-    authorFirstName: "Jean-Félix",
-    authorLastName: "Larouche",
-    timeAgo: "il y a 1 jour",
-    authorCip: "larj4236",
-    respondToCommentId: null,
-  },
+    {
+        idComment: 1,
+        content: "Le manuel est-il en bon état?",
+        firstName: "Jean-Félix",
+        lastName: "Larouche",
+        timestamp: "2026-07-09 13:17:37.959103",
+        idParentComment: null,
+    },
+    {
+        idComment: 2,
+        content: "Oui, quelques annotations seulement.",
+        firstName: "Éliane",
+        lastName: "Pelletier",
+        timestamp: "2026-07-09 13:17:37.959103",
+        idParentComment: 1,
+    },
+    {
+        idComment: 3,
+        content: "Est-ce que la livraison est possible?",
+        firstName: "Jean-Félix",
+        lastName: "Larouche",
+        timestamp: "2026-07-09 13:17:37.959103",
+        idParentComment: null,
+    },
 ];
- 
-const renderThread = (comments: ItemComment[] = mockComments, isAuthenticated: boolean = true) => {
-  return render(<CommentThread comments={comments} isAuthenticated={isAuthenticated}/>);
+
+const mockOnCommentSubmitted = jest.fn().mockResolvedValue(200);
+
+const renderThread = (comments: ItemComment[] = mockComments, isSeller = true) => {
+    return render(<CommentThread comments={comments} onCommentSubmitted={mockOnCommentSubmitted} isSeller={isSeller} isAuthenticated={true} />);
 };
  
 describe("CommentThread Component", () => {
@@ -75,7 +74,7 @@ describe("CommentThread Component", () => {
     });
  
     test("top-level comments only -> no reply prefix shown", () => {
-      const noReplies = mockComments.filter((c) => c.respondToCommentId === null);
+      const noReplies = mockComments.filter((c) => c.idParentComment === null);
       renderThread(noReplies);
       expect(screen.queryByText(/@/)).not.toBeInTheDocument();
     });

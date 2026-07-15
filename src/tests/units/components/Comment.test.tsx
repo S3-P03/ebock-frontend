@@ -3,13 +3,12 @@ import Comment from "components/Comment";
 import { ItemComment } from "interfaces/Item";
 
 const mockComment: ItemComment = {
-  id: 1,
-  content: "Est-ce que le livre est toujours disponible?",
-  authorFirstName: "Milo",
-  authorLastName: "Boucher",
-  timeAgo: "il y a 2 jours",
-  authorCip: "boum7113",
-  respondToCommentId: null,
+    idComment: 1,
+    content: "Est-ce que le livre est toujours disponible?",
+    firstName: "Milo",
+    lastName: "Boucher",
+    timestamp: "2026-07-09T13:17:37.959103",
+    idParentComment: null,
 };
 
 const renderComment = (comment: ItemComment = mockComment, isReply = false) => {
@@ -17,7 +16,6 @@ const renderComment = (comment: ItemComment = mockComment, isReply = false) => {
 };
 
 describe("Comment Component", () => {
-  // Test Group 1: Rendering
   describe("Rendering", () => {
     test("renders comment content", () => {
       renderComment();
@@ -28,21 +26,31 @@ describe("Comment Component", () => {
 
     test("renders author name and initial", () => {
       renderComment();
-      // Format: "Milo B - il y a 2 jours"
       expect(screen.getByText(/Milo B/)).toBeInTheDocument();
     });
 
-    test("renders timeAgo string", () => {
+    test("renders formatted date", () => {
       renderComment();
-      expect(screen.getByText(/il y a 2 jours/)).toBeInTheDocument();
+      expect(screen.getByText(/2026/)).toBeInTheDocument();
     });
   });
 
-  // Test Group 2: Avatar Initials
   describe("Avatar Initials", () => {
     test("renders uppercased initials in avatar", () => {
       renderComment();
       expect(screen.getByText("MB")).toBeInTheDocument();
+    });
+  });
+
+  describe("Reply styling", () => {
+    test("renders as normal comment when isReply is false", () => {
+      renderComment(mockComment, false);
+      expect(screen.getByText("Est-ce que le livre est toujours disponible?")).toBeInTheDocument();
+    });
+
+    test("renders as reply when isReply is true", () => {
+      renderComment(mockComment, true);
+      expect(screen.getByText("Est-ce que le livre est toujours disponible?")).toBeInTheDocument();
     });
   });
 });

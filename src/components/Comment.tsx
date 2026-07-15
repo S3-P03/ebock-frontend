@@ -21,7 +21,10 @@ const CommentStyle = styled('div')(({ theme }) => ({
 }));
 
 export default function Comment({ comment, isReply }: { comment: ItemComment; isReply: boolean }) {
-    const initials = `${comment.authorFirstName[0]}${comment.authorLastName[0]}`.toUpperCase();
+    const initials = `${comment.firstName[0]}${comment.lastName[0]}`.toUpperCase();
+    const formattedDate = new Date(comment.timestamp).toLocaleDateString("fr-CA", {
+        year: "numeric", month: "long", day: "numeric"
+    });
     return (
         <Box>
             <Box sx={{ display: "flex", gap: 1.5, alignItems: "flex-start" }}>
@@ -37,7 +40,7 @@ export default function Comment({ comment, isReply }: { comment: ItemComment; is
                         </CommentStyle>
                     )}
                     <Box sx={{ display: "flex"}}>
-                        <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${comment.authorFirstName} ${comment.authorLastName[0]} - ${comment.timeAgo}`}</Box>
+                        <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${comment.firstName} ${comment.lastName[0]} - ${formattedDate}`}</Box>
                     </Box>
                 </Box>
             </Box>
