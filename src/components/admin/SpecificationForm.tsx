@@ -10,14 +10,14 @@ import { useEffect, useState } from "react";
 import { SpecificationInfo } from "interfaces/Specification";
 
 export default function SpecificationForm({
-  categories,
-  category,
+  specifications,
+  specification,
   onSave,
   onCancel,
   showParent,
 }: {
-  categories: SpecificationInfo[];
-  category: SpecificationInfo | null;
+  specifications: SpecificationInfo[];
+  specification: SpecificationInfo | null;
   onSave: (name: string, parentId: number | null) => void;
   onCancel: () => void;
   showParent?: boolean;
@@ -32,19 +32,19 @@ export default function SpecificationForm({
   };
 
   useEffect(() => {
-  if (category) {
-    setName(category.name);
-    setParentId(category.parentSpecification);
+  if (specification) {
+    setName(specification.name);
+    setParentId(specification.parentSpecification);
   } else {
     setName("");
     setParentId(null);
   }
-}, [category]);
+}, [specification]);
 
   return (
     <Card sx={{ p: 2.5, borderRadius: 2, width: "100%" }}>
       <Typography sx={{ fontWeight: 700, fontSize: 16, mb: 2 }}>
-        {category ? "Modifier une spécification" : "Créer une spécification"}
+        {specification ? "Modifier une spécification" : "Créer une spécification"}
       </Typography>
 
       <Box
@@ -79,12 +79,12 @@ export default function SpecificationForm({
               Aucune (racine)
             </MenuItem>
 
-            {categories.map((category) => (
+            {specifications.map((specification) => (
               <MenuItem
-                key={category.specificationId}
-                value={category.specificationId}
+                key={specification.specificationId}
+                value={specification.specificationId}
               >
-                {category.name}
+                {specification.name}
               </MenuItem>
             ))}
           </TextField>
@@ -100,7 +100,7 @@ export default function SpecificationForm({
         }}
         onClick={handleSave}
       >
-        {category ? "Modifier" : "Créer"}
+        {specification ? "Modifier" : "Créer"}
       </Button>
       <Button
         variant="outlined"

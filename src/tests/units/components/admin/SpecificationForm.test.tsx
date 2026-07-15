@@ -4,7 +4,7 @@ import SpecificationForm from "components/admin/SpecificationForm";
 import { SpecificationInfo } from "interfaces/Specification";
 
 describe("CategoryForm", () => {
-    const categories: SpecificationInfo[] = [
+    const specifications: SpecificationInfo[] = [
         {
             specificationId: 1,
             name: "Parent 1",
@@ -23,8 +23,8 @@ describe("CategoryForm", () => {
 
         render(
             <SpecificationForm
-                categories={categories}
-                category={null}
+                specifications={specifications}
+                specification={null}
                 onSave={onSave}
                 onCancel={onCancel}
                 {...props}
@@ -36,6 +36,7 @@ describe("CategoryForm", () => {
             onCancel,
         };
     };
+    
 
     test("affiche le formulaire de création", () => {
         setup();
@@ -51,13 +52,13 @@ describe("CategoryForm", () => {
 
 
     test("affiche le formulaire de modification", () => {
-        const category = {
-            categoryId: 5,
+        const specification = {
+            specificationId: 5,
             name: "Catégorie test",
-            parentCategory: 1,
+            parentSpecification: 1,
         };
 
-        setup({ category });
+        setup({ specification });
 
         expect(
             screen.getByText("Modifier une spécification")

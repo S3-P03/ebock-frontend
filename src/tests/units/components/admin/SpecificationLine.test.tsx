@@ -17,7 +17,7 @@ describe("CategoryLine", () => {
 
         render(
             <SpecificationLine
-                category={category}
+                specification={category}
                 onEdit={onEdit}
                 onDelete={onDelete}
                 {...props}
@@ -68,12 +68,12 @@ describe("CategoryLine", () => {
 
     test("affiche 'Sous-catégorie' pour une sous-catégorie", () => {
         setup({
-        category: {
-            categoryId: 2,
-            name: "Ordinateurs",
-            parentCategory: 1,
-        },
-        showParent: true,
+            specification: {
+                specificationId: 2,
+                name: "Ordinateurs",
+                parentSpecification: 1,
+            },
+            showParent: true,
         });
 
         expect(
@@ -120,7 +120,7 @@ describe("CategoryLine", () => {
         };
 
         setup({
-            category: subCategory,
+            specification: subCategory,
             showParent: true,
         });
 

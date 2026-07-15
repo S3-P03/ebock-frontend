@@ -9,14 +9,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { SpecificationInfo } from "interfaces/Specification";
 
 interface CategoryLineProps {
-  category: SpecificationInfo;
-  onEdit: (category: SpecificationInfo) => void;
-  onDelete: (category: SpecificationInfo) => void;
+  specification: SpecificationInfo;
+  onEdit: (specification: SpecificationInfo) => void;
+  onDelete: (specification: SpecificationInfo) => void;
   showParent?: boolean;
 }
 
 export default function SpecificationLine({
-  category,
+  specification,
   onEdit,
   onDelete,
   showParent,
@@ -46,7 +46,7 @@ export default function SpecificationLine({
                 whiteSpace: "nowrap",
             }}
             >
-            {category.name}
+            {specification.name}
             </Typography>
         </Box>
 
@@ -54,7 +54,7 @@ export default function SpecificationLine({
             {showParent && (
                 <Chip
                 label={
-                    category.parentSpecification === null
+                    specification.parentSpecification === null
                     ? "Catégorie"
                     : "Sous-catégorie"
                 }
@@ -63,11 +63,11 @@ export default function SpecificationLine({
                     fontSize: 11,
                     fontWeight: 600,
                     bgcolor:
-                    category.parentSpecification === null
+                    specification.parentSpecification === null
                         ? "primary.50"
                         : "secondary.50",
                     color:
-                    category.parentSpecification === null
+                    specification.parentSpecification === null
                         ? "primary.main"
                         : "secondary.main",
                 }}
@@ -77,7 +77,7 @@ export default function SpecificationLine({
             <IconButton
             size="small"
             color="primary"
-            onClick={() => onEdit(category)}
+            onClick={() => onEdit(specification)}
             >
             <EditIcon fontSize="small" />
             </IconButton>
@@ -85,7 +85,7 @@ export default function SpecificationLine({
             <IconButton
             size="small"
             color="error"
-            onClick={() => onDelete(category)}
+            onClick={() => onDelete(specification)}
             >
             <DeleteIcon fontSize="small" />
             </IconButton>

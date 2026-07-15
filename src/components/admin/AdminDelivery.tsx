@@ -135,8 +135,8 @@ export default function AdminDelivery() {
         {openForm && (
             <Box ref={formRef}>
                 <SpecificationForm
-                    categories={deliveryOptions}
-                    category={editingDeliveryOption}
+                    specifications={deliveryOptions}
+                    specification={editingDeliveryOption}
                     onSave={handleSave}
                     onCancel={() => {
                         setEditingDeliveryOption(null);

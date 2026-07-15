@@ -136,8 +136,8 @@ export default function AdminPayment() {
         {openForm && (
             <Box ref={formRef}>
                 <SpecificationForm
-                    categories={paymentOptions}
-                    category={editingPaymentOptions}
+                    specifications={paymentOptions}
+                    specification={editingPaymentOptions}
                     onSave={handleSave}
                     onCancel={() => {
                         setEditingPaymentOptions(null);

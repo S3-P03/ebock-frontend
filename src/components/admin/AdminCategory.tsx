@@ -137,8 +137,8 @@ export default function AdminCategory() {
         {openForm && (
             <Box ref={formRef}>
                 <SpecificationForm
-                    categories={categories}
-                    category={editingCategory}
+                    specifications={categories}
+                    specification={editingCategory}
                     onSave={handleSave}
                     onCancel={() => {
                         setEditingCategory(null);

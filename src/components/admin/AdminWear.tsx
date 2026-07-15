@@ -135,8 +135,8 @@ export default function AdminWear() {
         <Box ref={formRef}>
             {openForm && (
                 <SpecificationForm
-                    categories={wear}
-                    category={editingWear}
+                    specifications={wear}
+                    specification={editingWear}
                     onSave={handleSave}
                     onCancel={() => {
                         setEditingWear(null);

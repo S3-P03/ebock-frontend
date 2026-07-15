@@ -4,20 +4,20 @@ import {
 import { SpecificationInfo } from "interfaces/Specification";
 import SpecificationLine from "./SpecificationLine";
 
-interface CategoryListProps {
+interface SpecificationListProps {
     specifications: SpecificationInfo[];
-    onEdit: (category: SpecificationInfo) => void;
-    onDelete: (category: SpecificationInfo) => void;
+    onEdit: (specification: SpecificationInfo) => void;
+    onDelete: (specification: SpecificationInfo) => void;
     showParent?: boolean;
 }
 
 export default function SpecificationList({
-    specifications: categories,
+    specifications,
     onEdit,
     onDelete,
     showParent,
-}: CategoryListProps) {
-    const categoriesArray = Array.isArray(categories) ? categories : [];
+}: SpecificationListProps) {
+    const specificationArray = Array.isArray(specifications) ? specifications : [];
 
     return (
         <Box
@@ -31,10 +31,10 @@ export default function SpecificationList({
             borderColor: "grey.200",
         }}
         >
-        {categoriesArray.map((category) => (
+        {specificationArray.map((specification) => (
             <SpecificationLine
-                key={category.specificationId}
-                category={category}
+                key={specification.specificationId}
+                specification={specification}
                 onEdit={onEdit}
                 onDelete={onDelete}
                 showParent={showParent}

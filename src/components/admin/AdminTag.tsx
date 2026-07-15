@@ -136,8 +136,8 @@ export default function AdminTag() {
         {openForm && (
             <Box ref={formRef}>
                 <SpecificationForm
-                    categories={tags}
-                    category={editingTags}
+                    specifications={tags}
+                    specification={editingTags}
                     onSave={handleSave}
                     onCancel={() => {
                         setEditingTags(null);
