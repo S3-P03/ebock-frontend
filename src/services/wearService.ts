@@ -1,5 +1,11 @@
 import { Wear } from "interfaces/Wear";
 import apiClient, { emitApiError } from "./apiClient";
+import { SpecificationInfo } from "interfaces/Specification";
+
+interface FetchOptions {
+  token: string;
+  logout: () => void;
+}
 
 const SERVICE_BASE_URL = "/wear";
 
@@ -15,4 +21,79 @@ export async function getWearList(): Promise<Wear[]> {
     }
     return [];
   }
+}
+
+export async function fetchWearList({ token, logout }: FetchOptions): Promise<SpecificationInfo[] | null> {
+  try {
+    const response = await apiClient.get(`${SERVICE_BASE_URL}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.status === 401) {
+      logout();
+      return null;
+    }
+    return response.data.map((item: any) => ({
+      specificationId: item.wearId,
+      name: item.name,
+    }));
+  } catch (error: any) {
+    emitApiError("Erreur lors de la récupération de l'état", error.status ?? 500);
+    return null;
+  }
+}
+
+export async function createWear({ token, logout }: FetchOptions, payload: {name: string}): Promise<boolean> {
+    try {
+        const response = await apiClient.post(`${SERVICE_BASE_URL}`, payload, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.status === 401) {
+            logout();
+            return false;
+        } 
+        return true;
+    } catch (error: any) {
+        emitApiError("Erreur lors de la création de l'état", error.status ?? 500);
+        return false;
+  }
+}
+
+export async function updateWear({ token, logout }: FetchOptions, id: number, payload: {name: string}): Promise<boolean> {
+    try {
+        const response = await apiClient.put(`${SERVICE_BASE_URL}/${id}`, payload, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.status === 401) {
+            logout();
+            return false;
+        } 
+        return true;
+    } catch (error: any) {
+        emitApiError("Erreur lors de la mise à jour de l'état", error.response?.status ?? 500);
+        return false;
+    }
+}
+
+export async function deleteWear({ token, logout }: FetchOptions, id: number): Promise<boolean> {
+    try {
+        const response = await apiClient.delete(`${SERVICE_BASE_URL}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.status === 401) {
+            logout();
+            return false;
+        } 
+        return true;
+    } catch (error: any) {
+        emitApiError("Erreur lors de la suppression de l'état", error.response?.status ?? 500);
+        return false;
+    }
 }
