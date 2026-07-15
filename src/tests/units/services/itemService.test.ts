@@ -1,9 +1,10 @@
-import { fetchUserItems, fetchItem, fetchItemImages, getFilteredItems, FilterParams, addItem } from "services/itemService";
-import apiClient from "services/apiClient";
+import { fetchUserItems, fetchItem, fetchItemImages, getFilteredItems, FilterParams, addItem, updateItem } from "services/itemService";
+import apiClient, { emitApiError } from "services/apiClient";
 
 jest.mock("services/apiClient");
 
 const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
+const mockedEmitApiError = emitApiError as jest.MockedFunction<typeof emitApiError>;
 
 const fakeToken = "token123";
 
@@ -271,5 +272,70 @@ describe("getFilteredItems", () => {
     expect(callArg).toContain("categories=1%2C2%2C3");
     expect(callArg).toContain("tags=5%2C6");
     expect(callArg).toContain("wears=1%2C2");
+  });
+});
+
+describe("updateItem", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("calls the correct URL with correct headers", async () => {
+    mockedApiClient.put.mockResolvedValue({
+      status: 200,
+      data: {},
+    });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedApiClient.put).toHaveBeenCalledWith(
+      "/item/42",
+      { price: 20 },
+      { headers: { Authorization: `Bearer ${fakeToken}` } }
+    );
+  });
+
+  test("emits a 400 error message when the API responds with status 400", async () => {
+    mockedApiClient.put.mockRejectedValue({ status: 400 });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedEmitApiError).toHaveBeenCalledWith(
+      "Erreur lors de la mise à jour de l'article, veuillez vérifier les données fournies",
+      400
+    );
+  });
+
+  test("emits a 403 error message when the API responds with status 403", async () => {
+    mockedApiClient.put.mockRejectedValue({ status: 403 });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedEmitApiError).toHaveBeenCalledWith(
+      "Erreur lors de la mise à jour de l'article, ce n'est pas votre article",
+      403
+    );
+  });
+
+  test("emits a 404 error message when the API responds with status 404", async () => {
+    mockedApiClient.put.mockRejectedValue({ status: 404 });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedEmitApiError).toHaveBeenCalledWith(
+      "Erreur lors de la mise à jour de l'article, l'article n'existe pas",
+      404
+    );
+  });
+
+  test("emits a generic error message for unknown statuses", async () => {
+    mockedApiClient.put.mockRejectedValue({ status: 500 });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedEmitApiError).toHaveBeenCalledWith(
+      "Erreur lors de la mise à jour de l'article",
+      500
+    );
   });
 });
