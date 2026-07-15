@@ -1,6 +1,6 @@
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor, fireEvent } from "@testing-library/react";
 import ItemDetails from "pages/ItemDetails";
-import { fetchItem, fetchItemImages } from "services/itemService";
+import { fetchItem, fetchItemImages, updateItem } from "services/itemService";
 import { fetchUser, fetchUserStoreFront } from "services/userService";
 import { fetchImage } from "services/imageService";
 import { fetchReviewAverage } from "services/reviewService";
@@ -11,6 +11,7 @@ const mockNavigate = jest.fn();
 jest.mock("services/itemService", () => ({
   fetchItem: jest.fn(),
   fetchItemImages: jest.fn(),
+  updateItem: jest.fn(),
 }));
 
 jest.mock("services/userService", () => ({
@@ -33,6 +34,11 @@ jest.mock("components/ImageList", () => () => <div data-testid="image-list" />);
 jest.mock("components/SellerBox", () => () => <div data-testid="seller-box" />);
 jest.mock("components/items/ItemAdditionalInfoBox", () => () => <div data-testid="additional-info" />);
 jest.mock("components/items/ItemMainInfoBox", () => () => <div data-testid="main-info" />);
+jest.mock("components/items/ItemSellerOptionBox", () => ({ item, changeItemQuantity }: any) => (
+  <button data-testid="seller-option-box" onClick={() => changeItemQuantity(1)}>
+    SellerOptionBox
+  </button>
+));
 jest.mock("components/CenteredCircularProgress", () => () => <div data-testid="spinner" />);
 
 jest.mock("react-router-dom", () => {
@@ -67,5 +73,43 @@ describe("ItemDetails", () => {
   test("renders spinner while loading", () => {
     const { getByTestId } = render(<ItemDetails />);
     expect(getByTestId("spinner")).toBeInTheDocument();
+  });
+
+  test("renders seller option box and calls updateItem when the current user is the seller", async () => {
+    const item = {
+      itemId: 1,
+      name: "Test Item",
+      description: "Test description",
+      price: 10,
+      addedAt: new Date().toISOString(),
+      quantity: 3,
+      category: "Test category",
+      wear: "Used",
+      sellerCip: "test1234",
+      paymentOptions: ["Cash"],
+      deliveryOptions: ["Pickup"],
+      tags: [1],
+    };
+
+    (useAuthSession as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      token: "fake-token",
+      logout: jest.fn(),
+      connectedUser: { cip: "test1234" },
+    });
+    (fetchUser as jest.Mock).mockResolvedValue({ cip: "test1234" });
+    (fetchItem as jest.Mock).mockResolvedValue(item);
+    (fetchItemImages as jest.Mock).mockResolvedValue([]);
+    (fetchUserStoreFront as jest.Mock).mockResolvedValue({});
+
+    const { getByTestId } = render(<ItemDetails />);
+
+    await waitFor(() => {
+      expect(getByTestId("seller-option-box")).toBeInTheDocument();
+    });
+
+    fireEvent.click(getByTestId("seller-option-box"));
+
+    expect(updateItem).toHaveBeenCalledWith(item.itemId, "fake-token", { quantity: item.quantity - 1 });
   });
 });

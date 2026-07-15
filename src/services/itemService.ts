@@ -20,7 +20,8 @@ export async function fetchUserItems(cip: string | undefined): Promise<SellerIte
     const response = await apiClient.get(`${SERVICE_BASE_URL}/${cip}/storefront`);
     const items = (await response.data) as SellerItem[];
     return items;
-  } catch (error) {
+  } catch (error: any) {
+    emitApiError("Items de l'utilisateur impossibles à récupérer", error.status);
     return null;
   }
 }
@@ -43,7 +44,8 @@ export async function fetchItemImages(id: string | undefined): Promise<ItemImage
   try {
     const response = await apiClient.get(`/image/forItem/${id}`);
     return (await response.data) as ItemImage[];
-  } catch (error) {
+  } catch (error: any) {
+    emitApiError("Images de l'item impossibles à récupérer", error.status);
     return null;
   }
 }
@@ -134,5 +136,25 @@ export async function unfavoriteItem(id: number, token: string): Promise<void> {
     } else {
       emitApiError("Erreur lors du retrait du favori de l'article", error.status ?? 401);
     }
+  }
+}
+
+export async function updateItem(id: number, token: string, itemData: Partial<ItemPayload>): Promise<void> {
+  try {
+    await apiClient.put(`${SERVICE_BASE_URL}/${id}`, itemData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error: any) {
+    let errorMessage = "Erreur lors de la mise à jour de l'article";
+    if (error.status === 400) {
+      errorMessage = "Erreur lors de la mise à jour de l'article, veuillez vérifier les données fournies";
+    } else if (error.status === 403) {
+      errorMessage = "Erreur lors de la mise à jour de l'article, ce n'est pas votre article";
+    } else if (error.status === 404) {
+      errorMessage = "Erreur lors de la mise à jour de l'article, l'article n'existe pas";
+    }
+    emitApiError(errorMessage, error.status);
   }
 }

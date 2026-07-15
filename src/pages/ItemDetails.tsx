@@ -4,7 +4,7 @@ import { SellerUser } from "interfaces/Seller";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchUser, fetchUserStoreFront } from "services/userService";
 import { DetailedItem, ItemComment, ItemImage } from "interfaces/Item";
-import { fetchItem, fetchItemImages } from "services/itemService";
+import { fetchItem, fetchItemImages, updateItem } from "services/itemService";
 import useAuthSession from "hooks/useAuthSession";
 import { User } from "interfaces/User";
 import CommentThread from "components/CommentThread";
@@ -18,6 +18,7 @@ import CenteredCircularProgress from "components/CenteredCircularProgress";
 import { fetchReviewAverage, ReviewAverage } from "services/reviewService";
 import { fetchComments, postComment } from "services/commentService";
 import { CommentDetail } from "interfaces/Comment";
+import ItemSellerOptionBox from "components/items/ItemSellerOptionBox";
 
 export default function ItemDetails() {
     const { id } = useParams();
@@ -60,12 +61,15 @@ export default function ItemDetails() {
                 setItem(data);
             })
         
-        try {
-            const response = fetchItemImages(id).then((data) => {
-                setImages(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des images :", error);
+        fetchItemImages(id).then((data) => {
+            setImages(data);
+        });
+    }, [id]);
+
+    useEffect(() => { 
+        if (!images || images.length == 0) {
+            setImages([]);
+            setImagesReady(true);
         }
         
         loadComments();
@@ -80,18 +84,14 @@ export default function ItemDetails() {
         }
  
         const resolveImageUrls = async () => {
-            try {
-                const resolved = await Promise.all(
-                    images.map(async (image) => {
-                        const url = await fetchImage(image.guid);
-                        return { ...image, url: url! };
-                    })
-                );
-                setImages(resolved);
-                setImagesReady(true);
-            } catch (error) {
-                console.error("Erreur lors de la récupération des images :", error);
-            }
+            const resolved = await Promise.all(
+                images.map(async (image) => {
+                    const url = await fetchImage(image.guid);
+                    return { ...image, url: url! };
+                })
+            );
+            setImages(resolved);
+            setImagesReady(true);
         };
  
         resolveImageUrls();
@@ -100,13 +100,9 @@ export default function ItemDetails() {
     useEffect(() => {
         if (!item?.sellerCip) return;
         
-        try {
-            fetchUserStoreFront(item.sellerCip).then((data) => {
-                setSeller(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération du vendeur :", error);
-        }
+        fetchUserStoreFront(item.sellerCip).then((data) => {
+            setSeller(data);
+        });
 
         fetchReviewAverage(item?.sellerCip).then((data) => setReviewAverage(data)).catch(console.error);
     }, [item?.sellerCip]);
@@ -114,14 +110,17 @@ export default function ItemDetails() {
     useEffect(() => {
         if (!isAuthenticated || !token) return;
         
-        try {
-            fetchUser({ token, logout }).then((data) => {
-                setUser(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération de l'utilisateur :", error);
-        }
+        fetchUser({ token, logout }).then((data) => {
+            setUser(data);
+        });
     }, [isAuthenticated]);
+
+    var changeItemQuantity = (value: number) => {
+        if (item) {
+            setItem({ ...item, quantity: item.quantity - value });
+            updateItem(item.itemId, token!, { quantity: item.quantity - value });
+        }
+    }
 
     return ( seller == null || !imagesReady ?
         (<CenteredCircularProgress />) :
@@ -158,7 +157,14 @@ export default function ItemDetails() {
                     <Box sx={{ width: "100%", flexShrink: 0, gap: 2, display: "flex", flexDirection: "column" }}>
                         <ItemMainInfoBox item={item} />
                         {isAuthenticated && <Card sx={{ p: 2.5, borderRadius: 2 }}>
-                            <Button variant="contained" sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} fullWidth onClick={handleClick}>Contacter le vendeur</Button>
+                            {item && (user?.cip == item?.sellerCip ? 
+                            (<ItemSellerOptionBox item={item} changeItemQuantity={changeItemQuantity} />) :
+                            (<Button 
+                                variant="contained" 
+                                sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} 
+                                fullWidth 
+                                onClick={handleClick}>Contacter le vendeur</Button>)
+                            )}
                         </Card>}                        
                         <SellerBox seller={seller} reviewAverage={reviewAverage} handleOpenStorefront={handleOpenStorefront} />
                         <ItemAditionnalInfoBox item={item} />
