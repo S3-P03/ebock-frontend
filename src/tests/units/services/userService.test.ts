@@ -75,6 +75,7 @@ describe("fetchUserStoreFront", () => {
     expect(result).toEqual({
       ...rawSeller,
       createdAt: new Date(rawSeller.createdAt),
+      profilePictureUrl: null,
     });
 
     expect(result?.createdAt).toBeInstanceOf(Date);

@@ -26,7 +26,7 @@ export default function SingleMessage({ message, isSent }: { message: Message; i
     return (
         <Box>
             <Box sx={{ display: "flex", flexDirection: (isSent ? "row-reverse" : "row"), justifyContent: "flex-start", gap: 1.5, alignItems: "flex-start" }}>
-                <DefaultAvatar width={36} height={36} primaryColor={isSent} initials={initials}/>
+                <DefaultAvatar width={36} height={36} primaryColor={isSent} initials={initials} fullName={message.senderFirstName + " " + message.senderLastName} profilePictureUrl={null} />
                 <Box sx={{ flexGrow: 1, display:"flex", flexDirection: (isSent ? "row-reverse" : "row") }}>
                 {isSent ? (
                     <SentStyle>

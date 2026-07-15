@@ -1,17 +1,23 @@
 import {
-  Avatar, Box, Button, Card,
+  Box, Card,
   Divider, Rating,
 } from "@mui/material";
 import { SellerUser } from "interfaces/Seller";
 import { ReviewAverage } from "services/reviewService";
+import DefaultAvatar from "./DefaultAvatar";
 
 export default function ProfileBox ({seller, reviewAverage, itemsOnSaleCount}: { seller: SellerUser, reviewAverage: ReviewAverage | null, itemsOnSaleCount: number | null }) {
   return (
     <Card sx={{ p: 2.5, borderRadius: 2 }}>
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, mb: 2 }}>
-        <Avatar sx={{ width: 64, height: 64, bgcolor: "primary.main", fontSize: 22, fontWeight: 700 }}>
-          {seller.firstName.charAt(0) + seller.lastName.charAt(0)}
-        </Avatar>
+        <DefaultAvatar
+          width={64}
+          height={64}
+          primaryColor={false}
+          initials={seller.firstName[0] + seller.lastName[0]}
+          fullName={seller.firstName + " " + seller.lastName}
+          profilePictureUrl={seller.profilePictureUrl}
+        />
         <Box sx={{ fontWeight: 700, fontSize: 16 }}>
           {seller.firstName} {seller.lastName}
         </Box>

@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Container,
@@ -15,6 +14,7 @@ import { MouseEvent, useState } from "react";
 import { User } from "interfaces/User";
 import useAuthSession from "hooks/useAuthSession";
 import { useNavigate } from "react-router-dom";
+import DefaultAvatar from "./DefaultAvatar";
 
 export default function MenuBar({ user }: { user: User | null }) {
   const [anchorUserMenu, setAnchorUserMenu] = useState<null | HTMLElement>(null);
@@ -83,9 +83,13 @@ export default function MenuBar({ user }: { user: User | null }) {
                 <Box sx={{ flexGrow: 0 }}>
                   <Tooltip title="Ouvrir options">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar
-                        alt={user?.firstName + " " + user?.lastName}
-                        src="/static/images/avatar/2.jpg"
+                      <DefaultAvatar
+                        width={42}
+                        height={42}
+                        primaryColor={false}
+                        initials={user?.firstName[0] + user?.lastName[0]}
+                        fullName={user?.firstName + " " + user?.lastName}
+                        profilePictureUrl={user?.profilePictureUrl}
                       />
                     </IconButton>
                   </Tooltip>

@@ -10,6 +10,8 @@ interface FetchOptions {
 
 const SERVICE_BASE_URL = "/user";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 export async function fetchUser({ token, logout }: FetchOptions): Promise<User | null> {
   
   try {
@@ -23,7 +25,11 @@ export async function fetchUser({ token, logout }: FetchOptions): Promise<User |
       logout();
       return null;
     }
-    return (await response.data) as User;
+
+    let user = (await response.data) as User;
+    user.profilePictureUrl = response.data.profilePictureGuid ? `${API_BASE_URL}/image/${response.data.profilePictureGuid}` : null;
+
+    return user;
   } catch (error: any) {
     if (error.status === 401) {
       emitApiError("Vous devez être connecté pour récupérer les informations de l'utilisateur", error.status);
@@ -44,6 +50,7 @@ export async function fetchUserStoreFront(cip: string | undefined): Promise<Sell
     const seller: SellerUser = {
       ...rawSeller,
       createdAt: new Date(rawSeller.createdAt),
+      profilePictureUrl: response.data.profilePictureGuid ? `${API_BASE_URL}/image/${response.data.profilePictureGuid}` : null,
     };
     return seller;
   } catch (error: any) {
