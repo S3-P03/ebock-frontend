@@ -14,12 +14,14 @@ import ConfirmCard from "components/admin/ConfirmCard";
 import { DetailedItem } from "interfaces/Item";
 import { fetchItem } from "services/itemService";
 import useAuthSession from "hooks/useAuthSession";
+import { banItem } from "services/itemAdminService";
 
 export default function AdminBanItem() {
     const [itemId, setItemId] = useState("");
     const [open, setOpen] = useState(false);
     const [item, setItem] = useState<DetailedItem | null>(null);
     const [loading, setLoading] = useState(false);
+    const { token, logout } = useAuthSession();
 
     const handleOpenBanPopup = async () => {
         const response = await fetchItem(itemId);
@@ -32,9 +34,19 @@ export default function AdminBanItem() {
     };
 
     const handleConfirmBan = async () => {
-        console.log(`Banning item with ID: ${itemId}`);
-        setOpen(false);
-        setItemId("");
+        if (!itemId.trim()) return;
+        
+        setLoading(true);
+        try {
+            const success = await banItem({ token, logout }, itemId);
+            if (success) {
+                setOpen(false);
+                setItemId("");
+                setItem(null);
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
