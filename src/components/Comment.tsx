@@ -20,7 +20,13 @@ const CommentStyle = styled('div')(({ theme }) => ({
     borderRadius: 12,
 }));
 
-export default function Comment({ comment, isReply }: { comment: ItemComment; isReply: boolean }) {
+interface CommentProps {
+    comment: ItemComment;
+    isReply: boolean;
+    profilePictureUrl: string | null;
+}
+
+export default function Comment({ comment, isReply, profilePictureUrl }: CommentProps) {
     const initials = `${comment.firstName[0]}${comment.lastName[0]}`.toUpperCase();
     const formattedDate = new Date(comment.timestamp).toLocaleDateString("fr-CA", {
         year: "numeric", month: "long", day: "numeric"
@@ -28,7 +34,7 @@ export default function Comment({ comment, isReply }: { comment: ItemComment; is
     return (
         <Box>
             <Box sx={{ display: "flex", gap: 1.5, alignItems: "flex-start" }}>
-                <DefaultAvatar width={36} height={36} initials={initials} primaryColor={isReply} />
+                <DefaultAvatar width={36} height={36} initials={initials} fullName={comment.firstName + " " + comment.lastName} primaryColor={isReply} profilePictureUrl={profilePictureUrl} />
                 <Box sx={{ flexGrow: 1 }}>
                     {isReply ? (
                         <ReplyCommentStyle>

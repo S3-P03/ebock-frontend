@@ -1,4 +1,4 @@
-import { Avatar, Box, Divider, List, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
+import { Box, Divider, List, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
 import { Room } from "interfaces/Message";
 import { User } from "interfaces/User";
 import DefaultAvatar from "./DefaultAvatar";
@@ -28,7 +28,7 @@ export default function RoomList({rooms, user, parentCallBack}: {rooms : Room[],
                         onClick={(event) => handleListItemClick(event, rooms.findIndex((compare) => room === compare))}
                         >
                             <ListItemAvatar>
-                                <DefaultAvatar width={36} height={36} primaryColor={false} initials={otherUserInitials} />
+                                <DefaultAvatar width={36} height={36} primaryColor={false} initials={otherUserInitials} fullName={otherUser.firstName + " " + otherUser.lastName} profilePictureUrl={null} />
                             </ListItemAvatar>
                             <ListItemText primary={listItemPrimary} sx={{}}/>
                         </ListItemButton>

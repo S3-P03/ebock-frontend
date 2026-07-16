@@ -22,13 +22,21 @@ const mockUser = {
   firstName: "Jeef",
   lastName: "Larouche",
   email: "larj4236@usherbrooke.ca",
-  profilePictureUrl: "",
+  profilePictureUrl: "https://example.com/profile.jpg",
 };
 
 const renderMenuBar = (user = mockUser) => {
   return render(
     <BrowserRouter>
       <MenuBar user={user} />
+    </BrowserRouter>
+  );
+};
+
+const renderNullUserMenuBar = () => {
+  return render(
+    <BrowserRouter>
+      <MenuBar user={null} />
     </BrowserRouter>
   );
 };
@@ -47,7 +55,7 @@ describe('MenuBar Component', () => {
       expect(screen.getByText('EBOCK')).toBeInTheDocument();
     });
 
-    test('avatar alt -> user full name', () => {
+    test('avatar alt is user full name', () => {
       setupMockAuth();
       renderMenuBar(mockUser);
       
@@ -55,12 +63,12 @@ describe('MenuBar Component', () => {
       expect(avatar).toHaveAttribute('alt', 'Jeef Larouche');
     });
 
-    test('undefined user -> handled', () => {
+    test('undefined user is handled', () => {
       setupMockAuth();
-      renderMenuBar({ cip: '', firstName: '', lastName: '', email: '', profilePictureUrl: '' });
+      renderNullUserMenuBar();
       
-      const avatar = screen.getByRole('img', { hidden: true });
-      expect(avatar).toHaveAttribute('alt', ' ');
+      const avatar = screen.queryByRole('img', { hidden: true });
+      expect(avatar).not.toBeInTheDocument();
     });
   });
 

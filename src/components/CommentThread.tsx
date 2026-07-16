@@ -65,7 +65,7 @@ export default function CommentThread({ comments, onCommentSubmitted, isSeller, 
                 });
                 return (
                     <Box sx={{ mt: 5 }} key={comment.idComment}>
-                        <Comment comment={comment} isReply={false} />
+                        <Comment comment={comment} isReply={false} profilePictureUrl={null} />
                         {isSeller && (
                             <Button
                                 size="small"
@@ -77,7 +77,7 @@ export default function CommentThread({ comments, onCommentSubmitted, isSeller, 
                         )}
                         {replies.map((reply) => (
                             <Box key={reply.idComment} sx={{ ml: 5, mt: 1 }}>
-                                <Comment comment={reply} isReply={true} />
+                                <Comment comment={reply} isReply={true} profilePictureUrl={null} />
                             </Box>
                         ))}
                         <Divider sx={{ mt: 1.5 }} />

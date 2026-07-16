@@ -9,6 +9,7 @@ import {
 import { SellerUser } from "interfaces/Seller";
 import { ReviewAverage } from "services/reviewService";
 import { monthNames } from "utils/months";
+import DefaultAvatar from "./DefaultAvatar";
 
 
 
@@ -23,17 +24,14 @@ export default function SellerBox({ seller, reviewAverage, handleOpenStorefront 
       </Typography>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <IconButton onClick={handleOpenStorefront} sx={{ p: 0 }}>
-          <Avatar
-            sx={{
-              width: 48,
-              height: 48,
-              bgcolor: "primary.main",
-              fontSize: 22,
-              fontWeight: 700,
-            }}
-          >
-            {seller.firstName.charAt(0) + seller.lastName.charAt(0)}
-          </Avatar>
+          <DefaultAvatar
+            width={48}
+            height={48}
+            primaryColor={false}
+            initials={seller.firstName[0] + seller.lastName[0]}
+            fullName={seller.firstName + " " + seller.lastName}
+            profilePictureUrl={seller.profilePictureUrl}
+          />
         </IconButton>
         <Box
           sx={{

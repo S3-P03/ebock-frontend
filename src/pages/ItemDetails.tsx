@@ -33,14 +33,9 @@ export default function ItemDetails() {
     let navigate = useNavigate();
 
     const handleClick = () => {        
-        try {
-            createRoom({itemId: Number(id!), buyerCip: user!.cip, token}).then((data) => {
-                navigate(`/message/${data!.roomId}`)
-            });
-        } catch(error) {
-            console.error("Erreur lors de l'envoi du message : ", error);
-            return;
-        }
+        createRoom({itemId: Number(id!), buyerCip: user!.cip, token}).then((data) => {
+            navigate(`/message/${data!.roomId}`)
+        });
     };
 
     const handleOpenStorefront = () => {
@@ -48,7 +43,7 @@ export default function ItemDetails() {
     }
 
     const loadComments = () => {
-    fetchComments(id).then((data) => setComments(data ?? []));
+        fetchComments(id).then((data) => setComments(data ?? []));
     };
 
     useEffect(() => {

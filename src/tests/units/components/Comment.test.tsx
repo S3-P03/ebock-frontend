@@ -11,8 +11,8 @@ const mockComment: ItemComment = {
     idParentComment: null,
 };
 
-const renderComment = (comment: ItemComment = mockComment, isReply = false) => {
-  return render(<Comment comment={comment} isReply={isReply} />);
+const renderComment = (comment: ItemComment = mockComment, isReply = false, profilePictureUrl: string | null = null) => {
+  return render(<Comment comment={comment} isReply={isReply} profilePictureUrl={profilePictureUrl} />);
 };
 
 describe("Comment Component", () => {
