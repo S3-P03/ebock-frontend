@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import CommentThread from "components/CommentThread";
-import { ItemComment } from "interfaces/Item";
+import { CommentDetail } from "interfaces/Comment";
  
-const mockComments: ItemComment[] = [
+const mockComments: CommentDetail[] = [
     {
         idComment: 1,
         content: "Le manuel est-il en bon état?",
@@ -10,6 +10,7 @@ const mockComments: ItemComment[] = [
         lastName: "Larouche",
         timestamp: "2026-07-09 13:17:37.959103",
         idParentComment: null,
+        profilePictureUrl: null
     },
     {
         idComment: 2,
@@ -18,6 +19,7 @@ const mockComments: ItemComment[] = [
         lastName: "Pelletier",
         timestamp: "2026-07-09 13:17:37.959103",
         idParentComment: 1,
+        profilePictureUrl: null
     },
     {
         idComment: 3,
@@ -26,12 +28,13 @@ const mockComments: ItemComment[] = [
         lastName: "Larouche",
         timestamp: "2026-07-09 13:17:37.959103",
         idParentComment: null,
+        profilePictureUrl: null
     },
 ];
 
 const mockOnCommentSubmitted = jest.fn().mockResolvedValue(200);
 
-const renderThread = (comments: ItemComment[] = mockComments, isSeller = true) => {
+const renderThread = (comments: CommentDetail[] = mockComments, isSeller = true) => {
     return render(<CommentThread comments={comments} onCommentSubmitted={mockOnCommentSubmitted} isSeller={isSeller} isAuthenticated={true} />);
 };
  

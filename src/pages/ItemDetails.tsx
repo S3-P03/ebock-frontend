@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { SellerUser } from "interfaces/Seller";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchUser, fetchUserStoreFront } from "services/userService";
-import { DetailedItem, ItemComment, ItemImage } from "interfaces/Item";
+import { DetailedItem, ItemImage } from "interfaces/Item";
 import { fetchItem, fetchItemImages, updateItem } from "services/itemService";
 import useAuthSession from "hooks/useAuthSession";
 import { User } from "interfaces/User";

@@ -19,6 +19,7 @@ describe("fetchComments", () => {
         idParentComment: null,
         idComment: 1,
         timestamp: "2026-07-09 13:17:37.959103",
+        profilePictureUrl: null
       },
     ];
     mockedApiClient.get.mockResolvedValue({ data: mockData });

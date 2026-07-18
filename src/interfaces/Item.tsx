@@ -20,15 +20,6 @@ export interface ItemImage {
     displayOrder: number;
 }
 
-export interface ItemComment {
-    idComment: number;
-    content: string;
-    idParentComment: number | null;
-    firstName: string;
-    lastName: string;
-    timestamp: string;
-}
-
 export interface ItemPayload {
     name: string;
     description: string;

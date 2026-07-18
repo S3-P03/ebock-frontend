@@ -1,4 +1,4 @@
-import apiClient, { emitApiError } from "./apiClient";
+import apiClient, { emitApiError, API_BASE_URL } from "./apiClient";
 import { CommentDetail } from "interfaces/Comment";
 
 const SERVICE_BASE_URL = "/comment";
@@ -6,7 +6,11 @@ const SERVICE_BASE_URL = "/comment";
 export async function fetchComments(id: string | undefined): Promise<CommentDetail[] | null> {
     try {
         const response = await apiClient.get(`/item/${id}/comment`);
-        return response.data as CommentDetail[];
+        const comments = response.data as Array<CommentDetail & { profilePictureGuid?: string }>;
+        return comments.map(comment => ({
+            ...comment,
+            profilePictureUrl: comment.profilePictureGuid ? `${API_BASE_URL}/image/${comment.profilePictureGuid}` : null,
+        }));
     } catch (error: any) {
         emitApiError(error.message, error.response?.status ?? 500);
         return null;

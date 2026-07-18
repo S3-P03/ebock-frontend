@@ -12,6 +12,8 @@ export const emitApiError = (error: string, status: number) => {
   window.dispatchEvent(new CustomEvent(API_ERROR_EVENT, { detail: { error, status } }));
 };
 
+export { API_BASE_URL };
+
 export default {
   get: axiosInstance.get,
   post: axiosInstance.post,
