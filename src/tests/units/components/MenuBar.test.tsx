@@ -4,6 +4,13 @@ import { BrowserRouter } from "react-router-dom";
 import * as authModule from "hooks/useAuthSession";
 
 jest.mock('hooks/useAuthSession');
+jest.mock('jwt-decode', () => ({
+  jwtDecode: jest.fn(() => ({
+    realm_access: {
+      roles: ['user', 'admin'],
+    },
+  })),
+}));
 
 const setupMockAuth = (logout = jest.fn()) => {
   const mockUseAuthSession = authModule.default as jest.Mock;
@@ -142,6 +149,25 @@ describe('MenuBar Component', () => {
 
       fireEvent.click(profileButton);
       expect(profileButton).toBeInTheDocument();
+    });
+  });
+
+  // Test Group 5: Admin
+  describe('Admin', () => {
+    test('admin button -> clickable', () => {
+      setupMockAuth();
+      renderMenuBar();
+
+      // Open menu
+      const avatarButton = screen.getAllByRole('button')[1];
+      fireEvent.click(avatarButton);
+
+      const adminButton = screen.getByText('Admin - Tableau de bord');
+      expect(adminButton).toBeInTheDocument();
+      expect(adminButton.closest('li')).toHaveClass('MuiMenuItem-root');
+
+      fireEvent.click(adminButton);
+      expect(adminButton).toBeInTheDocument();
     });
   });
 });
