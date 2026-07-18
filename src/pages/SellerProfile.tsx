@@ -57,7 +57,7 @@ export default function SellerProfile() {
 
                 <Box sx={{ flexGrow: 1 }}>
                     <ItemDisplayBox items={items ?? []} />
-                    {isAuthenticated && cip !== user!.cip && <AddReviewForm onReviewSubmitted={async (content, rating) => {
+                    {isAuthenticated && cip !== user?.cip && <AddReviewForm onReviewSubmitted={async (content, rating) => {
                         const status = await postReview(cip, content, rating, token);
                         if (status === 200) loadReviews();
                         return status;
