@@ -2,9 +2,11 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import MenuBar from "components/MenuBar";
 import { BrowserRouter } from "react-router-dom";
 import * as authModule from "hooks/useAuthSession";
+import { jwtDecode } from "jwt-decode";
 
 jest.mock('hooks/useAuthSession');
 jest.mock('jwt-decode', () => ({
+  __esModule: true,
   jwtDecode: jest.fn(() => ({
     realm_access: {
       roles: ['user', 'admin'],
@@ -14,6 +16,14 @@ jest.mock('jwt-decode', () => ({
 
 const setupMockAuth = (logout = jest.fn()) => {
   const mockUseAuthSession = authModule.default as jest.Mock;
+  const mockedJwtDecode = jwtDecode as jest.MockedFunction<typeof jwtDecode>;
+
+  mockedJwtDecode.mockReturnValue({
+    realm_access: {
+      roles: ['user', 'admin'],
+    },
+  } as any);
+
   mockUseAuthSession.mockReturnValue({
     isAuthenticated: true,
     isLoading: false,
