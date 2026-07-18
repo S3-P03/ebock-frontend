@@ -38,3 +38,8 @@ export interface MessagePayload {
     content: string;
     senderCip: string;
 }
+
+export interface WsTokenResponse {
+  token: string;
+  expiresInSeconds: number;
+}
