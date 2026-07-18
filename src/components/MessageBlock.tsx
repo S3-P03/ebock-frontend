@@ -9,7 +9,7 @@ export default function MessageBlock({ messages, cip }: { messages: Message[], c
     let sameSender = false;
 
     return (
-        <Box sx={{display: "flex", flexDirection: "column"}}>
+        <Box sx={{display: "flex", flexDirection: "column", pl: 2, pr: 2, pt: 1, pb: 1, gap: 1}}>
             {messages.map((message, idx, arr) => {
                 next = arr[idx + 1] ?? null;
                 const isLast = idx === arr.length - 1;

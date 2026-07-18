@@ -96,11 +96,11 @@ export default function MessageRoom() {
     return ( room == null || user == null ? 
         (<CenteredCircularProgress />) :
         (<Box sx={{ mx: "auto" }}>
-            <Box sx={{ display: "flex", gap: 2, p: 2, flexDirection: "column", alignItems: "flex-start" }}>
+            <Box sx={{ display: "flex", p: 2, flexDirection: "column", alignItems: "flex-start" }}>
                 <RoomHeader room={room!} connectedCip={user!.cip}/>
-                    <Card sx={{ p: 2.5, borderRadius: 2, width: "100%" }}>
+                    <Card sx={{ borderRadius: 2, width: "100%" }}>
                         <MessageBlock messages={messages!} cip={user!.cip} />
-                        <Box sx={{ display: "flex", gap: 2 }}>
+                        <Box sx={{ display: "flex", gap: 2, p: 2 }}>
                             <TextField fullWidth placeholder="Répondre..." variant="outlined" 
                                     value={fieldValue}
                                     onChange={(e) => setFieldValue(e.target.value)}
