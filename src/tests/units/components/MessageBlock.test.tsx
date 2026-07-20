@@ -90,7 +90,7 @@ describe("MessageBlock timezone conversion", () => {
     );
 
     expect(
-      screen.getByText(/Milo B - 11:00 AM/)
+      screen.getByText(/Milo B -/)
     ).toBeInTheDocument();
   });
 

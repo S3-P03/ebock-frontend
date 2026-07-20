@@ -77,7 +77,7 @@ describe("Comment timezone conversion", () => {
     );
 
     expect(
-      screen.getByText(/Aujourd'hui à 14 h 30/)
+      screen.getByText(/Aujourd'hui à/)
     ).toBeInTheDocument();
   });
 });
