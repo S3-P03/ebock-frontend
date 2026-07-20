@@ -30,7 +30,7 @@ const mockMessages: Message[] = [
 ];
  
 const renderBlock = (messages: Message[] = mockMessages) => {
-  return render(<MessageBlock messages={messages} cip={"boum7113"} />);
+  return render(<MessageBlock messages={messages} cip={"boum7113"} profilePictureUrl={null} />);
 };
  
 describe("MessageBlock Component", () => {

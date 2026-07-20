@@ -20,13 +20,19 @@ const ReceivedStyle = styled('div')(({ theme }) => ({
     borderRadius: 12,
 }));
 
-export default function SingleMessage({ message, isSent }: { message: Message; isSent: boolean }) {
+interface SingleMessageProps {
+    message: Message;
+    isSent: boolean;
+    profilePictureUrl: string | null;
+}
+
+export default function SingleMessage({ message, isSent, profilePictureUrl }: SingleMessageProps) {
     const initials = message.senderCip ? `${message.senderCip[3] ?? ""}${message.senderCip[0] ?? ""}`.toUpperCase() : "?";
 
     return (
         <Box>
             <Box sx={{ display: "flex", flexDirection: (isSent ? "row-reverse" : "row"), justifyContent: "flex-start", gap: 1.5, alignItems: "flex-start" }}>
-                <DefaultAvatar width={36} height={36} primaryColor={isSent} initials={initials} fullName={message.senderFirstName + " " + message.senderLastName} profilePictureUrl={null} />
+                <DefaultAvatar width={36} height={36} primaryColor={isSent} initials={initials} fullName={message.senderFirstName + " " + message.senderLastName} profilePictureUrl={profilePictureUrl} />
                 <Box sx={{ flexGrow: 1, display:"flex", flexDirection: (isSent ? "row-reverse" : "row") }}>
                 {isSent ? (
                     <SentStyle>

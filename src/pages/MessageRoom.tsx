@@ -87,7 +87,7 @@ export default function MessageRoom() {
             <Box sx={{ display: "flex", p: 2, flexDirection: "column", alignItems: "flex-start" }}>
                 <RoomHeader room={room!} connectedCip={user!.cip}/>
                     <Card sx={{ borderRadius: 2, width: "100%" }}>
-                        <MessageBlock messages={messages!} cip={user!.cip} />
+                        <MessageBlock messages={messages!} cip={user!.cip} profilePictureUrl={room!.buyerCip === user!.cip ? room!.buyerProfilePicUrl : room!.sellerProfilePicUrl} />
                         <Box sx={{ display: "flex", gap: 2, p: 2 }}>
                             <TextField fullWidth placeholder="Répondre..." variant="outlined" 
                                     value={fieldValue}

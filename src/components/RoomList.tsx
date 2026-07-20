@@ -18,7 +18,7 @@ export default function RoomList({rooms, user, parentCallBack}: {rooms : Room[],
     return(
         <List component="nav" sx={{width: "100%"}}>
             {rooms.map((room, idx) => {
-            const otherUser = (room.buyerCip !== user.cip ? {cip : room.buyerCip, firstName : room.buyerFirstName, lastName : room.buyerLastName} : {cip : room.sellerCip, firstName : room.sellerFirstName, lastName : room.sellerLastName});
+            const otherUser = (room.buyerCip !== user.cip ? {cip : room.buyerCip, firstName : room.buyerFirstName, lastName : room.buyerLastName, profilePictureUrl : room.buyerProfilePicUrl} : {cip : room.sellerCip, firstName : room.sellerFirstName, lastName : room.sellerLastName, profilePictureUrl : room.sellerProfilePicUrl});
             const otherUserInitials = `${otherUser.firstName[0]}${otherUser.lastName[0]}`.toUpperCase();
             const listItemPrimary = room.itemName + " - " + otherUser.firstName + " " + otherUser.lastName;
                 return (
@@ -28,7 +28,7 @@ export default function RoomList({rooms, user, parentCallBack}: {rooms : Room[],
                         onClick={(event) => handleListItemClick(event, rooms.findIndex((compare) => room === compare))}
                         >
                             <ListItemAvatar>
-                                <DefaultAvatar width={36} height={36} primaryColor={false} initials={otherUserInitials} fullName={otherUser.firstName + " " + otherUser.lastName} profilePictureUrl={null} />
+                                <DefaultAvatar width={36} height={36} primaryColor={false} initials={otherUserInitials} fullName={otherUser.firstName + " " + otherUser.lastName} profilePictureUrl={otherUser.profilePictureUrl} />
                             </ListItemAvatar>
                             <ListItemText primary={listItemPrimary} sx={{}}/>
                         </ListItemButton>

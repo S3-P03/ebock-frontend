@@ -12,7 +12,7 @@ const sentMessage: Message = {
 };
 
 const renderMessage = (message: Message = sentMessage, isSent = true) => {
-  return render(<SingleMessage message={message} isSent={isSent} />);
+  return render(<SingleMessage message={message} isSent={isSent} profilePictureUrl={null} />);
 };
 
 describe("Message Component", () => {

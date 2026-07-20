@@ -23,10 +23,11 @@ export interface Room {
     sellerCip: string;
     sellerFirstName: string;
     sellerLastName: string;
+    sellerProfilePicUrl: string;
     buyerCip: string;
     buyerFirstName: string;
     buyerLastName: string;
-
+    buyerProfilePicUrl: string;
 }
 
 export interface RoomPayload {
