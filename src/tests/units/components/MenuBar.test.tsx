@@ -14,13 +14,13 @@ jest.mock('jwt-decode', () => ({
   })),
 }));
 
-const setupMockAuth = (logout = jest.fn()) => {
+const setupMockAuth = (logout = jest.fn(), admin = true) => {
   const mockUseAuthSession = authModule.default as jest.Mock;
   const mockedJwtDecode = jwtDecode as jest.MockedFunction<typeof jwtDecode>;
 
   mockedJwtDecode.mockReturnValue({
     realm_access: {
-      roles: ['user', 'admin'],
+      roles: ['user', admin ? 'admin' : null].filter(Boolean) as string[],
     },
   } as any);
 
@@ -97,7 +97,8 @@ describe('MenuBar Component', () => {
 
       // Initially closed
       expect(screen.queryByText('Profil')).not.toBeVisible();
-      expect(screen.getByText('Mon étalage')).not.toBeVisible();
+      expect(screen.queryByText('Mon étalage')).not.toBeVisible();
+      expect(screen.queryByText('Admin - Tableau de bord')).not.toBeVisible();
       expect(screen.queryByText('Déconnexion')).not.toBeVisible();
 
       // Click avatar to open
@@ -107,6 +108,7 @@ describe('MenuBar Component', () => {
       // Now opened
       expect(screen.getByText('Profil')).toBeVisible();
       expect(screen.getByText('Mon étalage')).toBeVisible();
+      expect(screen.getByText('Admin - Tableau de bord')).toBeVisible();
       expect(screen.getByText('Déconnexion')).toBeVisible();
     });
   });
@@ -178,6 +180,17 @@ describe('MenuBar Component', () => {
 
       fireEvent.click(adminButton);
       expect(adminButton).toBeInTheDocument();
+    });
+
+    test('not admin -> no admin button displaying', () => {
+      setupMockAuth(undefined, false);
+      renderMenuBar();
+
+      // Open menu
+      const avatarButton = screen.getAllByRole('button')[1];
+      fireEvent.click(avatarButton);
+
+      expect(screen.queryByText('Admin - Tableau de bord')).not.toBeInTheDocument();
     });
   });
 });
