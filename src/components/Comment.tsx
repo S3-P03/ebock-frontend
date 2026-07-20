@@ -27,9 +27,22 @@ interface CommentProps {
 
 export default function Comment({ comment, isReply }: CommentProps) {
     const initials = `${comment.firstName[0]}${comment.lastName[0]}`.toUpperCase();
-    const formattedDate = new Date(comment.timestamp).toLocaleDateString("fr-CA", {
-        year: "numeric", month: "long", day: "numeric"
-    });
+    const timestamp = new Date(comment.timestamp);
+    const today = new Date();
+
+    const formattedDate = 
+        timestamp.toDateString() === today.toDateString()
+            ? `Aujourd'hui à ${timestamp.toLocaleTimeString("fr-CA", {
+                hour: "2-digit",
+                minute: "2-digit",
+            })}`
+            : timestamp.toLocaleString("fr-CA", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
     return (
         <Box>
             <Box sx={{ display: "flex", gap: 1.5, alignItems: "flex-start" }}>
