@@ -1,3 +1,4 @@
+process.env.TZ = "America/Toronto";
 import { render, screen } from "@testing-library/react";
 import MessageBlock from "components/MessageBlock";
 import { Message } from "interfaces/Message";
@@ -63,9 +64,6 @@ describe("MessageBlock Component", () => {
 });
 
 describe("MessageBlock timezone conversion", () => {
-  beforeAll(() => {
-    process.env.TZ = "America/Toronto";
-  });
 
   afterEach(() => {
     jest.useRealTimers();

@@ -1,3 +1,4 @@
+process.env.TZ = "America/Toronto";
 import { render, screen } from "@testing-library/react";
 import Comment from "components/Comment";
 import { CommentDetail } from "interfaces/Comment";
@@ -15,10 +16,6 @@ const mockComment: CommentDetail = {
 const renderComment = (comment: CommentDetail = mockComment, isReply = false) => {
   return render(<Comment comment={comment} isReply={isReply} />);
 };
-
-beforeAll(() => {
-  process.env.TZ = "America/Toronto";
-});
 
 describe("Comment Component", () => {
   describe("Rendering", () => {
