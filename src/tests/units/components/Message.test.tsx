@@ -15,6 +15,10 @@ const renderMessage = (message: Message = sentMessage, isSent = true) => {
   return render(<SingleMessage message={message} isSent={isSent} profilePictureUrl={null} />);
 };
 
+beforeAll(() => {
+  process.env.TZ = "America/Toronto";
+});
+
 describe("Message Component", () => {
   // Test Group 1: Rendering
   describe("Rendering", () => {
