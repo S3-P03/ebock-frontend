@@ -15,11 +15,15 @@ import { User } from "interfaces/User";
 import useAuthSession from "hooks/useAuthSession";
 import { useNavigate } from "react-router-dom";
 import DefaultAvatar from "./DefaultAvatar";
+import { jwtDecode } from "jwt-decode";
 
 export default function MenuBar({ user }: { user: User | null }) {
   const [anchorUserMenu, setAnchorUserMenu] = useState<null | HTMLElement>(null);
-  const {logout} = useAuthSession();
+  const {token, logout} = useAuthSession();
   let navigate = useNavigate();
+
+  const decodedToken: any = token ? jwtDecode(token) : null;
+  const isAdmin = decodedToken?.realm_access.roles.includes("admin") ?? false;
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorUserMenu(event.currentTarget);
@@ -36,6 +40,11 @@ export default function MenuBar({ user }: { user: User | null }) {
   const handleProfile = () => {
     setAnchorUserMenu(null);
     navigate("/profile");
+  }
+  
+  const handleAdmin = () => {
+    setAnchorUserMenu(null);
+    navigate("/admin");
   }
 
   const handleStorefront = () => {
@@ -112,6 +121,9 @@ export default function MenuBar({ user }: { user: User | null }) {
                     <MenuItem onClick={handleProfile}>Profil</MenuItem>
                     <MenuItem onClick={handleStorefront}>Mon étalage</MenuItem>
                     <MenuItem onClick={handleMessages}>Messages</MenuItem>
+                    {isAdmin && (
+                      <MenuItem onClick={handleAdmin}>Admin - Tableau de bord</MenuItem>
+                    )}
                     <MenuItem onClick={handleLogout}>Déconnexion</MenuItem>
                   </Menu>
                 </Box>
