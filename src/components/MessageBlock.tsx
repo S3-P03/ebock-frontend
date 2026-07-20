@@ -2,7 +2,14 @@ import { Box } from "@mui/material";
 import { Message } from "interfaces/Message";
 import SingleMessage from "./Message";
 
-export default function MessageBlock({ messages, cip }: { messages: Message[], cip: string }) {
+interface MessageBlockProps {
+    messages: Message[];
+    cip: string;
+    senderProfilePictureUrl: string | null;
+    receiverProfilePictureUrl: string | null;
+}
+
+export default function MessageBlock({ messages, cip, senderProfilePictureUrl, receiverProfilePictureUrl }: MessageBlockProps) {
     
     const now = new Date();
     let next = {} as Message;
@@ -16,7 +23,7 @@ export default function MessageBlock({ messages, cip }: { messages: Message[], c
                 sameSender = !isLast && next?.senderCip === message.senderCip;
                 return (
                     <Box key={idx} sx={{display: "flex", flexDirection: "column"}}>
-                        <SingleMessage message={message} isSent={message.senderCip==cip} />
+                        <SingleMessage message={message} isSent={message.senderCip==cip} profilePictureUrl={message.senderCip==cip ? senderProfilePictureUrl : receiverProfilePictureUrl} />
                         { !sameSender && 
                             <Box sx={{ display: "flex", mb: 4, justifyContent: (message.senderCip==cip ? "flex-end" : "flex-start") }}>
                                 <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${message.senderFirstName} ${message.senderLastName[0]} - ${now.getDate() !== message.sentAt?.getDate() ? (message.sentAt?.getDate() + "/" + String(message.sentAt?.getMonth()).padStart(2, "0")) : ""} ${message.sentAt?.getHours()}:${String(message.sentAt?.getMinutes()).padStart(2, "0")}`}</Box>

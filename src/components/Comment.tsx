@@ -1,5 +1,5 @@
 import { Box, styled } from "@mui/material";
-import { ItemComment } from "interfaces/Item";
+import { CommentDetail } from "interfaces/Comment";
 import DefaultAvatar from "./DefaultAvatar";
 
 const ReplyCommentStyle = styled('div')(({ theme }) => ({
@@ -21,12 +21,11 @@ const CommentStyle = styled('div')(({ theme }) => ({
 }));
 
 interface CommentProps {
-    comment: ItemComment;
+    comment: CommentDetail;
     isReply: boolean;
-    profilePictureUrl: string | null;
 }
 
-export default function Comment({ comment, isReply, profilePictureUrl }: CommentProps) {
+export default function Comment({ comment, isReply }: CommentProps) {
     const initials = `${comment.firstName[0]}${comment.lastName[0]}`.toUpperCase();
     const formattedDate = new Date(comment.timestamp).toLocaleDateString("fr-CA", {
         year: "numeric", month: "long", day: "numeric"
@@ -34,7 +33,7 @@ export default function Comment({ comment, isReply, profilePictureUrl }: Comment
     return (
         <Box>
             <Box sx={{ display: "flex", gap: 1.5, alignItems: "flex-start" }}>
-                <DefaultAvatar width={36} height={36} initials={initials} fullName={comment.firstName + " " + comment.lastName} primaryColor={isReply} profilePictureUrl={profilePictureUrl} />
+                <DefaultAvatar width={36} height={36} initials={initials} fullName={comment.firstName + " " + comment.lastName} primaryColor={isReply} profilePictureUrl={comment.profilePictureUrl} />
                 <Box sx={{ flexGrow: 1 }}>
                     {isReply ? (
                         <ReplyCommentStyle>

@@ -29,11 +29,7 @@ export default function MessageRoom() {
         const sanitized = DOMPurify.sanitize(fieldValue.trim());
         if (!sanitized  || containsMalicious(sanitized)) return;
         
-        try {
-            postMessage({content: sanitized, senderCip: user!.cip, roomId: id!, token});
-        } catch(error) {
-            console.error("Erreur lors de l'envoi du message : ", error);
-        }
+        postMessage({content: sanitized, senderCip: user!.cip, roomId: id!, token});
 
         setFieldValue("");
     };
@@ -61,36 +57,28 @@ export default function MessageRoom() {
             setRoom(data);
         })
         
-        try {
-            fetchMessages(id, token).then((data) => {
-                let formattedMessages = data?.map((obj) => {
-                    return {
-                        roomId: obj.roomId,
-                        content: obj.content,
-                        senderCip: obj.senderCip,
-                        senderFirstName: obj.senderFirstName,
-                        senderLastName: obj.senderLastName,
-                        sentAt: new Date(obj.sentAt)
-                    } as Message;
-                });
-
-                setMessages(formattedMessages!);
+        fetchMessages(id, token).then((data) => {
+            let formattedMessages = data?.map((obj) => {
+                return {
+                    roomId: obj.roomId,
+                    content: obj.content,
+                    senderCip: obj.senderCip,
+                    senderFirstName: obj.senderFirstName,
+                    senderLastName: obj.senderLastName,
+                    sentAt: new Date(obj.sentAt)
+                } as Message;
             });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des messages :", error);
-        }
+            
+            setMessages(formattedMessages!);
+        });
     }, [id]);
 
     useEffect(() => {
         if (!isAuthenticated || !token) return;
         
-        try {
-            fetchUser({ token, logout }).then((data) => {
-                setUser(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération de l'utilisateur :", error);
-        }
+        fetchUser({ token, logout }).then((data) => {
+            setUser(data);
+        });
     }, [isAuthenticated]);
 
     return ( room == null || user == null ? 
@@ -99,7 +87,12 @@ export default function MessageRoom() {
             <Box sx={{ display: "flex", p: 2, flexDirection: "column", alignItems: "flex-start" }}>
                 <RoomHeader room={room!} connectedCip={user!.cip}/>
                     <Card sx={{ borderRadius: 2, width: "100%" }}>
-                        <MessageBlock messages={messages!} cip={user!.cip} />
+                        <MessageBlock 
+                            messages={messages!} 
+                            cip={user!.cip} 
+                            senderProfilePictureUrl={room!.buyerCip === user!.cip ? room!.buyerProfilePicUrl : room!.sellerProfilePicUrl} 
+                            receiverProfilePictureUrl={room!.buyerCip === user!.cip ? room!.sellerProfilePicUrl : room!.buyerProfilePicUrl}
+                        />
                         <Box sx={{ display: "flex", gap: 2, p: 2 }}>
                             <TextField fullWidth placeholder="Répondre..." variant="outlined" 
                                     value={fieldValue}

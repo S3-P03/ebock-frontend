@@ -1,18 +1,19 @@
 import { render, screen } from "@testing-library/react";
 import Comment from "components/Comment";
-import { ItemComment } from "interfaces/Item";
+import { CommentDetail } from "interfaces/Comment";
 
-const mockComment: ItemComment = {
+const mockComment: CommentDetail = {
     idComment: 1,
     content: "Est-ce que le livre est toujours disponible?",
     firstName: "Milo",
     lastName: "Boucher",
     timestamp: "2026-07-09T13:17:37.959103",
     idParentComment: null,
+    profilePictureUrl: null
 };
 
-const renderComment = (comment: ItemComment = mockComment, isReply = false, profilePictureUrl: string | null = null) => {
-  return render(<Comment comment={comment} isReply={isReply} profilePictureUrl={profilePictureUrl} />);
+const renderComment = (comment: CommentDetail = mockComment, isReply = false) => {
+  return render(<Comment comment={comment} isReply={isReply} />);
 };
 
 describe("Comment Component", () => {

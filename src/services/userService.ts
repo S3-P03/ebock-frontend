@@ -1,7 +1,7 @@
 // services/userService.ts
 import { SellerUser, SellerUserRaw } from "interfaces/Seller";
 import { User, UserInformation, UserUpdatePayload } from "interfaces/User";
-import apiClient, { emitApiError } from "./apiClient";
+import apiClient, { emitApiError, API_BASE_URL } from "./apiClient";
 
 interface FetchOptions {
   token: string;
@@ -9,8 +9,6 @@ interface FetchOptions {
 }
 
 const SERVICE_BASE_URL = "/user";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 export async function fetchUser({ token, logout }: FetchOptions): Promise<User | null> {
   

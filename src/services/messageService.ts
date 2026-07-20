@@ -1,7 +1,15 @@
 import { Message, MessageRaw, Room } from "interfaces/Message";
-import apiClient, { emitApiError } from "./apiClient";
+import apiClient, { emitApiError, API_BASE_URL } from "./apiClient";
 
 const SERVICE_BASE_URL = "/message";
+
+function transformRoomProfilePics(room: any): Room {
+    return {
+        ...room,
+        sellerProfilePicUrl: room.sellerProfilePicGuid ? `${API_BASE_URL}/image/${room.sellerProfilePicGuid}` : room.sellerProfilePicUrl,
+        buyerProfilePicUrl: room.buyerProfilePicGuid ? `${API_BASE_URL}/image/${room.buyerProfilePicGuid}` : room.buyerProfilePicUrl,
+    };
+}
 
 export async function createRoom({itemId, buyerCip, token} : {itemId: number, buyerCip: string, token: string}) : Promise<Room | null> {
 
@@ -87,7 +95,7 @@ export async function fetchRoom(roomId: string | undefined, token: string): Prom
         },
     });
 
-    return (await response.data) as Room;
+    return transformRoomProfilePics(await response.data);
   } catch (error: any) {
     if(error.status === 401) {
       emitApiError("Vous devez être connecté pour récupérer les informations de la salle", error.status);
@@ -108,7 +116,8 @@ export async function fetchUserRooms(token: string): Promise<Room[] | null> {
             Authorization: `Bearer ${token}`,
         },
     });
-    return (await response.data) as Room[];
+    const rooms = await response.data as any[];
+    return rooms.map(transformRoomProfilePics);
   } catch (error: any) {
     if(error.status === 401) {
       emitApiError("Vous devez être connecté pour récupérer les salles", error.status);

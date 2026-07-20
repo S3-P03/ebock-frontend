@@ -5,4 +5,5 @@ export interface CommentDetail {
     idParentComment: number | null;
     idComment: number;
     timestamp: string;
+    profilePictureUrl: string | null;
 }

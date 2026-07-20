@@ -1,10 +1,10 @@
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
-import { ItemComment } from "interfaces/Item";
 import Comment from "./Comment";
 import { useState } from "react";
+import { CommentDetail } from "interfaces/Comment";
 
 interface CommentThreadProps {
-    comments: ItemComment[];
+    comments: CommentDetail[];
     onCommentSubmitted: (content: string, idParent: number | null) => Promise<number>;
     isSeller: boolean;
     isAuthenticated: boolean;
@@ -12,7 +12,7 @@ interface CommentThreadProps {
 
 export default function CommentThread({ comments, onCommentSubmitted, isSeller, isAuthenticated }: CommentThreadProps) {
     const [inputValue, setInputValue] = useState("");
-    const [replyingTo, setReplyingTo] = useState<ItemComment | null>(null);
+    const [replyingTo, setReplyingTo] = useState<CommentDetail | null>(null);
 
     const handleSend = async () => {
         if (!inputValue.trim()) return;
@@ -65,7 +65,7 @@ export default function CommentThread({ comments, onCommentSubmitted, isSeller, 
                 });
                 return (
                     <Box sx={{ mt: 5 }} key={comment.idComment}>
-                        <Comment comment={comment} isReply={false} profilePictureUrl={null} />
+                        <Comment comment={comment} isReply={false} />
                         {isSeller && (
                             <Button
                                 size="small"
@@ -77,7 +77,7 @@ export default function CommentThread({ comments, onCommentSubmitted, isSeller, 
                         )}
                         {replies.map((reply) => (
                             <Box key={reply.idComment} sx={{ ml: 5, mt: 1 }}>
-                                <Comment comment={reply} isReply={true} profilePictureUrl={null} />
+                                <Comment comment={reply} isReply={true} />
                             </Box>
                         ))}
                         <Divider sx={{ mt: 1.5 }} />

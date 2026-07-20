@@ -11,9 +11,11 @@ const mockRooms: Room[] = [
     sellerCip: "larj4236",
     sellerFirstName: "Jean-Félix",
     sellerLastName: "Larouche",
+    sellerProfilePicUrl: null,
     buyerCip: "boum7113",
     buyerFirstName: "Milo",
     buyerLastName: "Boucher",
+    buyerProfilePicUrl: null
   },
   {
     roomId: 2,
@@ -22,9 +24,11 @@ const mockRooms: Room[] = [
     sellerCip: "larj4236",
     sellerFirstName: "Jean-Félix",
     sellerLastName: "Larouche",
+    sellerProfilePicUrl: null,
     buyerCip: "boum7113",
     buyerFirstName: "Milo",
-    buyerLastName: "Boucher",  
+    buyerLastName: "Boucher",
+    buyerProfilePicUrl: null
   },
   {
     roomId: 3,
@@ -33,9 +37,11 @@ const mockRooms: Room[] = [
     sellerCip: "boum7113",
     sellerFirstName: "Milo",
     sellerLastName: "Boucher",
+    sellerProfilePicUrl: null,
     buyerCip: "larj4236",
     buyerFirstName: "Jean-Félix",
-    buyerLastName: "Larouche",  
+    buyerLastName: "Larouche",
+    buyerProfilePicUrl: null
   },
 ];
 
