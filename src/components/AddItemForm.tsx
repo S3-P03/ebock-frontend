@@ -212,7 +212,7 @@ export default function AddItemForm({
     <Box
       sx={{
         minHeight: "100vh",
-        bgcolor: "grey.100",
+        bgcolor: "action.hover",
         p: { xs: 2, sm: 4 },
         display: "flex",
         justifyContent: "center",

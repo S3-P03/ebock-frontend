@@ -11,7 +11,7 @@ interface DefaultAvatarProps {
 
 export default function DefaultAvatar({width, height, primaryColor, initials, fullName, profilePictureUrl} : DefaultAvatarProps) {
     return (                
-        <Avatar sx={{ width, height, color: (primaryColor ? "#00796b" : "#333"), backgroundColor: (primaryColor ? "#e1f5ee" : "#f5f5f0"), fontSize: 13 }} alt={fullName} src={profilePictureUrl || undefined}>
+        <Avatar sx={{ width, height, color: (primaryColor ? "primary.contrastText" : "text.primary"), backgroundColor: (primaryColor ? "primary.main" : "action.hover"), fontSize: 13 }} alt={fullName} src={profilePictureUrl || undefined}>
             {initials}
         </Avatar>
     );

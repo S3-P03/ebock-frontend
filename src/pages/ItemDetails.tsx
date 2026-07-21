@@ -128,7 +128,7 @@ export default function ItemDetails() {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            bgcolor: "grey.100",
+                            bgcolor: "action.hover",
                             fontSize: 48,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
@@ -142,7 +142,7 @@ export default function ItemDetails() {
                             isSeller={user?.cip === item?.sellerCip}
                             onCommentSubmitted={async (content, idParent) => {
                                 const status = await postComment(id, content, idParent, token);
-                                if (status === 200) loadComments();
+                                if (status === 201) loadComments();
                                 return status;
                             }}
                         />
@@ -156,7 +156,7 @@ export default function ItemDetails() {
                             (<ItemSellerOptionBox item={item} changeItemQuantity={changeItemQuantity} />) :
                             (<Button 
                                 variant="contained" 
-                                sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }} 
+                                sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "primary.main" }} 
                                 fullWidth 
                                 onClick={handleClick}>Contacter le vendeur</Button>)
                             )}

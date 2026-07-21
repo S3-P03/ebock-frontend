@@ -63,7 +63,7 @@ export default function ItemSellerOptionBox({ item, changeItemQuantity }: Props)
         <Button
           variant="contained"
           size="small"
-          sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "#1d9e75" }}
+          sx={{ width: "100%", borderRadius: 2, minHeight: 48, backgroundColor: "primary.main" }}
           onClick={() => removeAmountFromQuantity(1)}
         >
           Marquer comme vendu
@@ -91,7 +91,7 @@ export default function ItemSellerOptionBox({ item, changeItemQuantity }: Props)
             sx={{
               borderRadius: 2,
               minHeight: 48,
-              backgroundColor: "#1d9e75",
+              backgroundColor: "primary.main",
               whiteSpace: "nowrap",
               width: "100%",
               "&.Mui-disabled": {

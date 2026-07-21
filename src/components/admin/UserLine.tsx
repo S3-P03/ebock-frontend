@@ -17,7 +17,7 @@ export default function UserLine({ user, onToggleRequest }: { user: Users, onTog
             px: 2,
             py: 1.5,
             borderBottom: "1px solid",
-            borderColor: "grey.100",
+            borderColor: "divider",
             "&:last-of-type": { borderBottom: "none" },
             "&:hover": { bgcolor: "grey.50" },
         }}

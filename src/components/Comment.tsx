@@ -4,8 +4,8 @@ import DefaultAvatar from "./DefaultAvatar";
 
 const ReplyCommentStyle = styled('div')(({ theme }) => ({
   ...theme.typography.button,
-  backgroundColor: '#e1f5ee',
-  color: '#00796b',
+  backgroundColor: "primary.light",
+  color: "primary.dark",
   padding: theme.spacing(1),
   width: 'fit-content',
   borderRadius: 12,
@@ -13,8 +13,8 @@ const ReplyCommentStyle = styled('div')(({ theme }) => ({
 
 const CommentStyle = styled('div')(({ theme }) => ({
     ...theme.typography.button,
-    backgroundColor: '#f5f5f0',
-    color: '#333',
+    backgroundColor: theme.palette.action.hover,
+    color: theme.palette.text.primary,
     padding: theme.spacing(1),
     width: 'fit-content',
     borderRadius: 12,

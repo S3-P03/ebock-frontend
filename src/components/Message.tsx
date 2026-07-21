@@ -4,8 +4,8 @@ import DefaultAvatar from "./DefaultAvatar";
 
 const SentStyle = styled('div')(({ theme }) => ({
   ...theme.typography,
-  backgroundColor: '#e1f5ee',
-  color: '#00796b',
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
   padding: theme.spacing(1),
   width: 'fit-content',
   borderRadius: 12,
@@ -13,8 +13,8 @@ const SentStyle = styled('div')(({ theme }) => ({
 
 const ReceivedStyle = styled('div')(({ theme }) => ({
     ...theme.typography,
-    backgroundColor: '#f5f5f0',
-    color: '#333',
+    backgroundColor: theme.palette.action.hover,
+    color: theme.palette.text.primary,
     padding: theme.spacing(1),
     width: 'fit-content',
     borderRadius: 12,

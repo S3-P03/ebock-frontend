@@ -98,7 +98,7 @@ export default function MessageRoom() {
                                     value={fieldValue}
                                     onChange={(e) => setFieldValue(e.target.value)}
                                     onKeyDown={(e) => e.key === "Enter" && handleSend()} />
-                            <Button variant="contained" onClick={handleSend} sx={{ mt: 0.5, mb: 0.5, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }}>Envoyer</Button>
+                            <Button variant="contained" onClick={handleSend} sx={{ mt: 0.5, mb: 0.5, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }}>Envoyer</Button>
                         </Box>
                     </Card>
             </Box>

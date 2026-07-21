@@ -50,7 +50,7 @@ export default function CommentThread({ comments, onCommentSubmitted, isSeller, 
                         />
                         <Button
                             variant="contained"
-                            sx={{ mt: 0.5, mb: 0.5, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }}
+                            sx={{ mt: 0.5, mb: 0.5, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }}
                             onClick={handleSend}
                         >
                             Envoyer
