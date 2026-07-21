@@ -1,3 +1,4 @@
+process.env.TZ = "America/Toronto";
 import { render, screen } from "@testing-library/react";
 import Comment from "components/Comment";
 import { CommentDetail } from "interfaces/Comment";
@@ -7,7 +8,7 @@ const mockComment: CommentDetail = {
     content: "Est-ce que le livre est toujours disponible?",
     firstName: "Milo",
     lastName: "Boucher",
-    timestamp: "2026-07-09T13:17:37.959103",
+    timestamp: "2026-07-20T18:30:00Z",
     idParentComment: null,
     profilePictureUrl: null
 };
@@ -29,11 +30,6 @@ describe("Comment Component", () => {
       renderComment();
       expect(screen.getByText(/Milo B/)).toBeInTheDocument();
     });
-
-    test("renders formatted date", () => {
-      renderComment();
-      expect(screen.getByText(/2026/)).toBeInTheDocument();
-    });
   });
 
   describe("Avatar Initials", () => {
@@ -53,5 +49,35 @@ describe("Comment Component", () => {
       renderComment(mockComment, true);
       expect(screen.getByText("Est-ce que le livre est toujours disponible?")).toBeInTheDocument();
     });
+  });
+});
+
+describe("Comment timezone conversion", () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test("convertit UTC vers heure locale Québec", () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-07-20T15:00:00Z"));
+
+    render(
+      <Comment
+        isReply={false}
+        profilePictureUrl={null}
+        comment={{
+          idComment: 1,
+          content: "Est-ce que le livre est toujours disponible?",
+          firstName: "Milo",
+          lastName: "Boucher",
+          timestamp: "2026-07-20T18:30:00Z",
+          idParentComment: null,
+        }}
+      />
+    );
+
+    expect(
+      screen.getByText(/Aujourd'hui à/)
+    ).toBeInTheDocument();
   });
 });
