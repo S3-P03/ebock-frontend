@@ -18,6 +18,7 @@ import DefaultAvatar from "./DefaultAvatar";
 import { jwtDecode } from "jwt-decode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import { isRedactedEbockEnvironment, setRedactedEbockEnvironment } from "services/apiClient";
 import titleImage from "../assets/title.png";
 
 interface MenuBarProps {
@@ -33,6 +34,7 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
 
   const decodedToken: any = token ? jwtDecode(token) : null;
   const isAdmin = decodedToken?.realm_access.roles.includes("admin") ?? false;
+  const isRedactedAllowed = decodedToken?.realm_access.roles.includes("dark") ?? false;
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorUserMenu(event.currentTarget);
@@ -70,6 +72,13 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
     logout();
   }
 
+  const handleRedactedToggled = () => {
+    if(!isRedactedAllowed) return;
+    setRedactedEbockEnvironment(!isRedactedEbockEnvironment());
+    setDarkMode(!darkMode);
+    window.location.reload();
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -83,6 +92,28 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
                 onClick={() => navigate("/search")}
               />
             </Box>
+            {isRedactedAllowed && (
+              <IconButton
+                onClick={handleRedactedToggled}
+                sx={{
+                  opacity: 0,
+                  transition: "opacity 0.3s ease",
+                  "&:hover": {
+                    opacity: 1,
+                  },
+                }}
+                size="small"
+              >
+                <Box
+                  sx={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    backgroundColor: "rgba(255, 255, 255, 0.5)",
+                  }}
+                />
+              </IconButton>
+            )}
             {user !== null ? (
               <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
                 <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ ml: 1, mr: 2 }}>
