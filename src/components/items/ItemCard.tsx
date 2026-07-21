@@ -40,13 +40,13 @@ export default function ItemCard({ item }: { item: SellerItem }) {
             top: 6,
             right: 6,
           zIndex: 1,
-          bgcolor: "white",
+          bgcolor: "background.paper",
           borderRadius: "50%",
           width: 28,
           height: 28,
           color: isFavorite ? "red" : "inherit",
           "&:hover": {
-            bgcolor: "grey.100",
+            bgcolor: "action.hover",
           },
         }}
         role="fav-button"
@@ -69,7 +69,7 @@ export default function ItemCard({ item }: { item: SellerItem }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            bgcolor: "grey.100",
+            bgcolor: "background.paper",
             fontSize: 48,
             backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
             backgroundSize: "cover",

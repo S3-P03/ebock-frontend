@@ -21,11 +21,15 @@ import NotFound from "pages/NotFound";
 import { useEffect, useState } from "react";
 import ApiErrorAlert from "components/ApiErrorAlert";
 import AdminPage from "pages/AdminPage";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { lightTheme, darkTheme } from "./theme";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
   const [apiError, setApiError] = useState<string | null>(null);
   const [apiStatus, setApiStatus] = useState<number | null>(null);
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     const handleApiError = (event: Event) => {
@@ -44,28 +48,31 @@ export default function HomePage() {
   if (isLoading) { return <div className="spinner" />; }
 
   return (
-    <AppProvider>
-      <ApiErrorAlert error={apiError} status={apiStatus} onClose={() => setApiError(null)} />
-      <Router>
-        <Routes>
-          <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
-          <Route path="/" element={<MenuBarLayout />} >
-            <Route index element={<Home />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/seller/:cip" element={<SellerProfile />} />
-            <Route path="/item/:id" element={<ItemDetails />} />
-            <Route element={<AuthRouteGuard />}>
-              <Route path="message/:id" element={<MessageRoom />} />
-              <Route path="message" element={<RoomHistory />} />
-              <Route path="/item/add" element={<AddItem />} />
-              <Route path="/profile" element={<UserProfile />} />
-              <Route path="/admin" element={<AdminPage />} />
-            </Route>
-          </Route>
-          <Route path="/404" element={<NotFound />} />
-          <Route path="*" element={<Navigate to="/404" replace />} />
-        </Routes>
-      </Router>
-    </AppProvider>
-  );
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+        <CssBaseline />
+        <AppProvider>
+            <ApiErrorAlert error={apiError} status={apiStatus} onClose={() => setApiError(null)} />
+            <Router>
+                <Routes>
+                    <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
+                    <Route path="/" element={<MenuBarLayout darkMode={darkMode} setDarkMode={setDarkMode} />} >
+                        <Route index element={<Home />} />
+                        <Route path="/search" element={<SearchPage />} />
+                        <Route path="/seller/:cip" element={<SellerProfile />} />
+                        <Route path="/item/:id" element={<ItemDetails />} />
+                        <Route element={<AuthRouteGuard />}>
+                            <Route path="message/:id" element={<MessageRoom />} />
+                            <Route path="message" element={<RoomHistory />} />
+                            <Route path="/item/add" element={<AddItem />} />
+                            <Route path="/profile" element={<UserProfile />} />
+                            <Route path="/admin" element={<AdminPage />} />
+                        </Route>
+                    </Route>
+                    <Route path="/404" element={<NotFound />} />
+                    <Route path="*" element={<Navigate to="/404" replace />} />
+                </Routes>
+            </Router>
+        </AppProvider>
+    </ThemeProvider>
+);
 }

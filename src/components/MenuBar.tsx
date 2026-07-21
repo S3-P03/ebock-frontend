@@ -16,8 +16,16 @@ import useAuthSession from "hooks/useAuthSession";
 import { useNavigate } from "react-router-dom";
 import DefaultAvatar from "./DefaultAvatar";
 import { jwtDecode } from "jwt-decode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
-export default function MenuBar({ user }: { user: User | null }) {
+interface MenuBarProps {
+    user: User | null;
+    darkMode: boolean;
+    setDarkMode: (value: boolean) => void;
+}
+
+export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
   const [anchorUserMenu, setAnchorUserMenu] = useState<null | HTMLElement>(null);
   const {token, logout} = useAuthSession();
   let navigate = useNavigate();
@@ -69,8 +77,8 @@ export default function MenuBar({ user }: { user: User | null }) {
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="/search"
+              component="div"
+              onClick={() => navigate("/search")}
               sx={{
                 mr: 2,
                 display: "flex",
@@ -80,13 +88,17 @@ export default function MenuBar({ user }: { user: User | null }) {
                 letterSpacing: ".3rem",
                 color: "inherit",
                 textDecoration: "none",
+                cursor: "pointer",
               }}
             >
               EBOCK
             </Typography>
+            <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ mr: 2 }}>
+              {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
             {user !== null ? (
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }} onClick={handleAddItem}>
+                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }} onClick={handleAddItem}>
                     + Ajouter un item
                 </Button>
                 <Box sx={{ flexGrow: 0 }}>
@@ -130,7 +142,7 @@ export default function MenuBar({ user }: { user: User | null }) {
               </Box>
             ) : (
               <Box sx={{display: "flex", alignItems: "center"}}>
-                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }} href="/login">
+                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }} href="/login">
                   Se connecter
                 </Button>
               </Box>
