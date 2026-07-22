@@ -83,9 +83,11 @@ describe("MessageBlock timezone conversion", () => {
             senderCip: "boum7113",
             senderFirstName: "Milo",
             senderLastName: "Boucher",
-            sentAt: new Date("2026-07-20T15:00:00Z"),
+            sentAt: new Date("2026-07-20T15:00:00Z")
           },
         ]}
+        senderProfilePictureUrl={null}
+        receiverProfilePictureUrl={null}
       />
     );
 
@@ -112,6 +114,8 @@ describe("MessageBlock timezone conversion", () => {
             sentAt: new Date("2026-07-18T18:30:00Z"),
           },
         ]}
+        senderProfilePictureUrl={null}
+        receiverProfilePictureUrl={null}
       />
     );
 
@@ -119,7 +123,6 @@ describe("MessageBlock timezone conversion", () => {
       screen.getByText(/07\/18\/2026/)
     ).toBeInTheDocument();
   });
-
 
   test("groupe les messages du même expéditeur sans afficher deux fois le footer", () => {
     jest.useFakeTimers();
@@ -145,6 +148,8 @@ describe("MessageBlock timezone conversion", () => {
             sentAt: new Date("2026-07-20T18:31:00Z"),
           },
         ]}
+        senderProfilePictureUrl={null}
+        receiverProfilePictureUrl={null}
       />
     );
 

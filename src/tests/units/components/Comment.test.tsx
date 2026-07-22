@@ -64,7 +64,6 @@ describe("Comment timezone conversion", () => {
     render(
       <Comment
         isReply={false}
-        profilePictureUrl={null}
         comment={{
           idComment: 1,
           content: "Est-ce que le livre est toujours disponible?",
@@ -72,6 +71,7 @@ describe("Comment timezone conversion", () => {
           lastName: "Boucher",
           timestamp: "2026-07-20T18:30:00Z",
           idParentComment: null,
+          profilePictureUrl: null
         }}
       />
     );
