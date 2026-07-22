@@ -12,9 +12,8 @@ import {
 
 import ConfirmCard from "components/admin/ConfirmCard";
 import { DetailedItem } from "interfaces/Item";
-import { fetchItem } from "services/itemService";
+import { fetchItem, banItem } from "services/itemService";
 import useAuthSession from "hooks/useAuthSession";
-import { banItem } from "services/itemAdminService";
 
 export default function AdminBanItem() {
     const [itemId, setItemId] = useState("");
