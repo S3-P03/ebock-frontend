@@ -10,16 +10,24 @@ export default function ItemAditionnalInfoBox({ item }: { item: DetailedItem | n
   
     const itemDate = item ? new Date(item.addedAt) : null;
 
-    const itemInfos = [{
-        name: "État", 
-        info: item?.wear
-    },{
-        name: "Ramassage/Livraison", 
-        info: item?.deliveryOptions
-    },{
-        name: "Paiement", 
-        info: item?.paymentOptions
-    }];
+    const itemInfos = [
+        {
+            name: "État",
+            info: item?.wear,
+        },
+        {
+            name: "Ramassage/Livraison",
+            info: item?.deliveryOptions,
+        },
+        ...(item?.price !== 0
+            ? [
+                {
+                name: "Paiement",
+                info: item?.paymentOptions,
+                },
+            ]
+            : []),
+    ];
 
     return (
     <Card sx={{ p: 2.5, borderRadius: 2 }}>
