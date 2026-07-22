@@ -5,12 +5,7 @@ import { User } from 'interfaces/User';
 import { fetchUser } from 'services/userService';
 import MenuBar from './MenuBar';
 
-interface MenuBarLayoutProps {
-    darkMode: boolean;
-    setDarkMode: (value: boolean) => void;
-}
-
-export default function MenuBarLayout({ darkMode, setDarkMode }: MenuBarLayoutProps) {
+export default function MenuBarLayout() {
   const [user, setUser] = useState<User | null>(null);
   const { token, logout, isAuthenticated } = useAuthSession();
 
@@ -26,8 +21,8 @@ export default function MenuBarLayout({ darkMode, setDarkMode }: MenuBarLayoutPr
   
   return (
     <div>
-      {isAuthenticated && <MenuBar user={user} darkMode={darkMode} setDarkMode={setDarkMode} />}
-      {!isAuthenticated && <MenuBar user={null} darkMode={darkMode} setDarkMode={setDarkMode} />}
+      {isAuthenticated && <MenuBar user={user} />}
+      {!isAuthenticated && <MenuBar user={null} />}
       <main>
         <Outlet /> {}
       </main>

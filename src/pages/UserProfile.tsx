@@ -82,7 +82,7 @@ export default function UserProfile() {
                         });
 
                         if (updateProfilePictureUrl !== undefined) {
-                          window.location.reload();
+                          //window.location.reload();
                         }
                       }}
                     />

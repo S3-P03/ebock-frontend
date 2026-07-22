@@ -24,12 +24,13 @@ import AdminPage from "pages/AdminPage";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { lightTheme, darkTheme } from "./theme";
+import { isRedactedEbockEnvironment } from "services/apiClient";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuthSession();
   const [apiError, setApiError] = useState<string | null>(null);
   const [apiStatus, setApiStatus] = useState<number | null>(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(isRedactedEbockEnvironment());
 
   useEffect(() => {
     const handleApiError = (event: Event) => {
@@ -55,7 +56,7 @@ export default function HomePage() {
             <Router>
                 <Routes>
                     <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
-                    <Route path="/" element={<MenuBarLayout darkMode={darkMode} setDarkMode={setDarkMode} />} >
+                    <Route path="/" element={<MenuBarLayout />} >
                         <Route index element={<Home />} />
                         <Route path="/search" element={<SearchPage />} />
                         <Route path="/seller/:cip" element={<SellerProfile />} />

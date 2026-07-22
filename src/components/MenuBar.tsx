@@ -16,18 +16,14 @@ import useAuthSession from "hooks/useAuthSession";
 import { useNavigate } from "react-router-dom";
 import DefaultAvatar from "./DefaultAvatar";
 import { jwtDecode } from "jwt-decode";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LightModeIcon from "@mui/icons-material/LightMode";
 import { isRedactedEbockEnvironment, setRedactedEbockEnvironment } from "services/apiClient";
 import titleImage from "../assets/title.png";
 
 interface MenuBarProps {
     user: User | null;
-    darkMode: boolean;
-    setDarkMode: (value: boolean) => void;
 }
 
-export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
+export default function MenuBar({ user }: MenuBarProps) {
   const [anchorUserMenu, setAnchorUserMenu] = useState<null | HTMLElement>(null);
   const {token, logout} = useAuthSession();
   let navigate = useNavigate();
@@ -75,7 +71,6 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
   const handleRedactedToggled = () => {
     if(!isRedactedAllowed) return;
     setRedactedEbockEnvironment(!isRedactedEbockEnvironment());
-    setDarkMode(!darkMode);
     window.location.reload();
   }
 

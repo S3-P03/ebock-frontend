@@ -45,7 +45,7 @@ const mockUser = {
 const renderMenuBar = (user = mockUser) => {
   return render(
     <BrowserRouter>
-      <MenuBar user={user} darkMode={false} setDarkMode={() => {}} />
+      <MenuBar user={user} />
 
     </BrowserRouter>
   );
@@ -54,7 +54,7 @@ const renderMenuBar = (user = mockUser) => {
 const renderNullUserMenuBar = () => {
   return render(
     <BrowserRouter>
-      <MenuBar user={null} darkMode={false} setDarkMode={() => {}} />
+      <MenuBar user={null} />
     </BrowserRouter>
   );
 };
