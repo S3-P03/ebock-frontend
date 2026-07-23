@@ -1,6 +1,7 @@
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
+import logoImage from "../../../assets/logo.png";
 import "../login.css";
 
 export default function Register(props: PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n>) {
@@ -37,7 +38,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                     <div style={{ width: "320px", flexShrink: 0 }}>
                         {/* Logo */}
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "16px" }}>
-                            <div style={{ width: "32px", height: "32px", background: "#1D9E75", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px" }}>🍺</div>
+                            <img src={logoImage} alt="Logo EBock" style={{ width: "52px", height: "52px", objectFit: "contain", display: "block" }} />
                             <span style={{ fontSize: "17px", fontWeight: 600, color: "#222" }}>EBock</span>
                         </div>
 

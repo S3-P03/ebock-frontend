@@ -44,7 +44,7 @@ export default function AddItemForm({
   const INITIAL_STATE: ItemFormState = {
   name: "",
   description: "",
-  price: "",
+  price: "0",
   quantity: 1,
   categoryId: "",
   wearId: "",

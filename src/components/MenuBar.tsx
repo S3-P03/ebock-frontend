@@ -18,6 +18,7 @@ import DefaultAvatar from "./DefaultAvatar";
 import { jwtDecode } from "jwt-decode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import titleImage from "../assets/title.png";
 
 interface MenuBarProps {
     user: User | null;
@@ -73,32 +74,21 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Container style={{ maxWidth: 3000}}>
-          <Toolbar disableGutters>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              onClick={() => navigate("/search")}
-              sx={{
-                mr: 2,
-                display: "flex",
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-                cursor: "pointer",
-              }}
-            >
-              EBOCK
-            </Typography>
-            <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ mr: 2 }}>
-              {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
-            </IconButton>
+          <Toolbar disableGutters sx={{ width: "100%", justifyContent: "space-between" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={titleImage}
+                alt="Logo"
+                style={{ width: "40%", height: "100%", cursor: "pointer", objectFit: "contain" }}
+                onClick={() => navigate("/search")}
+              />
+            </Box>
             {user !== null ? (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }} onClick={handleAddItem}>
+              <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
+                <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ ml: 1, mr: 0 }}>
+                  {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                </IconButton>
+                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 2, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }} onClick={handleAddItem}>
                     + Ajouter un item
                 </Button>
                 <Box sx={{ flexGrow: 0 }}>
@@ -117,7 +107,7 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
                   <Menu
                     sx={{ mt: "45px" }}
                     id="menu-appbar"
-                    anchorEl={anchorUserMenu}    
+                    anchorEl={anchorUserMenu}
                     anchorOrigin={{
                       vertical: "top",
                       horizontal: "right",
@@ -141,8 +131,11 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
                 </Box>
               </Box>
             ) : (
-              <Box sx={{display: "flex", alignItems: "center"}}>
-                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 4, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }} href="/login">
+              <Box sx={{display: "flex", alignItems: "center", ml: "auto"}}>
+                <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ ml: 1, mr: 0 }}>
+                  {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                </IconButton>
+                <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 2, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }} href="/login">
                   Se connecter
                 </Button>
               </Box>
