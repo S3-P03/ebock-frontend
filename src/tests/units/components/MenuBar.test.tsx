@@ -66,26 +66,26 @@ describe('MenuBar Component', () => {
 
   // Test Group 1: Rendering
   describe('Rendering', () => {
-    test('renders EBOCK title', () => {
+    test('renders EBOCK title image', () => {
       setupMockAuth();
       renderMenuBar();
       
-      expect(screen.getByText('EBOCK')).toBeInTheDocument();
+      expect(screen.getByAltText('Logo')).toBeInTheDocument();
     });
 
     test('avatar alt is user full name', () => {
       setupMockAuth();
       renderMenuBar(mockUser);
       
-      const avatar = screen.getByRole('img', { hidden: true });
-      expect(avatar).toHaveAttribute('alt', 'Jeef Larouche');
+      const avatar = screen.getByAltText('Jeef Larouche');
+      expect(avatar).toBeInTheDocument();
     });
 
     test('undefined user is handled', () => {
       setupMockAuth();
       renderNullUserMenuBar();
       
-      const avatar = screen.queryByRole('img', { hidden: true });
+      const avatar = screen.queryByAltText('Jeef Larouche');
       expect(avatar).not.toBeInTheDocument();
     });
   });
