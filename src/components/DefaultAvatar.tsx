@@ -1,6 +1,4 @@
 import { Avatar } from "@mui/material";
-import { useEffect, useState } from "react";
-import { getImageUrlWithEnvironment } from "services/apiClient";
 
 interface DefaultAvatarProps {
     width: number;
