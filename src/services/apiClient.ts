@@ -29,6 +29,22 @@ export const setCurrentAuthToken = (token: string) => {
   currentAuthToken = token;
 };
 
+export const getImageUrlWithEnvironment = async (url: string | null): Promise<string | null> => {
+  if (!url) return null;
+  
+  if (!isRedactedEbockEnvironment()) {
+    return url;
+  }
+  
+  try {
+    const response = await axiosInstance.get(url, { responseType: 'blob' });
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    console.error("Failed to fetch image with environment header", error);
+    return null;
+  }
+};
+
 // --- inject header on every request ---
 
 axiosInstance.interceptors.request.use((config) => {

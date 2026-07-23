@@ -5,6 +5,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import { getImageUrlWithEnvironment } from "services/apiClient";
 
 interface ProfilePicChangerProps {
   currentProfilePictureUrl: string | null;
@@ -16,6 +17,7 @@ export default function ProfilePicChanger({ currentProfilePictureUrl, initials, 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [removeRequested, setRemoveRequested] = useState(false);
+  const [processedProfilePicUrl, setProcessedProfilePicUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -31,6 +33,12 @@ export default function ProfilePicChanger({ currentProfilePictureUrl, initials, 
       URL.revokeObjectURL(objectUrl);
     };
   }, [selectedFile]);
+
+  useEffect(() => {
+    getImageUrlWithEnvironment(currentProfilePictureUrl).then(url => {
+      setProcessedProfilePicUrl(url);
+    });
+  }, [currentProfilePictureUrl]);
 
   const handleChooseImage = () => {
     setRemoveRequested(false);
@@ -52,7 +60,7 @@ export default function ProfilePicChanger({ currentProfilePictureUrl, initials, 
     onSave(selectedFile, removeRequested);
   };
 
-  const imageSrc = removeRequested ? null : previewUrl || currentProfilePictureUrl;
+  const imageSrc = removeRequested ? null : previewUrl || processedProfilePicUrl;
   const hasImage = Boolean(imageSrc);
 
   return (
