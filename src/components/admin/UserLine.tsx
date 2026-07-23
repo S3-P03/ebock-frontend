@@ -19,7 +19,6 @@ export default function UserLine({ user, onToggleRequest }: { user: Users, onTog
             borderBottom: "1px solid",
             borderColor: "divider",
             "&:last-of-type": { borderBottom: "none" },
-            "&:hover": { bgcolor: "grey.50" },
         }}
         >
         <Box sx={{ minWidth: 0, flex: 1 }}>

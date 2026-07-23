@@ -8,7 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { SpecificationInfo } from "interfaces/Specification";
 
-interface CategoryLineProps {
+interface SpecificationLineProps {
   specification: SpecificationInfo;
   onEdit: (specification: SpecificationInfo) => void;
   onDelete: (specification: SpecificationInfo) => void;
@@ -20,7 +20,7 @@ export default function SpecificationLine({
   onEdit,
   onDelete,
   showParent,
-}: CategoryLineProps) {
+}: SpecificationLineProps) {
   return (
     <Box
       sx={{
@@ -32,8 +32,7 @@ export default function SpecificationLine({
         py: 1.5,
         borderBottom: "1px solid",
         borderColor: "divider",
-        "&:last-of-type": { borderBottom: "none" },
-        "&:hover": { bgcolor: "grey.50" },
+        "&:last-of-type": { borderBottom: "none" }
       }}
     >
         <Box sx={{ minWidth: 0, flex: 1 }}>

@@ -45,7 +45,7 @@ const mockUser = {
 const renderMenuBar = (user = mockUser) => {
   return render(
     <BrowserRouter>
-      <MenuBar user={user} darkMode={false} setDarkMode={() => {}} />
+      <MenuBar user={user} />
 
     </BrowserRouter>
   );
@@ -54,7 +54,7 @@ const renderMenuBar = (user = mockUser) => {
 const renderNullUserMenuBar = () => {
   return render(
     <BrowserRouter>
-      <MenuBar user={null} darkMode={false} setDarkMode={() => {}} />
+      <MenuBar user={null} />
     </BrowserRouter>
   );
 };
@@ -103,7 +103,7 @@ describe('MenuBar Component', () => {
       expect(screen.queryByText('Déconnexion')).not.toBeVisible();
 
       // Click avatar to open
-      const avatarButton = screen.getAllByRole('button')[2];
+      const avatarButton = screen.getAllByRole('button')[1];
       fireEvent.click(avatarButton);
 
       // Now opened

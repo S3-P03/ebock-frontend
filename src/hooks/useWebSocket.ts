@@ -2,11 +2,13 @@ import { useEffect, useRef } from "react";
 import useAuthSession from "./useAuthSession";
 import apiClient from "services/apiClient";
 import { WsTokenResponse } from "interfaces/Message";
+import { isRedactedEbockEnvironment } from "services/apiClient";
 
 async function fetchWsToken(token: string) {
   const response = await apiClient.post<WsTokenResponse>("/ws-token", {}, {
     headers: {
       Authorization: `Bearer ${token}`,
+      Environment: isRedactedEbockEnvironment() ? "dark_ebock" : "ebock",
     }
   });
   return response.data.token;
