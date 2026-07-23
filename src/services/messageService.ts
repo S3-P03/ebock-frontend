@@ -127,3 +127,25 @@ export async function fetchUserRooms(token: string): Promise<Room[] | null> {
     return null;
   }
 }
+
+export async function archiveRoom(roomId: string, token: string): Promise<number> {
+    try {
+        const response = await apiClient.post(`${SERVICE_BASE_URL}/room/${roomId}/archive`, {}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.status;
+    } catch (error: any) {
+        if(error.status === 401) {
+            emitApiError("Vous devez être connecté pour archiver la salle", error.status);
+        } else if(error.status === 403) {
+            emitApiError("Vous n'avez pas la permission d'archiver cette salle", error.status);
+        } else if(error.status === 404) {
+            emitApiError("La salle ou l'utilisateur n'existe pas", error.status);
+        } else {
+            emitApiError("Erreur lors de l'archivage de la salle", error.status);
+        }
+        return error.response?.status ?? 500;
+    }
+}
