@@ -1,7 +1,7 @@
 // services/userService.ts
 import { SellerUser, SellerUserRaw } from "interfaces/Seller";
 import { User, UserInformation, UserUpdatePayload } from "interfaces/User";
-import apiClient, { emitApiError, API_BASE_URL } from "./apiClient";
+import apiClient, { emitApiError, API_BASE_URL, getImageUrlWithEnvironment } from "./apiClient";
 
 interface FetchOptions {
   token: string;
@@ -25,8 +25,9 @@ export async function fetchUser({ token, logout }: FetchOptions): Promise<User |
     }
 
     let user = (await response.data) as User;
-    user.profilePictureUrl = response.data.profilePictureGuid ? `${API_BASE_URL}/image/${response.data.profilePictureGuid}` : null;
-
+    
+    const profilePictureUrl = response.data.profilePictureGuid ? `${API_BASE_URL}/image/${response.data.profilePictureGuid}` : null;
+    user.profilePictureUrl = await getImageUrlWithEnvironment(profilePictureUrl);
     return user;
   } catch (error: any) {
     if (error.status === 401) {
@@ -71,8 +72,9 @@ export async function fetchUserProfile({ token, logout }: FetchOptions): Promise
     });
 
     let userInfo = (await response.data) as UserInformation;
-    userInfo.user.profilePictureUrl = response.data.user.profilePictureGuid ? `${API_BASE_URL}/image/${response.data.user.profilePictureGuid}` : null;
-    
+ 
+    const profilePictureUrl = response.data.user.profilePictureGuid ? `${API_BASE_URL}/image/${response.data.user.profilePictureGuid}` : null;
+    userInfo.user.profilePictureUrl = await getImageUrlWithEnvironment(profilePictureUrl);
     return userInfo;
   } catch (error: any) {
     if(error.status === 401) {

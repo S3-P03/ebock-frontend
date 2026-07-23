@@ -103,7 +103,7 @@ describe('MenuBar Component', () => {
       expect(screen.queryByText('Déconnexion')).not.toBeVisible();
 
       // Click avatar to open
-      const avatarButton = screen.getAllByRole('button')[2];
+      const avatarButton = screen.getAllByRole('button')[1];
       fireEvent.click(avatarButton);
 
       // Now opened
