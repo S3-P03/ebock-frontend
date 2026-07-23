@@ -1,9 +1,10 @@
-import { createRoom, postMessage, fetchRoom, fetchMessages, fetchUserRooms } from "services/messageService";
-import apiClient from "services/apiClient";
+import { createRoom, postMessage, fetchRoom, fetchMessages, fetchUserRooms, archiveRoom } from "services/messageService";
+import apiClient, { emitApiError } from "services/apiClient";
 
 jest.mock("services/apiClient");
 
 const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
+const mockedEmitApiError = emitApiError as jest.MockedFunction<typeof emitApiError>;
 const token = "fake-token";
 
 describe("fetchRoom", () => {
@@ -159,3 +160,68 @@ describe("createRoom", () => {
         expect(result).toEqual(mockMessageResponse);
     });
 })
+
+describe("archiveRoom", () => {
+    
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test("returns status 204 when the room is successfully archived", async () => {
+        mockedApiClient.post.mockResolvedValue({
+            status: 204,
+        });
+
+        const result = await archiveRoom("1", token);
+
+        expect(result).toBe(204);
+    });
+
+    test("returns 401 and emits error when user is not authenticated", async () => {
+        const error = new Error("Unauthorized");
+        (error as any).status = 401;
+        (error as any).response = { status: 401 };
+        mockedApiClient.post.mockRejectedValue(error);
+
+        const result = await archiveRoom("1", token);
+
+        expect(result).toBe(401);
+        expect(mockedEmitApiError).toHaveBeenCalledWith("Vous devez être connecté pour archiver la salle", 401);
+    });
+
+    test("returns 403 and emits error when user does not have permission", async () => {
+        const error = new Error("Forbidden");
+        (error as any).status = 403;
+        (error as any).response = { status: 403 };
+        mockedApiClient.post.mockRejectedValue(error);
+
+        const result = await archiveRoom("1", token);
+
+        expect(result).toBe(403);
+        expect(mockedEmitApiError).toHaveBeenCalledWith("Vous n'avez pas la permission d'archiver cette salle", 403);
+    });
+
+    test("returns 404 and emits error when room or user is not found", async () => {
+        const error = new Error("Not found");
+        (error as any).status = 404;
+        (error as any).response = { status: 404 };
+        mockedApiClient.post.mockRejectedValue(error);
+
+        const result = await archiveRoom("1", token);
+
+        expect(result).toBe(404);
+        expect(mockedEmitApiError).toHaveBeenCalledWith("La salle ou l'utilisateur n'existe pas", 404);
+    });
+
+    test("returns 500 and emits error for other errors", async () => {
+        const error = new Error("Server error");
+        (error as any).status = 500;
+        (error as any).response = { status: 500 };
+        mockedApiClient.post.mockRejectedValue(error);
+
+        const result = await archiveRoom("1", token);
+
+        expect(result).toBe(500);
+        expect(mockedEmitApiError).toHaveBeenCalledWith("Erreur lors de l'archivage de la salle", 500);
+    });
+});
