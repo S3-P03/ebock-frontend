@@ -85,7 +85,7 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
             </Box>
             {user !== null ? (
               <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
-                <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ ml: 1, mr: 0 }}>
+                <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ ml: 1, mr: 2 }}>
                   {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
                 </IconButton>
                 <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 2, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }} onClick={handleAddItem}>
@@ -132,7 +132,7 @@ export default function MenuBar({ user, darkMode, setDarkMode }: MenuBarProps) {
               </Box>
             ) : (
               <Box sx={{display: "flex", alignItems: "center", ml: "auto"}}>
-                <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ ml: 1, mr: 0 }}>
+                <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit" sx={{ ml: 1, mr: 2 }}>
                   {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
                 </IconButton>
                 <Button variant="contained" sx={{ mt: 0.5, mb: 0.5, mr: 2, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }} href="/login">
