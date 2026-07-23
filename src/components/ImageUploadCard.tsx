@@ -12,7 +12,7 @@ export default function ImageUploadCard({ image, index, total, onRemove, onReord
         gap: 1.5,
         p: 1.5,
         borderRadius: 2,
-        bgcolor: "grey.50",
+        bgcolor: "primary.50",
         "&:hover": { borderColor: "primary.main", bgcolor: "primary.50" },
         transition: "all 0.15s",
       }}

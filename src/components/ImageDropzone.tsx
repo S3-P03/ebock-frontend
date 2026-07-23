@@ -38,7 +38,7 @@ export default function ImageDropzone({ onFiles, error, disabled } : {onFiles: (
         sx={{
           borderStyle: "dashed",
           borderColor: error ? "error.main" : dragging ? "primary.main" : "grey.300",
-          bgcolor: dragging ? "primary.50" : error ? "error.50" : "grey.50",
+          bgcolor: dragging ? "primary.50" : error ? "error.50" : "primary.50",
           borderRadius: 2,
           p: 4,
           display: "flex",

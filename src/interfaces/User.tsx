@@ -17,13 +17,14 @@ export interface UserInformation {
 }
 
 export interface UserUpdatePayload {
-    user: UserinfoForUpdate;
-    address: UserAddress;
+    user?: Partial<UserinfoForUpdate>;
+    address?: UserAddress;
 }
 
 export interface UserinfoForUpdate {
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
+    profilePictureGuid?: string;
 }
 
 export interface UserAddress {

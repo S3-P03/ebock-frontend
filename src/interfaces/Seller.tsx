@@ -6,6 +6,7 @@ export interface SellerUser {
   lastName: string;
   profilePictureUrl: string | null;
   createdAt: Date;
+  soldItemsCount: number;
 }
 
 export interface SellerUserRaw {
@@ -13,6 +14,7 @@ export interface SellerUserRaw {
   lastName: string;
   profilePictureUrl: string | null;
   createdAt: string;
+  soldItemsCount: number;
 }
 
 export interface SellerExtra {

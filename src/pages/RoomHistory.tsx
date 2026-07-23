@@ -26,26 +26,22 @@ export default function RoomHistory() {
     };
     
     useEffect(() => {
-        try {
-            fetchUserRooms(token).then((data) => {
-                setRooms(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des salles de discussion :", error);
-        }
+        fetchUserRooms(token).then((data) => {
+            setRooms(data);
+        });
     }, []);
 
     useEffect(() => {
         if (!isAuthenticated || !token) return;
         
-        try {
-            fetchUser({ token, logout }).then((data) => {
-                setUser(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération de l'utilisateur :", error);
-        }
+        fetchUser({ token, logout }).then((data) => {
+            setUser(data);
+        });
     }, [isAuthenticated]);
+
+    const handleRoomArchived = (archivedRoomId: number) => {
+        setRooms((prevRooms) => prevRooms?.filter((room) => room.roomId !== archivedRoomId) || null);
+    }
 
     return ( rooms == null || user == null ? 
         (<CenteredCircularProgress />) :
@@ -57,7 +53,7 @@ export default function RoomHistory() {
                 >
                     CONVERSATIONS
                 </Typography>
-                <RoomList rooms={rooms} user={user} parentCallBack={handleListItemClick}/>
+                <RoomList rooms={rooms} user={user} parentCallBack={handleListItemClick} onRoomArchived={handleRoomArchived} />
             </Card>
         </Box>
         )

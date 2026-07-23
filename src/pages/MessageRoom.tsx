@@ -3,7 +3,7 @@ import {
     TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchUser } from "services/userService";
 import useAuthSession from "hooks/useAuthSession";
 import { User } from "interfaces/User";
@@ -23,16 +23,13 @@ export default function MessageRoom() {
     const [user, setUser] = useState<User | null>(null);
     const { isAuthenticated, token, logout } = useAuthSession();
     const [fieldValue, setFieldValue] = useState("");
-
+    let navigate = useNavigate();
+    
     const handleSend = () => {
         const sanitized = DOMPurify.sanitize(fieldValue.trim());
         if (!sanitized  || containsMalicious(sanitized)) return;
         
-        try {
-            postMessage({content: sanitized, senderCip: user!.cip, roomId: id!, token});
-        } catch(error) {
-            console.error("Erreur lors de l'envoi du message : ", error);
-        }
+        postMessage({content: sanitized, senderCip: user!.cip, roomId: id!, token});
 
         setFieldValue("");
     };
@@ -51,59 +48,57 @@ export default function MessageRoom() {
     });
 
     useEffect(() => {
-        try {
-            fetchRoom(id, token).then((data) => {
-                setRoom(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des informations de la discussion :", error);
-        }
+        fetchRoom(id, token)
+        .then((data) => {
+            if (!data) {
+                navigate("/404");
+                return;
+            }
+            setRoom(data);
+        })
         
-        try {
-            fetchMessages(id, token).then((data) => {
-                let formattedMessages = data?.map((obj) => {
-                    return {
-                        roomId: obj.roomId,
-                        content: obj.content,
-                        senderCip: obj.senderCip,
-                        senderFirstName: obj.senderFirstName,
-                        senderLastName: obj.senderLastName,
-                        sentAt: new Date(obj.sentAt)
-                    } as Message;
-                });
-
-                setMessages(formattedMessages!);
+        fetchMessages(id, token).then((data) => {
+            let formattedMessages = data?.map((obj) => {
+                return {
+                    roomId: obj.roomId,
+                    content: obj.content,
+                    senderCip: obj.senderCip,
+                    senderFirstName: obj.senderFirstName,
+                    senderLastName: obj.senderLastName,
+                    sentAt: new Date(obj.sentAt)
+                } as Message;
             });
-        } catch (error) {
-            console.error("Erreur lors de la récupération des messages :", error);
-        }
+            
+            setMessages(formattedMessages!);
+        });
     }, [id]);
 
     useEffect(() => {
         if (!isAuthenticated || !token) return;
         
-        try {
-            fetchUser({ token, logout }).then((data) => {
-                setUser(data);
-            });
-        } catch (error) {
-            console.error("Erreur lors de la récupération de l'utilisateur :", error);
-        }
+        fetchUser({ token, logout }).then((data) => {
+            setUser(data);
+        });
     }, [isAuthenticated]);
 
     return ( room == null || user == null ? 
         (<CenteredCircularProgress />) :
         (<Box sx={{ mx: "auto" }}>
-            <Box sx={{ display: "flex", gap: 2, p: 2, flexDirection: "column", alignItems: "flex-start" }}>
+            <Box sx={{ display: "flex", p: 2, flexDirection: "column", alignItems: "flex-start" }}>
                 <RoomHeader room={room!} connectedCip={user!.cip}/>
-                    <Card sx={{ p: 2.5, borderRadius: 2, width: "100%" }}>
-                        <MessageBlock messages={messages!} cip={user!.cip} />
-                        <Box sx={{ display: "flex", gap: 2 }}>
+                    <Card sx={{ borderRadius: 2, width: "100%" }}>
+                        <MessageBlock 
+                            messages={messages!} 
+                            cip={user!.cip} 
+                            senderProfilePictureUrl={room!.buyerCip === user!.cip ? room!.buyerProfilePicUrl : room!.sellerProfilePicUrl} 
+                            receiverProfilePictureUrl={room!.buyerCip === user!.cip ? room!.sellerProfilePicUrl : room!.buyerProfilePicUrl}
+                        />
+                        <Box sx={{ display: "flex", gap: 2, p: 2 }}>
                             <TextField fullWidth placeholder="Répondre..." variant="outlined" 
                                     value={fieldValue}
                                     onChange={(e) => setFieldValue(e.target.value)}
                                     onKeyDown={(e) => e.key === "Enter" && handleSend()} />
-                            <Button variant="contained" onClick={handleSend} sx={{ mt: 0.5, mb: 0.5, textTransform: "none", borderRadius: 3, backgroundColor: "#1d9e75" }}>Envoyer</Button>
+                            <Button variant="contained" onClick={handleSend} sx={{ mt: 0.5, mb: 0.5, textTransform: "none", borderRadius: 3, backgroundColor: "primary.main" }}>Envoyer</Button>
                         </Box>
                     </Card>
             </Box>

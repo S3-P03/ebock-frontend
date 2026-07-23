@@ -14,7 +14,7 @@ export default function ItemCard({ item }: { item: SellerItem }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const navigate = useNavigate();
-  const {token} = useAuthSession();
+  const { token, isAuthenticated } = useAuthSession();
 
   useEffect(() => {
     if (firstImage) {
@@ -32,20 +32,21 @@ export default function ItemCard({ item }: { item: SellerItem }) {
 
   return (
     <Card sx={{ borderRadius: 2, position: "relative", flex: "1 1 250px", maxWidth: "350px" }}>
-      <IconButton
-        size="small"
-        sx={{
-          position: "absolute",
-          top: 6,
-          right: 6,
+      {isAuthenticated && (
+        <IconButton
+          size="small"
+          sx={{
+            position: "absolute",
+            top: 6,
+            right: 6,
           zIndex: 1,
-          bgcolor: "white",
+          bgcolor: "background.paper",
           borderRadius: "50%",
           width: 28,
           height: 28,
           color: isFavorite ? "red" : "inherit",
           "&:hover": {
-            bgcolor: "grey.100",
+            bgcolor: "action.hover",
           },
         }}
         role="fav-button"
@@ -59,7 +60,7 @@ export default function ItemCard({ item }: { item: SellerItem }) {
         }}
       >
         {isFavorite ? "♥" : "♡"}
-      </IconButton>
+      </IconButton>)}
       <CardActionArea onClick={handleCardClick}>
         <Box
           role="img"
@@ -68,7 +69,7 @@ export default function ItemCard({ item }: { item: SellerItem }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            bgcolor: "grey.100",
+            bgcolor: "background.paper",
             fontSize: 48,
             backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
             backgroundSize: "cover",

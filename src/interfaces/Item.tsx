@@ -20,16 +20,6 @@ export interface ItemImage {
     displayOrder: number;
 }
 
-export interface ItemComment {
-    id: number;
-    content: string;
-    respondToCommentId: number | null;
-    authorCip: string;
-    authorFirstName: string;
-    authorLastName: string;
-    timeAgo: string;
-}
-
 export interface ItemPayload {
     name: string;
     description: string;

@@ -1,16 +1,23 @@
 import { render, screen } from "@testing-library/react";
 import SellerBox from "components/SellerBox";
 import { SellerUser } from "interfaces/Seller";
+import { ReviewAverage } from "services/reviewService";
 
 const mockSeller: SellerUser = {
   firstName: "Éliane",
   lastName: "Pelletier",
   profilePictureUrl: null,
   createdAt: new Date("2022-09-01T00:00:00Z"),
+  soldItemsCount: 14,
 };
 
-const renderBox = (seller: SellerUser = mockSeller) => {
-  return render(<SellerBox seller={seller} />);
+const mockReviewAverage = {
+  avgRating: 4.5,
+  nbrReviews: 10,
+}
+
+const renderBox = (seller: SellerUser = mockSeller, reviewAverage: ReviewAverage | null = mockReviewAverage) => {
+  return render(<SellerBox seller={seller} reviewAverage={reviewAverage} handleOpenStorefront={() => {}} />);
 };
 
 describe("SellerBox Component", () => {
@@ -67,7 +74,20 @@ describe("SellerBox Component", () => {
   describe("Rating", () => {
     test("renders rating component", () => {
       renderBox();
-      expect(screen.getByText("(0)")).toBeInTheDocument();
+      expect(screen.getByText("(10)")).toBeInTheDocument();
+    });
+  });
+
+  // Test Group 5: Redirect
+  describe("Redirect", () => {
+    test("clicking on avatar calls handleOpenStorefront", () => {
+      const mockHandleOpenStorefront = jest.fn();
+      render(<SellerBox seller={mockSeller} reviewAverage={mockReviewAverage} handleOpenStorefront={mockHandleOpenStorefront} />);
+      
+      const avatarButton = screen.getByRole("button");
+      avatarButton.click();
+      
+      expect(mockHandleOpenStorefront).toHaveBeenCalledTimes(1);
     });
   });
 });

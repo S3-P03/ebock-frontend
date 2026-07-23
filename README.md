@@ -1,12 +1,22 @@
-# Getting Started with Create React App
+# ebock-frontend
+This repository contains the files for the React client of EBock, built with React, using MUI for components and styling.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Copy the .env and .env.build files from the Teams group into the root of this project. These files contain environment variables that are required to run the projet in development build or to build the application.
+
+## Requirements
+
+    - Node.js
+    - npm
+    - Apache Maven
+    - VS Code (Recommended)
 
 ## Startup
 
-Install [Node.js](https://nodejs.org/en/download)
-
-In the command prompt, in the project folder, run npm install
+To get started with the app, run the following commands in a command prompt, at the root of the project.
+### `npm install`
+To install all the necessary dependencies used by the application.
+### `npm run deploy-theme`
+To build the custom keycloak login and register pages. Docker and Apache Maven are required to run this command.
 
 ## Available Scripts
 
@@ -22,8 +32,8 @@ You will also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner.
+As a default, will run only the tests affected by changes. In the interactive test runner, press **a** to run all tests.
 
 ### `npm run build`
 
@@ -31,22 +41,15 @@ Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This build is used by infra as the deployed application.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Structure
+The project is divided into folders, following the standard structure for React apps. Separated as components, contexts, hooks, interfaces, pages, services and tests.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contribution
+Work must not be done directly in the main and dev branches. A branch must be created for every task, named after the associated Jira ticket.
+Commits must specify the changes done.
+Every feature is expected to be tested, using the **src/tests** package, with unit tests.
+Once a feature is functional, tested and documented, a pull request must be opened toward the **dev** branch. Two reviews must then be submitted.
+Once two contributors have reviewed the pull request, the creator can merge into dev using **Squash & merge**.
+**IMPORTANT : The branch should be deleted once the pull request is merged.**

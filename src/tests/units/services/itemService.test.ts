@@ -1,9 +1,10 @@
-import { fetchUserItems, fetchItem, fetchItemImages, getFilteredItems, FilterParams, addItem } from "services/itemService";
-import apiClient from "services/apiClient";
+import { fetchUserItems, fetchItem, fetchItemImages, getFilteredItems, FilterParams, addItem, updateItem, banItem } from "services/itemService";
+import apiClient, { emitApiError } from "services/apiClient";
 
 jest.mock("services/apiClient");
 
 const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
+const mockedEmitApiError = emitApiError as jest.MockedFunction<typeof emitApiError>;
 
 const fakeToken = "token123";
 
@@ -159,7 +160,7 @@ describe("getFilteredItems", () => {
       categories: [1, 2],
     };
 
-    const result = await getFilteredItems(fakeToken, 1, filters);
+    const result = await getFilteredItems(true, fakeToken, 1, filters);
 
     expect(mockedApiClient.get).toHaveBeenCalledWith(
       "/item/list/1?minP=40&maxP=100&categories=1%2C2",
@@ -188,7 +189,7 @@ describe("getFilteredItems", () => {
       payments: [1, 3],
     };
 
-    await getFilteredItems(fakeToken, 2, filters);
+    await getFilteredItems(true, fakeToken, 2, filters);
 
     expect(mockedApiClient.get).toHaveBeenCalled();
     const callArg = (mockedApiClient.get as jest.Mock).mock.calls[0][0];
@@ -209,7 +210,7 @@ describe("getFilteredItems", () => {
 
     const filters: FilterParams = {};
 
-    await getFilteredItems(fakeToken, 1, filters);
+    await getFilteredItems(true, fakeToken, 1, filters);
 
     expect(mockedApiClient.get).toHaveBeenCalledWith("/item/list/1",  {"headers": {"Authorization": `Bearer ${fakeToken}`}});
   });
@@ -219,7 +220,7 @@ describe("getFilteredItems", () => {
 
     const filters: FilterParams = { minP: 50 };
 
-    const result = await getFilteredItems(fakeToken, 1, filters);
+    const result = await getFilteredItems(true, fakeToken, 1, filters);
 
     expect(result).toEqual([]);
   });
@@ -233,7 +234,7 @@ describe("getFilteredItems", () => {
     const fakeToken = "token123";
     const filters: FilterParams = {};
 
-    const result = await getFilteredItems(fakeToken, 1, filters);
+    const result = await getFilteredItems(true, fakeToken, 1, filters);
 
     expect(result).toEqual([]);
   });
@@ -246,7 +247,7 @@ describe("getFilteredItems", () => {
 
     const filters: FilterParams = {};
 
-    const result = await getFilteredItems(fakeToken, 1, filters);
+    const result = await getFilteredItems(true, fakeToken, 1, filters);
 
     expect(result).toEqual([]);
   });
@@ -265,11 +266,161 @@ describe("getFilteredItems", () => {
       wears: [1, 2],
     };
 
-    await getFilteredItems(fakeToken, 1, filters);
+    await getFilteredItems(true, fakeToken, 1, filters);
 
     const callArg = (mockedApiClient.get as jest.Mock).mock.calls[0][0];
     expect(callArg).toContain("categories=1%2C2%2C3");
     expect(callArg).toContain("tags=5%2C6");
     expect(callArg).toContain("wears=1%2C2");
   });
+});
+
+describe("updateItem", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("calls the correct URL with correct headers", async () => {
+    mockedApiClient.put.mockResolvedValue({
+      status: 200,
+      data: {},
+    });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedApiClient.put).toHaveBeenCalledWith(
+      "/item/42",
+      { price: 20 },
+      { headers: { Authorization: `Bearer ${fakeToken}` } }
+    );
+  });
+
+  test("emits a 400 error message when the API responds with status 400", async () => {
+    mockedApiClient.put.mockRejectedValue({ status: 400 });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedEmitApiError).toHaveBeenCalledWith(
+      "Erreur lors de la mise à jour de l'article, veuillez vérifier les données fournies",
+      400
+    );
+  });
+
+  test("emits a 403 error message when the API responds with status 403", async () => {
+    mockedApiClient.put.mockRejectedValue({ status: 403 });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedEmitApiError).toHaveBeenCalledWith(
+      "Erreur lors de la mise à jour de l'article, ce n'est pas votre article",
+      403
+    );
+  });
+
+  test("emits a 404 error message when the API responds with status 404", async () => {
+    mockedApiClient.put.mockRejectedValue({ status: 404 });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedEmitApiError).toHaveBeenCalledWith(
+      "Erreur lors de la mise à jour de l'article, l'article n'existe pas",
+      404
+    );
+  });
+
+  test("emits a generic error message for unknown statuses", async () => {
+    mockedApiClient.put.mockRejectedValue({ status: 500 });
+
+    await updateItem(42, fakeToken, { price: 20 });
+
+    expect(mockedEmitApiError).toHaveBeenCalledWith(
+      "Erreur lors de la mise à jour de l'article",
+      500
+    );
+  });
+});
+
+describe("banItem", () => {
+    const mockToken = "fake-jwt-token";
+    const mockLogout = jest.fn();
+    const mockItemId = "123";
+ 
+    const fetchOptions = {
+        token: mockToken,
+        logout: mockLogout,
+    };
+ 
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+ 
+    test("returns true and sends correct headers when the request succeeds", async () => {
+        mockedApiClient.delete.mockResolvedValue({ status: 200 });
+ 
+        const result = await banItem(fetchOptions, mockItemId);
+ 
+        expect(mockedApiClient.delete).toHaveBeenCalledWith(`/item/${mockItemId}`, {
+            headers: { Authorization: `Bearer ${mockToken}` },
+        });
+        expect(result).toBe(true);
+        expect(mockLogout).not.toHaveBeenCalled();
+        expect(mockedEmitApiError).not.toHaveBeenCalled();
+    });
+ 
+    test("bloque l'exécution et ne fait aucun appel réseau si itemId est manquant", async () => {
+        // Ensures the service protects the backend from empty ID strings
+        const result = await banItem(fetchOptions, "");
+ 
+        expect(mockedApiClient.delete).not.toHaveBeenCalled();
+        expect(result).toBe(false);
+    });
+ 
+    test("returns false and calls logout on 401 Unauthorized", async () => {
+        mockedApiClient.delete.mockRejectedValue({ response: { status: 401 } });
+ 
+        const result = await banItem(fetchOptions, mockItemId);
+ 
+        expect(result).toBe(false);
+        expect(mockLogout).toHaveBeenCalledTimes(1);
+        expect(mockedEmitApiError).not.toHaveBeenCalled();
+    });
+ 
+    test("returns false and emits 403 error on Forbidden", async () => {
+        mockedApiClient.delete.mockRejectedValue({ response: { status: 403 } });
+ 
+        const result = await banItem(fetchOptions, mockItemId);
+ 
+        expect(result).toBe(false);
+        expect(mockLogout).not.toHaveBeenCalled();
+        expect(mockedEmitApiError).toHaveBeenCalledWith(
+            "Vous n'avez pas les autorisations pour bannir cet item.",
+            403
+        );
+    });
+ 
+    test("returns false and emits error with status code on generic API failure", async () => {
+        mockedApiClient.delete.mockRejectedValue({ response: { status: 404 } });
+ 
+        const result = await banItem(fetchOptions, mockItemId);
+ 
+        expect(result).toBe(false);
+        expect(mockLogout).not.toHaveBeenCalled();
+        expect(mockedEmitApiError).toHaveBeenCalledWith(
+            "Erreur lors du bannissement de l'item.",
+            404
+        );
+    });
+ 
+    test("returns false and emits 500 on network error without response status", async () => {
+        mockedApiClient.delete.mockRejectedValue(new Error("Network timeout"));
+ 
+        const result = await banItem(fetchOptions, mockItemId);
+ 
+        expect(result).toBe(false);
+        expect(mockLogout).not.toHaveBeenCalled();
+        expect(mockedEmitApiError).toHaveBeenCalledWith(
+            "Erreur lors du bannissement de l'item.",
+            500
+        );
+    });
 });

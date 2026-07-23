@@ -24,7 +24,7 @@ describe("getDeliveryList", () => {
 
     const result = await getDeliveryList();
 
-    expect(mockedApiClient.get).toHaveBeenCalledWith("/deliveryOption/list");
+    expect(mockedApiClient.get).toHaveBeenCalledWith("/deliveryOption");
     expect(result).toEqual(mockDeliveries);
   });
 

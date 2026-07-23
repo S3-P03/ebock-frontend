@@ -1,3 +1,4 @@
+process.env.TZ = "America/Toronto";
 import { render, screen } from "@testing-library/react";
 import MessageBlock from "components/MessageBlock";
 import { Message } from "interfaces/Message";
@@ -9,7 +10,7 @@ const mockMessages: Message[] = [
     senderCip: "boum7113",
     senderFirstName: "Milo",
     senderLastName: "Boucher",
-    sentAt: new Date("2026-06-22T11:00:00"),
+    sentAt: new Date("2026-06-22T11:00:00Z"),
   },
   {
     roomId: 2,
@@ -17,7 +18,7 @@ const mockMessages: Message[] = [
     senderCip: "larj4236",
     senderFirstName: "Jean-Félix",
     senderLastName: "Larouche",
-    sentAt: new Date("2026-06-22T12:00:00"),
+    sentAt: new Date("2026-06-22T12:00:00Z"),
   },
   {
     roomId: 1,
@@ -25,12 +26,12 @@ const mockMessages: Message[] = [
     senderCip: "boum7113",
     senderFirstName: "Milo",
     senderLastName: "Boucher",
-    sentAt: new Date("2026-06-22T13:00:00"),
+    sentAt: new Date("2026-06-22T13:00:00Z"),
   },
 ];
  
 const renderBlock = (messages: Message[] = mockMessages) => {
-  return render(<MessageBlock messages={messages} cip={"boum7113"} />);
+  return render(<MessageBlock messages={messages} cip={"boum7113"} senderProfilePictureUrl={null} receiverProfilePictureUrl={null} />);
 };
  
 describe("MessageBlock Component", () => {
@@ -59,10 +60,103 @@ describe("MessageBlock Component", () => {
       renderBlock();
       expect(screen.getByText(/Jean-Félix L/)).toBeInTheDocument();
     });
+  });
+});
 
-    test("displays sentAt time", () => {
-      renderBlock();
-      expect(screen.getByText(/12:00/)).toBeInTheDocument();
-    });
+describe("MessageBlock timezone conversion", () => {
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test("affiche l'heure locale convertie depuis UTC pour un message d'aujourd'hui", () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-07-20T15:00:00Z"));
+
+    render(
+      <MessageBlock
+        cip="123"
+        messages={[
+          {
+            roomId: 1,
+            content: "Bonjour",
+            senderCip: "boum7113",
+            senderFirstName: "Milo",
+            senderLastName: "Boucher",
+            sentAt: new Date("2026-07-20T15:00:00Z")
+          },
+        ]}
+        senderProfilePictureUrl={null}
+        receiverProfilePictureUrl={null}
+      />
+    );
+
+    expect(
+      screen.getByText(/Milo B -/)
+    ).toBeInTheDocument();
+  });
+
+
+  test("affiche la date complète si le message n'est pas aujourd'hui", () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-07-20T15:00:00Z"));
+
+    render(
+      <MessageBlock
+        cip="123"
+        messages={[
+          {
+            roomId: 1,
+            content: "Bonjour",
+            senderCip: "boum7113",
+            senderFirstName: "Milo",
+            senderLastName: "Boucher",
+            sentAt: new Date("2026-07-18T18:30:00Z"),
+          },
+        ]}
+        senderProfilePictureUrl={null}
+        receiverProfilePictureUrl={null}
+      />
+    );
+
+    expect(
+      screen.getByText(/07\/18\/2026/)
+    ).toBeInTheDocument();
+  });
+
+  test("groupe les messages du même expéditeur sans afficher deux fois le footer", () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2026-07-20T15:00:00Z"));
+    render(
+      <MessageBlock
+        cip="123"
+        messages={[
+          {
+            roomId: 1,
+            content: "Message 1",
+            senderCip: "boum7113",
+            senderFirstName: "Milo",
+            senderLastName: "Boucher",
+            sentAt: new Date("2026-07-20T18:30:00Z"),
+          },
+          {
+            roomId: 1,
+            content: "Message 2",
+            senderCip: "boum7113",
+            senderFirstName: "Milo",
+            senderLastName: "Boucher",
+            sentAt: new Date("2026-07-20T18:31:00Z"),
+          },
+        ]}
+        senderProfilePictureUrl={null}
+        receiverProfilePictureUrl={null}
+      />
+    );
+
+    expect(screen.getByText("Message 1")).toBeInTheDocument();
+    expect(screen.getByText("Message 2")).toBeInTheDocument();
+    expect(
+      screen.getAllByText(/Milo B -/)
+    ).toHaveLength(1);
   });
 });

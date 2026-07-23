@@ -2,11 +2,28 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import MenuBar from "components/MenuBar";
 import { BrowserRouter } from "react-router-dom";
 import * as authModule from "hooks/useAuthSession";
+import { jwtDecode } from "jwt-decode";
 
 jest.mock('hooks/useAuthSession');
+jest.mock('jwt-decode', () => ({
+  __esModule: true,
+  jwtDecode: jest.fn(() => ({
+    realm_access: {
+      roles: ['user', 'admin'],
+    },
+  })),
+}));
 
-const setupMockAuth = (logout = jest.fn()) => {
+const setupMockAuth = (logout = jest.fn(), admin = true) => {
   const mockUseAuthSession = authModule.default as jest.Mock;
+  const mockedJwtDecode = jwtDecode as jest.MockedFunction<typeof jwtDecode>;
+
+  mockedJwtDecode.mockReturnValue({
+    realm_access: {
+      roles: ['user', admin ? 'admin' : null].filter(Boolean) as string[],
+    },
+  } as any);
+
   mockUseAuthSession.mockReturnValue({
     isAuthenticated: true,
     isLoading: false,
@@ -22,13 +39,22 @@ const mockUser = {
   firstName: "Jeef",
   lastName: "Larouche",
   email: "larj4236@usherbrooke.ca",
-  profilePictureUrl: "",
+  profilePictureUrl: "https://example.com/profile.jpg",
 };
 
 const renderMenuBar = (user = mockUser) => {
   return render(
     <BrowserRouter>
       <MenuBar user={user} />
+
+    </BrowserRouter>
+  );
+};
+
+const renderNullUserMenuBar = () => {
+  return render(
+    <BrowserRouter>
+      <MenuBar user={null} />
     </BrowserRouter>
   );
 };
@@ -40,27 +66,27 @@ describe('MenuBar Component', () => {
 
   // Test Group 1: Rendering
   describe('Rendering', () => {
-    test('renders EBOCK title', () => {
+    test('renders EBOCK title image', () => {
       setupMockAuth();
       renderMenuBar();
       
-      expect(screen.getByText('EBOCK')).toBeInTheDocument();
+      expect(screen.getByAltText('Logo')).toBeInTheDocument();
     });
 
-    test('avatar alt -> user full name', () => {
+    test('avatar alt is user full name', () => {
       setupMockAuth();
       renderMenuBar(mockUser);
       
-      const avatar = screen.getByRole('img', { hidden: true });
-      expect(avatar).toHaveAttribute('alt', 'Jeef Larouche');
+      const avatar = screen.getByAltText('Jeef Larouche');
+      expect(avatar).toBeInTheDocument();
     });
 
-    test('undefined user -> handled', () => {
+    test('undefined user is handled', () => {
       setupMockAuth();
-      renderMenuBar({ cip: '', firstName: '', lastName: '', email: '', profilePictureUrl: '' });
+      renderNullUserMenuBar();
       
-      const avatar = screen.getByRole('img', { hidden: true });
-      expect(avatar).toHaveAttribute('alt', ' ');
+      const avatar = screen.queryByAltText('Jeef Larouche');
+      expect(avatar).not.toBeInTheDocument();
     });
   });
 
@@ -72,6 +98,8 @@ describe('MenuBar Component', () => {
 
       // Initially closed
       expect(screen.queryByText('Profil')).not.toBeVisible();
+      expect(screen.queryByText('Mon étalage')).not.toBeVisible();
+      expect(screen.queryByText('Admin - Tableau de bord')).not.toBeVisible();
       expect(screen.queryByText('Déconnexion')).not.toBeVisible();
 
       // Click avatar to open
@@ -80,6 +108,8 @@ describe('MenuBar Component', () => {
 
       // Now opened
       expect(screen.getByText('Profil')).toBeVisible();
+      expect(screen.getByText('Mon étalage')).toBeVisible();
+      expect(screen.getByText('Admin - Tableau de bord')).toBeVisible();
       expect(screen.getByText('Déconnexion')).toBeVisible();
     });
   });
@@ -132,6 +162,36 @@ describe('MenuBar Component', () => {
 
       fireEvent.click(profileButton);
       expect(profileButton).toBeInTheDocument();
+    });
+  });
+
+  // Test Group 5: Admin
+  describe('Admin', () => {
+    test('admin button -> clickable', () => {
+      setupMockAuth();
+      renderMenuBar();
+
+      // Open menu
+      const avatarButton = screen.getAllByRole('button')[1];
+      fireEvent.click(avatarButton);
+
+      const adminButton = screen.getByText('Admin - Tableau de bord');
+      expect(adminButton).toBeInTheDocument();
+      expect(adminButton.closest('li')).toHaveClass('MuiMenuItem-root');
+
+      fireEvent.click(adminButton);
+      expect(adminButton).toBeInTheDocument();
+    });
+
+    test('not admin -> no admin button displaying', () => {
+      setupMockAuth(undefined, false);
+      renderMenuBar();
+
+      // Open menu
+      const avatarButton = screen.getAllByRole('button')[1];
+      fireEvent.click(avatarButton);
+
+      expect(screen.queryByText('Admin - Tableau de bord')).not.toBeInTheDocument();
     });
   });
 });

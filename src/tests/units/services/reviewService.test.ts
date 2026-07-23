@@ -1,5 +1,5 @@
-import { fetchReviewAverage, fetchReviewDetails } from "services/reviewService";
 import apiClient from "services/apiClient";
+import { fetchReviewAverage, fetchReviewDetails, postReview } from "services/reviewService";
 
 jest.mock("services/apiClient");
 
@@ -93,5 +93,47 @@ describe("fetchReviewDetails", () => {
     const result = await fetchReviewDetails("pele3157");
 
     expect(result).toBeNull();
+  });
+});
+
+describe("postReview", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("returns 200 when request succeeds", async () => {
+    mockedApiClient.post.mockResolvedValue({ data: {} });
+
+    const result = await postReview("pele3157", "Super vendeur", 5, "mock-token");
+
+    expect(apiClient.post).toHaveBeenCalledWith("/review/pele3157",
+      { content: "Super vendeur", rating: 5 },
+      { headers: { Authorization: "Bearer mock-token" } }
+    );
+    expect(result).toBe(200);
+  });
+
+  test("returns 403 when user has no conversation with seller", async () => {
+    mockedApiClient.post.mockRejectedValue({ response: { status: 403 } });
+
+    const result = await postReview("pele3157", "Super vendeur", 5, "mock-token");
+
+    expect(result).toBe(403);
+  });
+
+  test("returns 500 when request fails with unknown error", async () => {
+    mockedApiClient.post.mockRejectedValue(new Error("Network Error"));
+
+    const result = await postReview("pele3157", "Super vendeur", 5, "mock-token");
+
+    expect(result).toBe(500);
+  });
+
+  test("returns 500 when cip is undefined", async () => {
+    mockedApiClient.post.mockRejectedValue(new Error("Network Error"));
+
+    const result = await postReview(undefined, "Super vendeur", 5, "mock-token");
+
+    expect(result).toBe(500);
   });
 });

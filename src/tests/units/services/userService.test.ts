@@ -1,4 +1,4 @@
-import { fetchUser, fetchUserProfile, fetchUserStoreFront, updateUserPassword, updateUserProfile } from "services/userService";
+import { fetchUser, fetchUserProfile, fetchUserStoreFront, updateUserPassword, updateUserProfile, updateUserProfilePicture } from "services/userService";
 import apiClient from "services/apiClient";
 
 jest.mock("services/apiClient");
@@ -75,6 +75,7 @@ describe("fetchUserStoreFront", () => {
     expect(result).toEqual({
       ...rawSeller,
       createdAt: new Date(rawSeller.createdAt),
+      profilePictureUrl: null,
     });
 
     expect(result?.createdAt).toBeInstanceOf(Date);
@@ -134,9 +135,13 @@ describe("fetchAndModifyUserProfile", () => {
       expect(result).toEqual(mockUserInfoPerso);
     });
 
-    test("retourne null si erreur", async () => {
-      mockedApiClient.get.mockRejectedValue(new Error("Erreur réseau"));
-      const result = await fetchUserProfile({ token, logout });
+    test("rejette l'erreur", async () => {
+      mockedApiClient.get.mockRejectedValue({
+        response: { status: 500 },
+        message: "Erreur réseau",
+      });
+
+      const result = await updateUserProfile({ token, logout }, mockUserInfoForUpdate);
       expect(result).toBeNull();
     });
 
@@ -154,8 +159,11 @@ describe("fetchAndModifyUserProfile", () => {
       expect(result).toEqual(mockUserInfoPerso);
     });
 
-    test("retourne null si erreur", async () => {
-      mockedApiClient.put.mockRejectedValue(new Error("Erreur réseau"));
+    test("rejette l'erreur", async () => {
+      mockedApiClient.put.mockRejectedValue({
+        response: { status: 500 },
+        message: "Erreur réseau",
+      });
       const result = await updateUserProfile({ token, logout }, mockUserInfoForUpdate);
       expect(result).toBeNull();
     });
@@ -171,6 +179,39 @@ describe("fetchAndModifyUserProfile", () => {
     });
   });
 
+  describe("updateUserProfilePicture", () => {
+    const guid = "new-guid";
+
+    test("returns the new image URL when upload succeeds", async () => {
+      mockedApiClient.put.mockResolvedValue({ status: 204, data: {} });
+
+      const result = await updateUserProfilePicture({ token, logout }, { guid });
+
+      expect(mockedApiClient.put).toHaveBeenCalledWith(
+        "/user/updateProfilePicture",
+        { guid },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      expect(result).toMatch(new RegExp(`${guid}$`));
+    });
+
+    test("returns null when guid is empty", async () => {
+      mockedApiClient.put.mockResolvedValue({ status: 204, data: {} });
+
+      const result = await updateUserProfilePicture({ token, logout }, { guid: "" });
+
+      expect(result).toBeNull();
+    });
+
+    test("returns null on API error", async () => {
+      mockedApiClient.put.mockRejectedValue({ response: { status: 500 }, message: "Erreur réseau" });
+
+      const result = await updateUserProfilePicture({ token, logout }, { guid });
+
+      expect(result).toBeNull();
+    });
+  });
+
   describe("updateUserPassword", () => {
     const mockPasswordData = { oldPassword: "ancien", newPassword: "nouveau" };
 
@@ -180,8 +221,11 @@ describe("fetchAndModifyUserProfile", () => {
       expect(result).toBe(true);
     });
 
-    test("retourne false si erreur", async () => {
-      mockedApiClient.put.mockRejectedValue(new Error("Erreur réseau"));
+    test("retourne false en cas d'erreur", async () => {
+      mockedApiClient.put.mockRejectedValue({
+        response: { status: 500 },
+        message: "Erreur réseau",
+      });
       const result = await updateUserPassword({ token, logout }, mockPasswordData);
       expect(result).toBe(false);
     });

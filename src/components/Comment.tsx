@@ -1,11 +1,11 @@
 import { Box, styled } from "@mui/material";
-import { ItemComment } from "interfaces/Item";
+import { CommentDetail } from "interfaces/Comment";
 import DefaultAvatar from "./DefaultAvatar";
 
 const ReplyCommentStyle = styled('div')(({ theme }) => ({
   ...theme.typography.button,
-  backgroundColor: '#e1f5ee',
-  color: '#00796b',
+  backgroundColor: theme.palette.background.default,
+  color: theme.palette.text.primary,
   padding: theme.spacing(1),
   width: 'fit-content',
   borderRadius: 12,
@@ -13,19 +13,40 @@ const ReplyCommentStyle = styled('div')(({ theme }) => ({
 
 const CommentStyle = styled('div')(({ theme }) => ({
     ...theme.typography.button,
-    backgroundColor: '#f5f5f0',
-    color: '#333',
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.common.black,
     padding: theme.spacing(1),
     width: 'fit-content',
     borderRadius: 12,
 }));
 
-export default function Comment({ comment, isReply }: { comment: ItemComment; isReply: boolean }) {
-    const initials = `${comment.authorFirstName[0]}${comment.authorLastName[0]}`.toUpperCase();
+interface CommentProps {
+    comment: CommentDetail;
+    isReply: boolean;
+}
+
+export default function Comment({ comment, isReply }: CommentProps) {
+    const initials = `${comment.firstName[0]}${comment.lastName[0]}`.toUpperCase();
+    const timestamp = new Date(comment.timestamp);
+    const today = new Date();
+
+    const formattedDate = 
+        timestamp.toDateString() === today.toDateString()
+            ? `Aujourd'hui à ${timestamp.toLocaleTimeString("fr-CA", {
+                hour: "2-digit",
+                minute: "2-digit",
+            })}`
+            : timestamp.toLocaleString("fr-CA", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
     return (
         <Box>
             <Box sx={{ display: "flex", gap: 1.5, alignItems: "flex-start" }}>
-                <DefaultAvatar width={36} height={36} initials={initials} primaryColor={isReply} />
+                <DefaultAvatar width={36} height={36} initials={initials} fullName={comment.firstName + " " + comment.lastName} primaryColor={isReply} profilePictureUrl={comment.profilePictureUrl} />
                 <Box sx={{ flexGrow: 1 }}>
                     {isReply ? (
                         <ReplyCommentStyle>
@@ -37,7 +58,7 @@ export default function Comment({ comment, isReply }: { comment: ItemComment; is
                         </CommentStyle>
                     )}
                     <Box sx={{ display: "flex"}}>
-                        <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${comment.authorFirstName} ${comment.authorLastName[0]} - ${comment.timeAgo}`}</Box>
+                        <Box sx={{ fontSize: 14, color: "text.secondary" }}>{`${comment.firstName} ${comment.lastName[0]} - ${formattedDate}`}</Box>
                     </Box>
                 </Box>
             </Box>
