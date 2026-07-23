@@ -7,6 +7,7 @@ jest.mock('hooks/useAuthSession');
 jest.mock('services/apiClient', () => ({
   __esModule: true,
   default: { post: jest.fn() },
+  isRedactedEbockEnvironment: jest.fn(() => false),
 }));
 
 class MockWebSocket {
@@ -59,7 +60,7 @@ describe('useWebSocket hook', () => {
     expect(mockPost).toHaveBeenCalledWith(
       '/ws-token',
       {},
-      { headers: { Authorization: 'Bearer jwt-token-test' } }
+      { headers: { Authorization: 'Bearer jwt-token-test', Environment: 'ebock' } }
     );
   });
 
