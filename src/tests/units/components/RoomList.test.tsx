@@ -2,6 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import RoomList from "components/RoomList";
 import { Room } from "interfaces/Message";
 import { User } from "interfaces/User";
+import * as authModule from "hooks/useAuthSession";
+import { jwtDecode } from "jwt-decode";
  
 const mockRooms: Room[] = [
   {
@@ -52,6 +54,40 @@ const mockUser : User = {
     email: "",
     profilePictureUrl: ""
 };
+
+jest.mock('hooks/useAuthSession');
+jest.mock('jwt-decode', () => ({
+  __esModule: true,
+  jwtDecode: jest.fn(() => ({
+    realm_access: {
+      roles: ['user', 'admin'],
+    },
+  })),
+}));
+
+const setupMockAuth = (logout = jest.fn(), admin = true) => {
+  const mockUseAuthSession = authModule.default as jest.Mock;
+  const mockedJwtDecode = jwtDecode as jest.MockedFunction<typeof jwtDecode>;
+
+  mockedJwtDecode.mockReturnValue({
+    realm_access: {
+      roles: ['user', admin ? 'admin' : null].filter(Boolean) as string[],
+    },
+  } as any);
+
+  mockUseAuthSession.mockReturnValue({
+    isAuthenticated: true,
+    isLoading: false,
+    connectedUser: { cip: 'larj4236', email: 'larj4236@usherbrooke.ca' },
+    token: 'test-token',
+    login: jest.fn(),
+    logout,
+  });
+};
+
+beforeEach(() => {
+  setupMockAuth();
+});
 
 const mockFunction = jest.fn();
  
